@@ -3,12 +3,8 @@
 import { useLang } from "@/components/LanguageProvider";
 import type { Lang } from "@/lib/content";
 
-function LangToggle() {
-  const { lang, setLang } = useLang();
-  const base =
-    "px-2.5 py-1 font-display text-[11px] uppercase tracking-[0.18em] transition-colors duration-200";
-  const active = "bg-ink text-paper";
-  const idle = "text-ink/50 hover:text-ink";
+export function Header() {
+  const { t, lang, setLang } = useLang();
 
   const btn = (l: Lang) => (
     <button
@@ -17,66 +13,41 @@ function LangToggle() {
       onClick={() => setLang(l)}
       aria-pressed={lang === l}
       aria-label={l === "en" ? "Switch to English" : "Cambiar a español"}
-      className={`${base} ${lang === l ? active : idle}`}
+      className={`px-3 py-1.5 font-sans text-[11px] font-medium uppercase tracking-[0.2em] transition-colors duration-200 ${
+        lang === l ? "bg-flame text-ink" : "text-dim hover:text-cream"
+      }`}
     >
-      {l.toUpperCase()}
+      {l}
     </button>
   );
 
   return (
-    <div className="flex items-stretch border border-ink/25">
-      {btn("en")}
-      {btn("es")}
-    </div>
-  );
-}
-
-export function Header() {
-  const { t } = useLang();
-
-  return (
-    <header className="sticky top-0 z-50 border-b border-ink/15 bg-paper/90 backdrop-blur-sm">
-      <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-6 px-5 py-4 md:px-10">
+    <header className="fixed inset-x-0 top-0 z-50 border-b border-cream/10 bg-ink/75 backdrop-blur-md">
+      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6 md:px-14">
         <a
           href="#top"
-          className="group font-display text-sm font-semibold uppercase tracking-[0.14em]"
+          className="group flex items-center gap-2.5 font-display text-lg tracking-tight"
         >
+          <span
+            className="inline-block h-2 w-2 rounded-full bg-flame transition-transform duration-300 group-hover:scale-150"
+            aria-hidden
+          />
           {t.brand}
-          <span className="ml-1 inline-block text-accent transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:translate-x-0.5">
-            ↗
-          </span>
         </a>
 
-        <nav className="hidden items-center gap-8 lg:flex" aria-label="Primary">
-          {t.nav.map((item) => (
-            <a
-              key={item.href}
-              href={item.href}
-              className="font-display text-[11px] uppercase tracking-[0.18em] text-ink/60 transition-colors hover:text-ink"
-            >
-              {item.label}
-            </a>
-          ))}
-        </nav>
-
-        <LangToggle />
-      </div>
-
-      {/* Mobile nav row */}
-      <nav
-        className="flex items-center gap-6 overflow-x-auto border-t border-ink/10 px-5 py-2.5 lg:hidden"
-        aria-label="Primary mobile"
-      >
-        {t.nav.map((item) => (
+        <div className="flex items-center gap-6">
           <a
-            key={item.href}
-            href={item.href}
-            className="whitespace-nowrap font-display text-[11px] uppercase tracking-[0.18em] text-ink/60 hover:text-ink"
+            href="#contact"
+            className="hidden font-sans text-[11px] uppercase tracking-[0.25em] text-dim transition-colors hover:text-flame sm:block"
           >
-            {item.label}
+            {t.hero.cta} ↗
           </a>
-        ))}
-      </nav>
+          <div className="flex items-stretch overflow-hidden border border-cream/20">
+            {btn("en")}
+            {btn("es")}
+          </div>
+        </div>
+      </div>
     </header>
   );
 }
