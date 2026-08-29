@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Fraunces, Space_Grotesk } from "next/font/google";
+import { SmoothScroll } from "@/components/SmoothScroll";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -29,7 +30,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${fraunces.variable} ${grotesk.variable}`}>
-      <body>{children}</body>
+      <body>
+        <SmoothScroll>{children}</SmoothScroll>
+      </body>
     </html>
   );
 }

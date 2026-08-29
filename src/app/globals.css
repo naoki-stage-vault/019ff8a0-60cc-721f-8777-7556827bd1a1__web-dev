@@ -15,8 +15,21 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-snap-type: y proximity;
-  scroll-padding-top: 88px;
+}
+
+/* Lenis smooth-scroll support */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
 }
 
 body {
@@ -69,17 +82,20 @@ body::before {
   pointer-events: none;
 }
 
-/* scroll-reveal */
+/* scroll-reveal: cinematic blur-in */
 [data-reveal] {
   opacity: 0;
-  transform: translateY(28px);
+  transform: translateY(32px);
+  filter: blur(8px);
   transition:
-    opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+    opacity 1s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 1s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 1s cubic-bezier(0.22, 1, 0.36, 1);
 }
 [data-reveal].is-visible {
   opacity: 1;
   transform: translateY(0);
+  filter: blur(0);
 }
 
 /* marquee */
@@ -101,6 +117,7 @@ body::before {
   [data-reveal] {
     opacity: 1;
     transform: none;
+    filter: none;
     transition: none;
   }
   .marquee-track {

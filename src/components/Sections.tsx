@@ -102,7 +102,8 @@ function Slide({ id, children }: { id: string; children: React.ReactNode }) {
   return (
     <section
       id={id}
-      className="relative flex min-h-svh snap-start snap-always items-center overflow-hidden px-6 py-24 md:px-14 md:py-28"
+      data-slide
+      className="relative flex min-h-svh items-center overflow-hidden px-6 py-24 md:px-14 md:py-28"
     >
       <div className="relative z-10 mx-auto w-full max-w-6xl">{children}</div>
     </section>
