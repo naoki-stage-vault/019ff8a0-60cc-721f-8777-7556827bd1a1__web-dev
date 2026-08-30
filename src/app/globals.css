@@ -154,6 +154,134 @@ body::before {
   animation: decor-drift-alt 18s ease-in-out infinite;
 }
 
+/* ------------------------------------------------------------------ */
+/* Scrollytelling grid field                                          */
+/* ------------------------------------------------------------------ */
+
+/* faint grid of cells, fading toward the edges */
+.grid-field {
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, rgba(246, 236, 216, 0.06) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(246, 236, 216, 0.06) 1px, transparent 1px);
+  background-size: 56px 56px;
+  -webkit-mask-image: radial-gradient(ellipse at center, #000 25%, transparent 78%);
+  mask-image: radial-gradient(ellipse at center, #000 25%, transparent 78%);
+}
+
+/* a soft colored beam sweeping across the grid */
+@keyframes grid-beam {
+  0% {
+    transform: translateX(-30%) scaleX(0.6);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.9;
+  }
+  50% {
+    transform: translateX(60%) scaleX(1);
+  }
+  90% {
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateX(140%) scaleX(0.6);
+    opacity: 0;
+  }
+}
+.grid-beam {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 140px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255, 106, 60, 0.13),
+    transparent
+  );
+  mix-blend-mode: screen;
+  animation: grid-beam 11s ease-in-out infinite;
+}
+.grid-beam-alt {
+  animation: grid-beam 15s ease-in-out 3s infinite;
+}
+
+/* a short colored line hopping through the cells */
+@keyframes grid-walk {
+  0% {
+    transform: translate(0, 0);
+  }
+  25% {
+    transform: translate(336px, 0);
+  }
+  50% {
+    transform: translate(336px, 168px);
+  }
+  75% {
+    transform: translate(0, 168px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+@keyframes grid-walk-alt {
+  0% {
+    transform: translate(0, 0);
+  }
+  33% {
+    transform: translate(392px, 56px);
+  }
+  66% {
+    transform: translate(112px, 336px);
+  }
+  100% {
+    transform: translate(0, 0);
+  }
+}
+.grid-walker {
+  position: absolute;
+  width: 56px;
+  height: 56px;
+  animation: grid-walk 22s steps(1) infinite;
+}
+.grid-walker-alt {
+  animation: grid-walk-alt 26s steps(1) infinite;
+}
+.grid-walker-slow {
+  animation-duration: 36s;
+  animation-delay: -14s;
+  opacity: 0.7;
+}
+/* the little colored line inside the walking cell */
+.grid-walker::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  right: 4px;
+  top: 50%;
+  height: 1px;
+  background: rgba(255, 106, 60, 0.65);
+  box-shadow:
+    0 0 12px rgba(255, 106, 60, 0.7),
+    0 0 24px rgba(255, 106, 60, 0.35);
+}
+/* soft glow that fills the cell it visits */
+.grid-walker::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  background: radial-gradient(
+    circle,
+    rgba(255, 106, 60, 0.4),
+    rgba(255, 106, 60, 0.08) 55%,
+    transparent 75%
+  );
+  border-radius: 3px;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;
@@ -168,7 +296,12 @@ body::before {
     animation: none;
   }
   .decor-drift,
-  .decor-drift-alt {
+  .decor-drift-alt,
+  .grid-beam,
+  .grid-beam-alt,
+  .grid-walker,
+  .grid-walker-alt,
+  .grid-walker-slow {
     animation: none;
   }
 }

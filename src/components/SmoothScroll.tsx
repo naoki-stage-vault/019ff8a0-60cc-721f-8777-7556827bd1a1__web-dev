@@ -9,8 +9,7 @@ const easeOutExpo = (t: number) =>
 /**
  * Wraps the whole app in buttery inertial scrolling (Lenis),
  * adds a gentle snap-to-nearest-chapter when the user settles,
- * parallaxes the ghost chapter numerals, and routes in-page
- * anchor clicks through the eased scrollTo.
+ * and routes in-page anchor clicks through the eased scrollTo.
  */
 export function SmoothScroll({ children }: { children: React.ReactNode }) {
   const lenisRef = useRef<Lenis | null>(null);
@@ -30,22 +29,9 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     });
     lenisRef.current = lenis;
 
-    const ghosts = Array.from(
-      document.querySelectorAll<HTMLElement>(".ghost")
-    );
-
     let rafId = 0;
     const raf = (time: number) => {
       lenis.raf(time);
-
-      // parallax: ghost numerals drift slower than the page
-      const vh = window.innerHeight;
-      for (const g of ghosts) {
-        const r = g.getBoundingClientRect();
-        const progress = (r.top + r.height / 2 - vh / 2) / vh;
-        g.style.transform = `translate3d(0, ${(progress * -70).toFixed(1)}px, 0)`;
-      }
-
       rafId = requestAnimationFrame(raf);
     };
     rafId = requestAnimationFrame(raf);
@@ -56,7 +42,7 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     const snap = () => {
       if (!lenis.isScrolling || lenis.velocity > 0.4) return;
       const slides = Array.from(
-        document.querySelectorAll<HTMLElement>("section[data-slide]")
+        document.querySelectorAll<HTMLElement>("[data-slide]")
       );
       if (!slides.length) return;
 
