@@ -11,8 +11,8 @@ const Arrow = ({ className = "" }: { className?: string }) => (
 );
 
 const UI = {
-  en: { about: "About", processHead: "One clear thread, from first call to launch." },
-  es: { about: "Sobre mí", processHead: "Un solo hilo, de la primera llamada al lanzamiento." },
+  en: { processHead: "One clear thread, from first call to launch." },
+  es: { processHead: "Un solo hilo, de la primera llamada al lanzamiento." },
 } as const;
 
 const SECTION_IDS = [
@@ -288,17 +288,9 @@ function Positioning({ t, lang }: { t: Copy; lang: Lang }) {
 
       <div className="mt-14 grid gap-12 lg:grid-cols-12 lg:gap-16">
         <Reveal delay={160} className="lg:col-span-7">
-          <div className="space-y-5 font-serif text-lg leading-relaxed text-dim">
-            {p.body.map((para, i) =>
-              i === p.body.length - 1 ? (
-                <p key={i} className="font-display text-2xl text-cream">
-                  {para}
-                </p>
-              ) : (
-                <p key={i}>{para}</p>
-              )
-            )}
-          </div>
+          <p className="max-w-xl font-serif text-[clamp(1.4rem,2.4vw,1.9rem)] leading-snug text-dim">
+            {p.body}
+          </p>
         </Reveal>
 
         <Reveal delay={240} className="lg:col-span-5">
@@ -326,24 +318,6 @@ function Positioning({ t, lang }: { t: Copy; lang: Lang }) {
           </div>
         </Reveal>
       </div>
-
-      <div className="mt-16 grid gap-10 border-t border-cream/10 pt-14 lg:grid-cols-12 lg:gap-16">
-        <Reveal className="lg:col-span-5">
-          <h3 className="font-display text-[clamp(1.6rem,2.8vw,2.4rem)] leading-[1.1]">
-            {p.introTitle}
-          </h3>
-          <p className="mt-6 font-sans text-[11px] uppercase tracking-[0.25em] text-flame">
-            — Catalina
-          </p>
-        </Reveal>
-        <Reveal delay={120} className="lg:col-span-6 lg:col-start-7">
-          <div className="space-y-5 font-serif text-[17px] leading-relaxed text-dim">
-            {p.intro.map((para, i) => (
-              <p key={i}>{para}</p>
-            ))}
-          </div>
-        </Reveal>
-      </div>
     </Slide>
   );
 }
@@ -352,44 +326,36 @@ function Positioning({ t, lang }: { t: Copy; lang: Lang }) {
 /* 03 · ABOUT                                                          */
 /* ------------------------------------------------------------------ */
 
-function About({ t, lang }: { t: Copy; lang: Lang }) {
-  const ui = UI[lang];
+function About({ t }: { t: Copy }) {
+  const a = t.about;
   return (
     <Slide id="about">
+      <span className="ghost" aria-hidden>
+        03
+      </span>
+
       <Reveal>
-        <Eyebrow>{ui.about}</Eyebrow>
+        <Eyebrow>{a.num}</Eyebrow>
       </Reveal>
 
       <Reveal delay={100}>
-        <p className="mt-10 max-w-4xl font-display text-[clamp(2.4rem,5.2vw,4.8rem)] leading-[1.04] tracking-[-0.015em]">
-          <em className="text-cream">“{t.positioning.introTitle}”</em>
+        <p className="mt-10 max-w-5xl font-display text-[clamp(2.2rem,5vw,4.6rem)] leading-[1.05] tracking-[-0.015em]">
+          <em className="text-cream">“{a.statement}”</em>
           <span className="text-flame">.</span>
         </p>
       </Reveal>
 
-      <div className="mt-14 grid gap-10 lg:grid-cols-12 lg:gap-16">
-        <Reveal delay={160} className="lg:col-span-6">
-          <div className="space-y-5 font-serif text-lg leading-relaxed text-dim">
-            {t.positioning.intro.map((para, i) => (
-              <p key={i}>{para}</p>
-            ))}
-          </div>
-        </Reveal>
-
-        <Reveal delay={240} className="lg:col-span-4 lg:col-start-9">
-          <div className="border border-cream/10 bg-raised/30 p-8">
-            <p className="font-sans text-[10px] uppercase tracking-[0.25em] text-faint">
-              Catalina
-            </p>
-            <p className="mt-4 font-display text-5xl text-flame">C.</p>
-            <p className="mt-4 font-serif text-[15px] leading-relaxed text-dim">
-              {lang === "en"
-                ? "Web designer & developer based in Costa Rica. English + Spanish."
-                : "Diseñadora y desarrolladora web con base en Costa Rica. Español + inglés."}
-            </p>
-          </div>
-        </Reveal>
-      </div>
+      <Reveal delay={180} className="lg:col-span-4 lg:col-start-9">
+        <div className="mt-14 w-full max-w-sm border border-cream/10 bg-raised/30 p-8">
+          <p className="font-sans text-[10px] uppercase tracking-[0.25em] text-faint">
+            {a.name}
+          </p>
+          <p className="mt-4 font-display text-6xl text-flame">{a.monogram}</p>
+          <p className="mt-4 font-serif text-[15px] leading-relaxed text-dim">
+            {a.note}
+          </p>
+        </div>
+      </Reveal>
     </Slide>
   );
 }
@@ -408,7 +374,7 @@ function Build({ t }: { t: Copy }) {
   return (
     <Slide id="build">
       <span className="ghost" aria-hidden>
-        03
+        04
       </span>
 
       <Reveal>
@@ -427,21 +393,21 @@ function Build({ t }: { t: Copy }) {
       <div className="mt-12 grid gap-5 md:grid-cols-2">
         {panels.map((panel, i) => (
           <Reveal key={panel.tag} delay={i * 120}>
-            <article className="group flex h-full flex-col border border-cream/10 bg-raised/30 p-8 transition-colors duration-300 hover:border-flame/50 md:p-10">
-              <div className="flex items-center justify-between">
-                <span className="font-sans text-[11px] uppercase tracking-[0.25em] text-flame">
-                  {panel.tag}
-                </span>
-                <Arrow className="text-faint transition-all duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-flame" />
+            <article className="group flex h-full flex-col justify-between border border-cream/10 bg-raised/30 p-8 transition-colors duration-300 hover:border-flame/50 md:p-10">
+              <div>
+                <div className="flex items-center justify-between">
+                  <span className="font-sans text-[11px] uppercase tracking-[0.25em] text-flame">
+                    {panel.tag}
+                  </span>
+                  <Arrow className="text-faint transition-all duration-300 group-hover:-translate-y-1 group-hover:translate-x-1 group-hover:text-flame" />
+                </div>
+                <h3 className="mt-6 font-display text-2xl leading-tight md:text-[1.7rem]">
+                  {panel.lead}
+                </h3>
               </div>
-              <h3 className="mt-6 font-display text-2xl leading-tight md:text-[1.7rem]">
-                {panel.lead}
-              </h3>
-              <div className="mt-5 space-y-3 font-serif text-[15px] leading-relaxed text-dim">
-                {panel.body.map((para, j) => (
-                  <p key={j}>{para}</p>
-                ))}
-              </div>
+              <p className="mt-6 font-serif text-[15px] leading-relaxed text-dim">
+                {panel.body}
+              </p>
             </article>
           </Reveal>
         ))}
@@ -501,7 +467,7 @@ function Projects({ t, lang }: { t: Copy; lang: Lang }) {
   return (
     <Slide id="projects">
       <span className="ghost" aria-hidden>
-        04
+        05
       </span>
 
       <Reveal>
@@ -537,16 +503,9 @@ function Projects({ t, lang }: { t: Copy; lang: Lang }) {
                   {p.cat}
                 </span>
               </div>
-              <div className="font-serif text-sm leading-snug text-dim md:col-span-5">
-                <p className="font-sans text-[10px] uppercase tracking-[0.2em] text-faint">
-                  {p.roleLabel}
-                </p>
-                <p className="mt-1">{p.role}</p>
-                <p className="mt-2 font-sans text-[10px] uppercase tracking-[0.2em] text-faint">
-                  {p.focusLabel}
-                </p>
-                <p className="mt-1 text-flame/90">{p.focus}</p>
-              </div>
+              <p className="font-serif text-sm leading-snug text-dim md:col-span-5 md:pr-8">
+                {p.desc}
+              </p>
               <div className="font-sans text-[11px] uppercase tracking-[0.25em] text-cream md:col-span-2 md:text-right">
                 <span className="inline-flex items-center gap-2 transition-colors duration-200 group-hover:text-flame">
                   {p.link}
@@ -572,7 +531,7 @@ function Fit({ t, lang }: { t: Copy; lang: Lang }) {
   return (
     <Slide id="fit">
       <span className="ghost" aria-hidden>
-        05
+        06
       </span>
 
       <Reveal>
@@ -599,11 +558,6 @@ function Fit({ t, lang }: { t: Copy; lang: Lang }) {
               <p className="mt-3 font-serif text-[15px] leading-relaxed text-dim">
                 {item.d}
               </p>
-              {item.d2 ? (
-                <p className="mt-2 font-serif text-sm leading-relaxed text-faint">
-                  {item.d2}
-                </p>
-              ) : null}
             </article>
           </Reveal>
         ))}
@@ -621,7 +575,7 @@ function Contact({ t }: { t: Copy }) {
   return (
     <Slide id="contact">
       <span className="ghost" aria-hidden>
-        06
+        07
       </span>
 
       <Reveal>
@@ -636,11 +590,9 @@ function Contact({ t }: { t: Copy }) {
       </Reveal>
 
       <Reveal delay={180}>
-        <div className="mt-8 max-w-2xl space-y-4 font-serif text-lg leading-relaxed text-dim">
-          {c.body.map((para, i) => (
-            <p key={i}>{para}</p>
-          ))}
-        </div>
+        <p className="mt-8 max-w-2xl font-serif text-lg leading-relaxed text-dim">
+          {c.body}
+        </p>
       </Reveal>
 
       <Reveal delay={260}>
@@ -701,7 +653,7 @@ export function Sections() {
       <ProgressRail />
       <Hero t={t} lang={lang} />
       <Positioning t={t} lang={lang} />
-      <About t={t} lang={lang} />
+      <About t={t} />
       <Build t={t} />
       <Process t={t} lang={lang} />
       <Projects t={t} lang={lang} />
