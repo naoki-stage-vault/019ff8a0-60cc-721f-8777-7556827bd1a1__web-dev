@@ -170,13 +170,14 @@ function ProgressRail() {
               title={label}
               aria-label={label}
               aria-current={isActive ? "true" : undefined}
-              className={`flex h-8 w-8 items-center justify-center rounded-full font-sans text-[10px] tracking-widest transition-all duration-300 ${
-                isActive
-                  ? "scale-110 bg-flame text-ink"
-                  : "text-faint hover:text-cream"
-              }`}
+              className="flex h-8 w-8 items-center justify-center rounded-full"
             >
-              {String(i + 1).padStart(2, "0")}
+              <span
+                aria-hidden
+                className={`block h-2 w-2 rounded-full transition-all duration-300 ${
+                  isActive ? "scale-125 bg-flame" : "bg-faint/60 hover:bg-cream"
+                }`}
+              />
             </a>
           );
         })}
@@ -195,12 +196,8 @@ function Hero({ t, lang }: { t: Copy; lang: Lang }) {
 
   return (
     <Slide id="top">
-      <span className="ghost" aria-hidden>
-        01
-      </span>
-
       <Reveal>
-        <Eyebrow>
+        <Eyebrow className="text-center">
           <span
             className="mr-2 inline-block h-2 w-2 rounded-full bg-flame align-middle"
             aria-hidden
@@ -210,7 +207,7 @@ function Hero({ t, lang }: { t: Copy; lang: Lang }) {
       </Reveal>
 
       <Reveal delay={100}>
-        <h1 className="mt-8 font-display text-[clamp(2.8rem,8.2vw,7.4rem)] leading-[0.95] tracking-[-0.02em]">
+        <h1 className="mx-auto mt-8 max-w-5xl text-center font-display text-[clamp(2.8rem,8.2vw,7.4rem)] leading-[0.95] tracking-[-0.02em]">
           <span className="uppercase">{t.hero.titleA}</span>
           <br />
           <em className="text-cream">
@@ -221,7 +218,7 @@ function Hero({ t, lang }: { t: Copy; lang: Lang }) {
       </Reveal>
 
       <Reveal delay={220}>
-        <div className="mt-12 flex max-w-3xl flex-col gap-8 md:flex-row md:items-center md:justify-between">
+        <div className="mt-12 flex max-w-3xl flex-col items-center gap-8 text-center md:flex-row md:justify-center">
           <p className="max-w-md font-serif text-xl leading-relaxed text-dim">
             {t.hero.sub}
           </p>
@@ -236,7 +233,7 @@ function Hero({ t, lang }: { t: Copy; lang: Lang }) {
       </Reveal>
 
       <Reveal delay={340}>
-        <div className="mt-20 overflow-hidden border-y border-cream/10 py-3">
+        <div className="mt-20 w-full overflow-hidden border-y border-cream/10 py-3">
           <div className="marquee-track font-sans text-[11px] uppercase tracking-[0.3em] text-faint">
             <span className="px-4">{strip}</span>
             <span className="px-4" aria-hidden>
@@ -271,53 +268,47 @@ function Positioning({ t, lang }: { t: Copy; lang: Lang }) {
 
   return (
     <Slide id="positioning">
-      <span className="ghost" aria-hidden>
-        02
-      </span>
-
       <Reveal>
-        <Eyebrow>{p.num}</Eyebrow>
+        <Eyebrow className="text-center">{p.num}</Eyebrow>
       </Reveal>
 
       <Reveal delay={100}>
-        <h2 className="mt-6 max-w-5xl font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
+        <h2 className="mx-auto mt-6 max-w-4xl text-center font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
           {p.title.replace(last, "")}
           <em className="text-flame">{last}</em>
         </h2>
       </Reveal>
 
-      <div className="mt-14 grid gap-12 lg:grid-cols-12 lg:gap-16">
-        <Reveal delay={160} className="lg:col-span-7">
-          <p className="max-w-xl font-serif text-[clamp(1.4rem,2.4vw,1.9rem)] leading-snug text-dim">
-            {p.body}
-          </p>
-        </Reveal>
+      <Reveal delay={160}>
+        <p className="mx-auto mt-12 max-w-3xl text-center font-serif text-[clamp(1.4rem,2.4vw,1.9rem)] leading-snug text-dim">
+          {p.body}
+        </p>
+      </Reveal>
 
-        <Reveal delay={240} className="lg:col-span-5">
-          <div className="border border-cream/10 bg-raised/30">
-            <p className="border-b border-cream/10 px-6 py-3 font-sans text-[10px] uppercase tracking-[0.25em] text-faint">
-              {p.glanceTitle}
-            </p>
-            <dl>
-              {p.glance.map(([label, value], i) => (
-                <div
-                  key={label}
-                  className={`flex flex-col gap-1 px-6 py-4 sm:flex-row sm:items-baseline sm:justify-between ${
-                    i > 0 ? "border-t border-cream/10" : ""
-                  }`}
-                >
-                  <dt className="shrink-0 font-sans text-[10px] uppercase tracking-[0.2em] text-faint">
-                    {label}
-                  </dt>
-                  <dd className="text-right font-serif text-[15px] leading-snug text-cream">
-                    {value}
-                  </dd>
-                </div>
-              ))}
-            </dl>
-          </div>
-        </Reveal>
-      </div>
+      <Reveal delay={240}>
+        <div className="mx-auto mt-14 w-full max-w-xl border border-cream/10 bg-raised/30">
+          <p className="border-b border-cream/10 px-6 py-3 font-sans text-[10px] uppercase tracking-[0.25em] text-faint">
+            {p.glanceTitle}
+          </p>
+          <dl>
+            {p.glance.map(([label, value], i) => (
+              <div
+                key={label}
+                className={`flex flex-col gap-1 px-6 py-4 sm:flex-row sm:items-baseline sm:justify-between ${
+                  i > 0 ? "border-t border-cream/10" : ""
+                }`}
+              >
+                <dt className="shrink-0 font-sans text-[10px] uppercase tracking-[0.2em] text-faint">
+                  {label}
+                </dt>
+                <dd className="text-right font-serif text-[15px] leading-snug text-cream">
+                  {value}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+      </Reveal>
     </Slide>
   );
 }
@@ -330,23 +321,19 @@ function About({ t }: { t: Copy }) {
   const a = t.about;
   return (
     <Slide id="about">
-      <span className="ghost" aria-hidden>
-        03
-      </span>
-
       <Reveal>
-        <Eyebrow>{a.num}</Eyebrow>
+        <Eyebrow className="text-center">{a.num}</Eyebrow>
       </Reveal>
 
       <Reveal delay={100}>
-        <p className="mt-10 max-w-5xl font-display text-[clamp(2.2rem,5vw,4.6rem)] leading-[1.05] tracking-[-0.015em]">
+        <p className="mx-auto mt-10 max-w-5xl text-center font-display text-[clamp(2.2rem,5vw,4.6rem)] leading-[1.05] tracking-[-0.015em]">
           <em className="text-cream">“{a.statement}”</em>
           <span className="text-flame">.</span>
         </p>
       </Reveal>
 
-      <Reveal delay={180} className="lg:col-span-4 lg:col-start-9">
-        <div className="mt-14 w-full max-w-sm border border-cream/10 bg-raised/30 p-8">
+      <Reveal delay={180}>
+        <div className="mx-auto mt-14 w-full max-w-sm border border-cream/10 bg-raised/30 p-8">
           <p className="font-sans text-[10px] uppercase tracking-[0.25em] text-faint">
             {a.name}
           </p>
@@ -373,19 +360,15 @@ function Build({ t }: { t: Copy }) {
 
   return (
     <Slide id="build">
-      <span className="ghost" aria-hidden>
-        04
-      </span>
-
       <Reveal>
-        <Eyebrow>{b.num}</Eyebrow>
+        <Eyebrow className="text-center">{b.num}</Eyebrow>
       </Reveal>
 
       <Reveal delay={100}>
-        <h2 className="mt-6 max-w-4xl font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
+        <h2 className="mx-auto mt-6 max-w-4xl text-center font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
           {b.title}
         </h2>
-        <p className="mt-6 max-w-2xl font-serif text-lg leading-relaxed text-dim">
+        <p className="mx-auto mt-6 max-w-2xl text-center font-serif text-lg leading-relaxed text-dim">
           {b.intro}
         </p>
       </Reveal>
@@ -426,11 +409,11 @@ function Process({ t, lang }: { t: Copy; lang: Lang }) {
   return (
     <Slide id="process">
       <Reveal>
-        <Eyebrow>{b.processTitle}</Eyebrow>
+        <Eyebrow className="text-center">{b.processTitle}</Eyebrow>
       </Reveal>
 
       <Reveal delay={100}>
-        <h2 className="mt-6 max-w-4xl font-display text-[clamp(2rem,4.6vw,4.1rem)] leading-[1.05] tracking-[-0.015em]">
+        <h2 className="mx-auto mt-6 max-w-4xl text-center font-display text-[clamp(2rem,4.6vw,4.1rem)] leading-[1.05] tracking-[-0.015em]">
           {ui.processHead}
         </h2>
       </Reveal>
@@ -439,9 +422,6 @@ function Process({ t, lang }: { t: Copy; lang: Lang }) {
         {b.process.map((step, i) => (
           <Reveal key={step.n} delay={i * 110}>
             <div className="border-t-2 border-cream/15 pt-6 transition-colors duration-300 hover:border-flame">
-              <span className="font-display text-5xl text-flame/90">
-                {step.n}
-              </span>
               <h3 className="mt-4 font-sans text-sm font-bold uppercase tracking-[0.08em] text-cream">
                 {step.t}
               </h3>
@@ -466,20 +446,16 @@ function Projects({ t, lang }: { t: Copy; lang: Lang }) {
 
   return (
     <Slide id="projects">
-      <span className="ghost" aria-hidden>
-        05
-      </span>
-
       <Reveal>
-        <Eyebrow>{w.num}</Eyebrow>
+        <Eyebrow className="text-center">{w.num}</Eyebrow>
       </Reveal>
 
       <Reveal delay={100}>
-        <h2 className="mt-6 font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
+        <h2 className="mx-auto mt-6 max-w-4xl text-center font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
           {w.title.replace(last, "")}
           <em className="text-flame">{last}</em>
         </h2>
-        <p className="mt-6 max-w-2xl font-serif text-lg leading-relaxed text-dim">
+        <p className="mx-auto mt-6 max-w-2xl text-center font-serif text-lg leading-relaxed text-dim">
           {w.intro}
         </p>
       </Reveal>
@@ -492,9 +468,6 @@ function Projects({ t, lang }: { t: Copy; lang: Lang }) {
               onClick={(e) => e.preventDefault()}
               className="group grid gap-3 border-t border-cream/10 py-6 transition-colors duration-200 hover:bg-raised/40 md:grid-cols-12 md:items-center md:gap-6 md:py-7"
             >
-              <span className="font-sans text-[11px] tracking-[0.2em] text-faint md:col-span-1">
-                {p.n}
-              </span>
               <div className="md:col-span-4">
                 <h3 className="font-display text-2xl leading-tight transition-colors duration-200 group-hover:text-flame md:text-3xl">
                   {p.name}
@@ -530,16 +503,12 @@ function Fit({ t, lang }: { t: Copy; lang: Lang }) {
 
   return (
     <Slide id="fit">
-      <span className="ghost" aria-hidden>
-        06
-      </span>
-
       <Reveal>
-        <Eyebrow>{f.num}</Eyebrow>
+        <Eyebrow className="text-center">{f.num}</Eyebrow>
       </Reveal>
 
       <Reveal delay={100}>
-        <h2 className="mt-6 max-w-5xl font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
+        <h2 className="mx-auto mt-6 max-w-4xl text-center font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
           {f.title.replace(last, "")}
           <em className="text-flame">{last}</em>
         </h2>
@@ -549,10 +518,7 @@ function Fit({ t, lang }: { t: Copy; lang: Lang }) {
         {f.items.map((item, i) => (
           <Reveal key={item.n} delay={i * 90}>
             <article className="h-full border border-cream/10 bg-raised/25 p-7 transition-colors duration-300 hover:border-flame/40 md:p-8">
-              <span className="font-sans text-[11px] tracking-[0.2em] text-flame">
-                {item.n}
-              </span>
-              <h3 className="mt-3 font-sans text-lg font-bold uppercase leading-snug tracking-[0.02em] text-cream">
+              <h3 className="font-sans text-lg font-bold uppercase leading-snug tracking-[0.02em] text-cream">
                 {item.t}
               </h3>
               <p className="mt-3 font-serif text-[15px] leading-relaxed text-dim">
@@ -574,29 +540,25 @@ function Contact({ t }: { t: Copy }) {
   const c = t.contact;
   return (
     <Slide id="contact">
-      <span className="ghost" aria-hidden>
-        07
-      </span>
-
       <Reveal>
-        <Eyebrow>{c.num}</Eyebrow>
+        <Eyebrow className="text-center">{c.num}</Eyebrow>
       </Reveal>
 
       <Reveal delay={100}>
-        <h2 className="mt-6 max-w-4xl font-display text-[clamp(2.1rem,5.2vw,4.6rem)] leading-[1.03] tracking-[-0.015em]">
+        <h2 className="mx-auto mt-6 max-w-4xl text-center font-display text-[clamp(2.1rem,5.2vw,4.6rem)] leading-[1.03] tracking-[-0.015em]">
           {c.title.split("?")[0]}
           <em className="text-flame">?</em>
         </h2>
       </Reveal>
 
       <Reveal delay={180}>
-        <p className="mt-8 max-w-2xl font-serif text-lg leading-relaxed text-dim">
+        <p className="mx-auto mt-8 max-w-2xl text-center font-serif text-lg leading-relaxed text-dim">
           {c.body}
         </p>
       </Reveal>
 
       <Reveal delay={260}>
-        <div className="mt-12 flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
+        <div className="mt-12 flex flex-col items-center gap-10 text-center md:flex-row md:items-end md:justify-center">
           <a
             href={t.links.email}
             className="group inline-flex w-fit items-center gap-3 bg-flame px-8 py-4 font-sans text-[12px] font-semibold uppercase tracking-[0.22em] text-ink transition-colors duration-200 hover:bg-cream"
@@ -619,7 +581,7 @@ function Contact({ t }: { t: Copy }) {
       </Reveal>
 
       <Reveal delay={320}>
-        <div className="mt-14 flex flex-wrap items-center gap-x-8 gap-y-3 border-t border-cream/10 pt-8">
+        <div className="mt-14 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 border-t border-cream/10 pt-8">
           <span className="font-sans text-[10px] uppercase tracking-[0.25em] text-faint">
             {c.online}
           </span>

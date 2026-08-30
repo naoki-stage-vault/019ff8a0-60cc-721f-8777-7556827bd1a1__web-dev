@@ -24,7 +24,7 @@ export const en = {
     stripSuffix: "/ Costa Rica",
   },
   positioning: {
-    num: "02 / Positioning",
+    num: "Positioning",
     title: "When the work gets better, the website has to catch up.",
     body: "Built from the ground up to match the business you have today — no templates, no patches.",
     glanceTitle: "At a glance",
@@ -36,7 +36,7 @@ export const en = {
     ],
   },
   about: {
-    num: "03 / About",
+    num: "About",
     statement:
       "I build every website from scratch — designed and developed around what the project actually needs.",
     name: "Catalina",
@@ -44,7 +44,7 @@ export const en = {
     note: "Web designer & developer, Costa Rica. English + Spanish.",
   },
   build: {
-    num: "04 / What I build",
+    num: "What I build",
     title: "Two kinds of projects.",
     intro: "Work where the experience can be properly rethought — not patched.",
     new: {
@@ -66,7 +66,7 @@ export const en = {
     ],
   },
   work: {
-    num: "05 / Selected work",
+    num: "Selected work",
     title: "Different businesses. Different websites.",
     intro: "Every project shaped around what the business needs to say.",
     projects: [
@@ -108,7 +108,7 @@ export const en = {
     ],
   },
   fit: {
-    num: "06 / A good fit",
+    num: "A good fit",
     title: "This works best when you’re ready for a real change.",
     items: [
       { n: "01", t: "Starting more seriously", d: "The work is professional now — the site should say so." },
@@ -118,7 +118,7 @@ export const en = {
     ],
   },
   contact: {
-    num: "07 / Contact",
+    num: "Contact",
     title: "Ready for a website that matches where the business is now?",
     body: "Tell me what has changed and what the new version should do better.",
     cta: "Start a project",
@@ -157,7 +157,7 @@ export const es = {
     stripSuffix: "/ Costa Rica",
   },
   positioning: {
-    num: "02 / Posicionamiento",
+    num: "Posicionamiento",
     title: "Cuando el trabajo mejora, el sitio web tiene que ponerse al día.",
     body: "Construido desde cero para estar a la altura del negocio que tiene hoy — sin plantillas ni parches.",
     glanceTitle: "De un vistazo",
@@ -169,7 +169,7 @@ export const es = {
     ],
   },
   about: {
-    num: "03 / Sobre mí",
+    num: "Sobre mí",
     statement:
       "Construyo cada sitio web desde cero — diseñado y desarrollado alrededor de lo que el proyecto realmente necesita.",
     name: "Catalina",
@@ -177,7 +177,7 @@ export const es = {
     note: "Diseñadora y desarrolladora web, Costa Rica. Español + inglés.",
   },
   build: {
-    num: "04 / Lo que construyo",
+    num: "Lo que construyo",
     title: "Dos tipos de proyectos.",
     intro: "Trabajo donde la experiencia se puede repensar de verdad — no remendar.",
     new: {
@@ -199,7 +199,7 @@ export const es = {
     ],
   },
   work: {
-    num: "05 / Trabajo seleccionado",
+    num: "Trabajo seleccionado",
     title: "Negocios diferentes. Sitios web diferentes.",
     intro: "Cada proyecto se forma alrededor de lo que el negocio necesita decir.",
     projects: [
@@ -241,7 +241,7 @@ export const es = {
     ],
   },
   fit: {
-    num: "06 / Un buen encaje",
+    num: "Un buen encaje",
     title: "Funciona mejor cuando está listo para un cambio real.",
     items: [
       { n: "01", t: "Empieza más en serio", d: "El trabajo ya es profesional — el sitio debería decirlo." },
@@ -251,7 +251,7 @@ export const es = {
     ],
   },
   contact: {
-    num: "07 / Contacto",
+    num: "Contacto",
     title: "¿Listo para un sitio web que esté a la altura del negocio actual?",
     body: "Cuénteme qué ha cambiado y qué debería hacer mejor la nueva versión.",
     cta: "Iniciar un proyecto",
