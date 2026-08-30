@@ -98,6 +98,44 @@ function Reveal({
   );
 }
 
+function SlideDecor() {
+  return (
+    <>
+      <span
+        aria-hidden
+        className="decor-drift pointer-events-none absolute left-[5%] top-[14%] hidden h-20 w-20 text-cream/10 md:block"
+      >
+        <svg viewBox="0 0 100 100" fill="none" className="h-full w-full">
+          <circle cx="50" cy="50" r="44" stroke="currentColor" strokeWidth="1" />
+        </svg>
+      </span>
+      <span
+        aria-hidden
+        className="decor-drift-alt pointer-events-none absolute right-[7%] top-[24%] hidden h-12 w-12 text-cream/15 md:block"
+      >
+        <svg viewBox="0 0 100 100" fill="none" className="h-full w-full">
+          <path d="M22 50h56M50 22v56" stroke="currentColor" strokeWidth="1" />
+        </svg>
+      </span>
+      <span
+        aria-hidden
+        className="decor-drift pointer-events-none absolute bottom-[18%] left-[12%] hidden h-10 w-10 text-flame/10 md:block"
+      >
+        <svg viewBox="0 0 100 100" fill="none" className="h-full w-full">
+          <circle
+            cx="50"
+            cy="50"
+            r="34"
+            stroke="currentColor"
+            strokeWidth="1"
+            strokeDasharray="3 7"
+          />
+        </svg>
+      </span>
+    </>
+  );
+}
+
 function Slide({ id, children }: { id: string; children: React.ReactNode }) {
   return (
     <section
@@ -105,6 +143,7 @@ function Slide({ id, children }: { id: string; children: React.ReactNode }) {
       data-slide
       className="relative flex min-h-svh items-center overflow-hidden px-6 py-24 md:px-14 md:py-28"
     >
+      <SlideDecor />
       <div className="relative z-10 mx-auto w-full max-w-6xl">{children}</div>
     </section>
   );
@@ -218,8 +257,8 @@ function Hero({ t, lang }: { t: Copy; lang: Lang }) {
       </Reveal>
 
       <Reveal delay={220}>
-        <div className="mt-12 flex max-w-3xl flex-col items-center gap-8 text-center md:flex-row md:justify-center">
-          <p className="max-w-md font-serif text-xl leading-relaxed text-dim">
+        <div className="mt-12 flex w-full max-w-6xl flex-col items-center gap-8 md:flex-row md:items-start md:justify-between">
+          <p className="max-w-md text-center font-serif text-xl leading-relaxed text-dim md:text-left">
             {t.hero.sub}
           </p>
           <a
@@ -233,7 +272,7 @@ function Hero({ t, lang }: { t: Copy; lang: Lang }) {
       </Reveal>
 
       <Reveal delay={340}>
-        <div className="mt-20 w-full overflow-hidden border-y border-cream/10 py-3">
+        <div className="marquee-fade mt-20 w-full overflow-hidden border-y border-cream/10 py-3">
           <div className="marquee-track font-sans text-[11px] uppercase tracking-[0.3em] text-faint">
             <span className="px-4">{strip}</span>
             <span className="px-4" aria-hidden>
@@ -333,15 +372,11 @@ function About({ t }: { t: Copy }) {
       </Reveal>
 
       <Reveal delay={180}>
-        <div className="mx-auto mt-14 w-full max-w-sm border border-cream/10 bg-raised/30 p-8">
-          <p className="font-sans text-[10px] uppercase tracking-[0.25em] text-faint">
-            {a.name}
-          </p>
-          <p className="mt-4 font-display text-6xl text-flame">{a.monogram}</p>
-          <p className="mt-4 font-serif text-[15px] leading-relaxed text-dim">
-            {a.note}
-          </p>
-        </div>
+        <p className="mx-auto mt-12 w-fit font-serif text-lg leading-relaxed text-dim">
+          <span className="text-flame">—</span>{" "}
+          <span className="text-cream">{a.name}</span>{" "}
+          <span className="text-faint">({a.note})</span>
+        </p>
       </Reveal>
     </Slide>
   );

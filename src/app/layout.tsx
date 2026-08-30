@@ -18,7 +18,7 @@ const grotesk = Space_Grotesk({
 });
 
 export const metadata: Metadata = {
-  title: "Catalina Cob — Web Design + Development / Costa Rica",
+  title: "Catalina Cobap — Web Design + Development / Costa Rica",
   description:
     "Custom websites for businesses and independent professionals ready for an online presence that reflects the quality of their work today.",
 };

@@ -7,7 +7,7 @@ export const en = {
     { href: "#projects", label: "Selected work" },
     { href: "#contact", label: "Contact" },
   ],
-  brand: "Catalina Cob",
+  brand: "Catalina Cobap",
   links: {
     email: "mailto:catalinacobap@gmail.com",
     linkedin: "#",
@@ -26,7 +26,7 @@ export const en = {
   positioning: {
     num: "Positioning",
     title: "When the work gets better, the website has to catch up.",
-    body: "Built from the ground up to match the business you have today — no templates, no patches.",
+    body: "Built from the ground up to match the business you have today. No templates, no patches.",
     glanceTitle: "At a glance",
     glance: [
       ["Focus", "New websites + complete rebuilds"],
@@ -41,7 +41,7 @@ export const en = {
       "I build every website from scratch — designed and developed around what the project actually needs.",
     name: "Catalina",
     monogram: "C.",
-    note: "Web designer & developer, Costa Rica. English + Spanish.",
+    note: "Web designer & developer, Costa Rica.",
   },
   build: {
     num: "What I build",
@@ -140,7 +140,7 @@ export const es = {
     { href: "#projects", label: "Trabajo seleccionado" },
     { href: "#contact", label: "Contacto" },
   ],
-  brand: "Catalina Cob",
+  brand: "Catalina Cobap",
   links: {
     email: "mailto:catalinacobap@gmail.com",
     linkedin: "#",
@@ -159,7 +159,7 @@ export const es = {
   positioning: {
     num: "Posicionamiento",
     title: "Cuando el trabajo mejora, el sitio web tiene que ponerse al día.",
-    body: "Construido desde cero para estar a la altura del negocio que tiene hoy — sin plantillas ni parches.",
+    body: "Construido desde cero para estar a la altura del negocio que tiene hoy. Sin plantillas ni parches.",
     glanceTitle: "De un vistazo",
     glance: [
       ["Enfoque", "Sitios web nuevos + rediseños completos"],
@@ -174,7 +174,7 @@ export const es = {
       "Construyo cada sitio web desde cero — diseñado y desarrollado alrededor de lo que el proyecto realmente necesita.",
     name: "Catalina",
     monogram: "C.",
-    note: "Diseñadora y desarrolladora web, Costa Rica. Español + inglés.",
+    note: "Diseñadora y desarrolladora web, Costa Rica.",
   },
   build: {
     num: "Lo que construyo",
