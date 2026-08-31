@@ -238,9 +238,15 @@ function PinHero({ t, lang }: { t: Copy; lang: Lang }) {
   const [p, setP] = useState(0);
   useEffect(() => on(setP), [on]);
 
-  const intro = clamp01(p / 0.3);
+  const [entered, setEntered] = useState(false);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setEntered(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
+
+  // visible from load: scroll only fades it out at the end of the runway
   const fadeOut = clamp01((1 - p) / 0.15);
-  const reveal = Math.min(intro, fadeOut);
+  const enter = entered ? 1 : 0;
 
   const last = lang === "en" ? "look like it." : "reflejarlo.";
   const main = t.hero.titleB.replace(last, "");
@@ -248,13 +254,18 @@ function PinHero({ t, lang }: { t: Copy; lang: Lang }) {
 
   return (
     <Runway h="340vh" ref={ref}>
-      <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col items-center justify-center px-6 md:px-14">
+      <div
+        className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col items-center justify-center px-6 md:px-14"
+        style={{ opacity: fadeOut }}
+      >
         <div
           className="text-center"
           style={{
-            opacity: reveal,
-            transform: `translateY(${(1 - reveal) * 44}px)`,
-            filter: `blur(${(1 - reveal) * 10}px)`,
+            opacity: enter,
+            transform: `translateY(${(1 - enter) * 44}px)`,
+            filter: `blur(${(1 - enter) * 10}px)`,
+            transition:
+              "opacity 1s cubic-bezier(0.22, 1, 0.36, 1), transform 1s cubic-bezier(0.22, 1, 0.36, 1), filter 1s cubic-bezier(0.22, 1, 0.36, 1)",
           }}
         >
           <Eyebrow className="text-center">{t.hero.label}</Eyebrow>
@@ -270,8 +281,10 @@ function PinHero({ t, lang }: { t: Copy; lang: Lang }) {
         <div
           className="mt-12 w-full"
           style={{
-            opacity: Math.min(1, reveal * 1.2),
-            transform: `translateY(${(1 - reveal) * 30}px)`,
+            opacity: enter,
+            transform: `translateY(${(1 - enter) * 30}px)`,
+            transition:
+              "opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.15s, transform 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.15s",
           }}
         >
           <div className="flex w-full flex-col items-center gap-8 md:flex-row md:items-start md:justify-between">
