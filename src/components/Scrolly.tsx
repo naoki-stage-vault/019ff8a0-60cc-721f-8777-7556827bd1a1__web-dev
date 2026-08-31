@@ -215,16 +215,12 @@ function Words({
 function ProgressRail() {
   const { lang } = useLang();
   const [active, setActive] = useState(0);
-  const [progress, setProgress] = useState(0);
 
   useEffect(() => {
     let raf = 0;
     const onScroll = () => {
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
-        const y = window.scrollY;
-        const h = document.documentElement.scrollHeight - window.innerHeight;
-        setProgress(h > 0 ? y / h : 0);
         let idx = 0;
         for (let i = 0; i < SECTION_IDS.length; i++) {
           const el = document.getElementById(SECTION_IDS[i]);
@@ -247,13 +243,6 @@ function ProgressRail() {
 
   return (
     <>
-      <div className="fixed inset-x-0 top-0 z-[60] h-[3px]" aria-hidden>
-        <div
-          className="h-full bg-flame transition-[width] duration-150 ease-out"
-          style={{ width: `${progress * 100}%` }}
-        />
-      </div>
-
       <nav
         className="fixed right-5 top-1/2 z-50 hidden -translate-y-1/2 flex-col items-center gap-1.5 lg:flex"
         aria-label="Chapters"
@@ -317,7 +306,7 @@ function Hero({ t, lang }: { t: Copy; lang: Lang }) {
           }}
         >
           <Eyebrow className="text-center">{t.hero.label}</Eyebrow>
-          <h1 className="mx-auto mt-8 font-display text-[clamp(2.4rem,6.2vw,5.4rem)] leading-[1.02] tracking-[-0.02em]">
+          <h1 className="mx-auto mt-8 font-display text-[clamp(3rem,7.8vw,7.4rem)] leading-[1.02] tracking-[-0.02em]">
             <span className="block uppercase">{t.hero.titleA}</span>
             <em className="text-cream">
               {main}
@@ -596,14 +585,16 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
     <Runway id="projects" h="380vh" ref={ref}>
       <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col justify-start px-6 pt-20 md:justify-center md:pt-0 md:px-14">
         <div className="text-center">
-          <Eyebrow className="text-center">{w.num}</Eyebrow>
+          <div style={{ opacity: seg(0, 0.12) }}>
+            <Eyebrow className="text-center">{w.num}</Eyebrow>
+          </div>
           <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
-            <Words text={main} p={p} range={[0.05, 0.35]} />
+            <Words text={main} p={p} range={[0, 0.3]} />
             <em className="text-flame">{last}</em>
           </h2>
           <p
             className="mx-auto mt-6 hidden max-w-2xl font-serif text-lg leading-relaxed text-dim md:block"
-            style={{ opacity: seg(0.2, 0.4) }}
+            style={{ opacity: seg(0.12, 0.3) }}
           >
             {w.intro}
           </p>
@@ -616,8 +607,9 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
             return (
               <a
                 key={pr.n}
-                href="#"
-                onClick={(e) => e.preventDefault()}
+                href={pr.url}
+                target="_blank"
+                rel="noreferrer"
                 className="grid gap-3 border-t border-cream/10 py-4 md:grid-cols-12 md:items-center md:gap-6 md:py-6"
                 style={{
                   opacity: Math.min(1, o * 1.5),
