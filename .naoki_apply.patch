@@ -1,7 +1,0 @@
---- a/src/components/Scrolly.tsx
-+++ b/src/components/Scrolly.tsx
-@@ -308,4 +308,4 @@
-           <Eyebrow className="text-center">{t.hero.label}</Eyebrow>
--          <h1 className="mx-auto mt-8 font-display text-[clamp(2.4rem,6.2vw,5.4rem)] leading-[1.02] tracking-[-0.02em]">
-+          <h1 className="mx-auto mt-8 font-display text-[clamp(3rem,7.8vw,7.4rem)] leading-[1.02] tracking-[-0.02em]">
-             <span className="block uppercase">{t.hero.titleA}</span>

@@ -12,7 +12,7 @@ export const en = {
     email: "mailto:catalinacobap@gmail.com",
     linkedin: "#",
     github: "#",
-    cv: "#",
+    cv: "https://docs.google.com/document/d/1ZT_LXHi_dx4Z-HlCwThasDIjoyxdMLnrpJmPymGnG54/edit?usp=sharing",
   },
   hero: {
     label: "Web design + development / Costa Rica",
@@ -76,6 +76,7 @@ export const en = {
         name: "Aster Intel",
         desc: "An AI-powered intelligence platform, made clear for investors.",
         link: "Visit website",
+        url: "https://asterintel.ai",
       },
       {
         n: "02",
@@ -83,6 +84,7 @@ export const en = {
         name: "Kai Custom Homes",
         desc: "A premium custom home builder with a presence to match.",
         link: "Visit website",
+        url: "https://kai-customhomes.com",
       },
       {
         n: "03",
@@ -90,6 +92,7 @@ export const en = {
         name: "Baileyscode",
         desc: "A Costa Rican web studio for tourism and hospitality.",
         link: "Visit website",
+        url: "https://www.baileyscode.com",
       },
       {
         n: "04",
@@ -97,6 +100,7 @@ export const en = {
         name: "Costa Rica Descents",
         desc: "A large tour catalog, organized for easy discovery.",
         link: "Visit website",
+        url: "https://costaricadescents.com",
       },
       {
         n: "05",
@@ -104,6 +108,7 @@ export const en = {
         name: "Ester’s Place",
         desc: "A bilingual guesthouse with a complete online presence.",
         link: "Visit website",
+        url: "https://estersplace.com",
       },
     ],
   },
@@ -145,7 +150,7 @@ export const es = {
     email: "mailto:catalinacobap@gmail.com",
     linkedin: "#",
     github: "#",
-    cv: "#",
+    cv: "https://docs.google.com/document/d/1ZT_LXHi_dx4Z-HlCwThasDIjoyxdMLnrpJmPymGnG54/edit?usp=sharing",
   },
   hero: {
     label: "Diseño web + desarrollo / Costa Rica",
@@ -209,6 +214,7 @@ export const es = {
         name: "Aster Intel",
         desc: "Una plataforma de inteligencia, clara para inversionistas.",
         link: "Visitar sitio",
+        url: "https://asterintel.ai",
       },
       {
         n: "02",
@@ -216,6 +222,7 @@ export const es = {
         name: "Kai Custom Homes",
         desc: "Un constructor premium con presencia a la altura.",
         link: "Visitar sitio",
+        url: "https://kai-customhomes.com",
       },
       {
         n: "03",
@@ -223,6 +230,7 @@ export const es = {
         name: "Baileyscode",
         desc: "Un estudio web costarricense para turismo y hospitalidad.",
         link: "Visitar sitio",
+        url: "https://www.baileyscode.com",
       },
       {
         n: "04",
@@ -230,6 +238,7 @@ export const es = {
         name: "Costa Rica Descents",
         desc: "Un catálogo grande de tours, organizado para explorar.",
         link: "Visitar sitio",
+        url: "https://costaricadescents.com",
       },
       {
         n: "05",
@@ -237,6 +246,7 @@ export const es = {
         name: "Ester’s Place",
         desc: "Un hospedaje bilingüe con presencia en línea completa.",
         link: "Visitar sitio",
+        url: "https://estersplace.com",
       },
     ],
   },
