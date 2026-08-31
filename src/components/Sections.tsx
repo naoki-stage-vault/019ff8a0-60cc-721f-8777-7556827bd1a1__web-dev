@@ -493,6 +493,8 @@ function Build({ t }: { t: Copy }) {
     { tag: b.new.tag, lead: b.new.lead, body: b.new.body },
     { tag: b.rebuild.tag, lead: b.rebuild.lead, body: b.rebuild.body },
   ];
+  const activeRef = useRef<HTMLDivElement>(null);
+  const p = useScrollProgress(activeRef);
 
   return (
     <Slide id="build" className="h-[180vh]">
@@ -510,10 +512,17 @@ function Build({ t }: { t: Copy }) {
         />
       </Reveal>
 
-      <div className="mt-12 grid gap-5 md:grid-cols-2">
-        {panels.map((panel, i) => (
+      <div ref={activeRef} className="mt-12 grid gap-5 md:grid-cols-2">
+        {panels.map((panel, i) => {
+          const a = Math.min(1, Math.max(0, (p - i / panels.length) * panels.length));
+          const active = a > 0 && a < 1;
+          return (
           <Reveal key={panel.tag} delay={i * 120}>
-            <article className="group flex h-full flex-col justify-between border border-cream/10 bg-raised/30 p-8 transition-colors duration-300 hover:border-flame/50 md:p-10">
+            <article
+              className={`group flex h-full flex-col justify-between border bg-raised/30 p-8 transition-colors duration-500 md:p-10 ${
+                active ? "border-flame/60" : "border-cream/10"
+              }`}
+            >
               <div>
                 <div className="flex items-center justify-between">
                   <span className="font-sans text-[11px] uppercase tracking-[0.25em] text-flame">
@@ -530,7 +539,8 @@ function Build({ t }: { t: Copy }) {
               </p>
             </article>
           </Reveal>
-        ))}
+          );
+        })}
       </div>
     </Slide>
   );
@@ -543,6 +553,8 @@ function Build({ t }: { t: Copy }) {
 function Process({ t, lang }: { t: Copy; lang: Lang }) {
   const b = t.build;
   const ui = UI[lang];
+  const activeRef = useRef<HTMLDivElement>(null);
+  const p = useScrollProgress(activeRef);
   return (
     <Slide id="process" className="h-[200vh]">
       <Reveal>
@@ -555,10 +567,17 @@ function Process({ t, lang }: { t: Copy; lang: Lang }) {
         </h2>
       </Reveal>
 
-      <div className="mt-14 grid gap-10 md:grid-cols-4 md:gap-8">
-        {b.process.map((step, i) => (
+      <div ref={activeRef} className="mt-14 grid gap-10 md:grid-cols-4 md:gap-8">
+        {b.process.map((step, i) => {
+          const a = Math.min(1, Math.max(0, (p - i / b.process.length) * b.process.length));
+          const active = a > 0 && a < 1;
+          return (
           <Reveal key={step.n} delay={i * 110}>
-            <div className="border-t-2 border-cream/15 pt-6 transition-colors duration-300 hover:border-flame">
+            <div
+              className={`border-t-2 pt-6 transition-colors duration-500 ${
+                active ? "border-flame" : "border-cream/15"
+              }`}
+            >
               <h3 className="mt-4 font-sans text-sm font-bold uppercase tracking-[0.08em] text-cream">
                 {step.t}
               </h3>
@@ -567,7 +586,8 @@ function Process({ t, lang }: { t: Copy; lang: Lang }) {
               </p>
             </div>
           </Reveal>
-        ))}
+          );
+        })}
       </div>
     </Slide>
   );
@@ -647,6 +667,8 @@ function Projects({ t, lang }: { t: Copy; lang: Lang }) {
 function Fit({ t, lang }: { t: Copy; lang: Lang }) {
   const f = t.fit;
   const last = lang === "en" ? "real change." : "un cambio real.";
+  const activeRef = useRef<HTMLDivElement>(null);
+  const p = useScrollProgress(activeRef);
 
   return (
     <Slide id="fit" className="h-[200vh]">
@@ -661,10 +683,17 @@ function Fit({ t, lang }: { t: Copy; lang: Lang }) {
         </h2>
       </Reveal>
 
-      <div className="mt-8 grid gap-5 md:grid-cols-2">
-        {f.items.map((item, i) => (
+      <div ref={activeRef} className="mt-8 grid gap-5 md:grid-cols-2">
+        {f.items.map((item, i) => {
+          const a = Math.min(1, Math.max(0, (p - i / f.items.length) * f.items.length));
+          const active = a > 0 && a < 1;
+          return (
           <Reveal key={item.n} delay={i * 90}>
-            <article className="h-full border border-cream/10 bg-raised/25 p-7 transition-colors duration-300 hover:border-flame/40 md:p-8">
+            <article
+              className={`h-full border bg-raised/25 p-7 transition-colors duration-500 md:p-8 ${
+                active ? "border-flame/50" : "border-cream/10"
+              }`}
+            >
               <h3 className="font-sans text-lg font-bold uppercase leading-snug tracking-[0.02em] text-cream">
                 {item.t}
               </h3>
@@ -673,7 +702,8 @@ function Fit({ t, lang }: { t: Copy; lang: Lang }) {
               </p>
             </article>
           </Reveal>
-        ))}
+          );
+        })}
       </div>
     </Slide>
   );
