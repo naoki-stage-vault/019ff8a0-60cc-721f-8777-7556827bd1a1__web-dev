@@ -56,6 +56,59 @@ function Eyebrow({
 }
 
 /* ------------------------------------------------------------------ */
+/* Reveal: subtle fade + rise when a block enters the viewport        */
+/* ------------------------------------------------------------------ */
+
+function Reveal({
+  children,
+  className = "",
+  delay = 0,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  delay?: number;
+}) {
+  const ref = useRef<HTMLDivElement | null>(null);
+  const [vis, setVis] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setVis(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            setVis(true);
+            io.disconnect();
+          }
+        }
+      },
+      { threshold: 0.15 }
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  return (
+    <div
+      ref={ref}
+      className={className}
+      style={{
+        opacity: vis ? 1 : 0,
+        transform: vis ? "none" : "translateY(18px)",
+        transition: `opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1) ${delay}s, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1) ${delay}s`,
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Scroll pin hook: reports 0..1 progress through a runway            */
 /* ------------------------------------------------------------------ */
 
@@ -101,33 +154,18 @@ function usePin<T extends HTMLElement>() {
 
 function Runway({
   h = "300vh",
+  id,
   ref,
   children,
 }: {
   h?: string;
+  id?: string;
   ref?: React.Ref<HTMLDivElement>;
   children: React.ReactNode;
 }) {
   return (
-    <div ref={ref} data-slide className="relative" style={{ height: h }}>
+    <div ref={ref} id={id} data-slide className="relative" style={{ height: h }}>
       <div className="sticky top-0 h-svh overflow-hidden">{children}</div>
-    </div>
-  );
-}
-
-/* ------------------------------------------------------------------ */
-/* Grid field: faint cells, sweeping beam, walking colored line       */
-/* ------------------------------------------------------------------ */
-
-function GridField() {
-  return (
-    <div aria-hidden className="pointer-events-none absolute inset-0">
-      <div className="grid-field" />
-      <div className="grid-beam hidden md:block" />
-      <div className="grid-beam grid-beam-alt hidden md:block" />
-      <div className="grid-walker hidden md:block" />
-      <div className="grid-walker grid-walker-alt hidden md:block" />
-      <div className="grid-walker grid-walker-slow hidden md:block" />
     </div>
   );
 }
@@ -247,39 +285,42 @@ function ProgressRail() {
 }
 
 /* ------------------------------------------------------------------ */
-/* 01 · HERO (pinned)                                                  */
+/* 01 · HERO (normal flow, entrance on load)                          */
 /* ------------------------------------------------------------------ */
 
-function PinHero({ t, lang }: { t: Copy; lang: Lang }) {
-  const { ref, on } = usePin<HTMLDivElement>();
-  const [p, setP] = useState(0);
-  useEffect(() => on(setP), [on]);
+function Hero({ t, lang }: { t: Copy; lang: Lang }) {
+  const [entered, setEntered] = useState(false);
+  useEffect(() => {
+    const id = requestAnimationFrame(() => setEntered(true));
+    return () => cancelAnimationFrame(id);
+  }, []);
 
-  const intro = clamp01(p / 0.3);
-  const fadeOut = clamp01((1 - p) / 0.15);
-  const reveal = Math.min(intro, fadeOut);
-
+  const enter = entered ? 1 : 0;
   const last = lang === "en" ? "look like it." : "reflejarlo.";
   const main = t.hero.titleB.replace(last, "");
   const strip = `${t.hero.strip}  ·  ${t.hero.stripSuffix}`;
 
   return (
-    <Runway h="340vh" ref={ref}>
-      <GridField />
-      <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col items-center justify-center px-6 md:px-14">
+    <section
+      id="top"
+      className="relative flex min-h-svh w-full items-center justify-center overflow-hidden px-6 md:px-14"
+    >
+      <div className="mx-auto w-full max-w-6xl">
         <div
           className="text-center"
           style={{
-            opacity: reveal,
-            transform: `translateY(${(1 - reveal) * 44}px)`,
-            filter: `blur(${(1 - reveal) * 10}px)`,
+            opacity: enter,
+            transform: `translateY(${(1 - enter) * 44}px)`,
+            filter: `blur(${(1 - enter) * 10}px)`,
+            transition:
+              "opacity 1s cubic-bezier(0.22, 1, 0.36, 1), transform 1s cubic-bezier(0.22, 1, 0.36, 1), filter 1s cubic-bezier(0.22, 1, 0.36, 1)",
           }}
         >
           <Eyebrow className="text-center">{t.hero.label}</Eyebrow>
           <h1 className="mx-auto mt-8 font-display text-[clamp(2.4rem,6.2vw,5.4rem)] leading-[1.02] tracking-[-0.02em]">
             <span className="block uppercase">{t.hero.titleA}</span>
             <em className="text-cream">
-              <Words text={main} p={p} range={[0.22, 0.68]} />
+              {main}
               <span className="text-flame">{last}</span>
             </em>
           </h1>
@@ -288,8 +329,10 @@ function PinHero({ t, lang }: { t: Copy; lang: Lang }) {
         <div
           className="mt-12 w-full"
           style={{
-            opacity: Math.min(1, reveal * 1.2),
-            transform: `translateY(${(1 - reveal) * 30}px)`,
+            opacity: enter,
+            transform: `translateY(${(1 - enter) * 30}px)`,
+            transition:
+              "opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.15s, transform 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.15s",
           }}
         >
           <div className="flex w-full flex-col items-center gap-8 md:flex-row md:items-start md:justify-between">
@@ -327,129 +370,107 @@ function PinHero({ t, lang }: { t: Copy; lang: Lang }) {
           </div>
         </div>
       </div>
-    </Runway>
+    </section>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/* 02 · POSITIONING (pinned)                                           */
+/* 02 · POSITIONING (normal flow, subtle reveal)                      */
 /* ------------------------------------------------------------------ */
 
-function PinPositioning({ t, lang }: { t: Copy; lang: Lang }) {
-  const { ref, on } = usePin<HTMLDivElement>();
-  const [p, setP] = useState(0);
-  useEffect(() => on(setP), [on]);
-
-  const seg = (a: number, b: number) => clamp01((p - a) / (b - a));
+function Positioning({ t, lang }: { t: Copy; lang: Lang }) {
   const last = lang === "en" ? "catch up." : "ponerse al día.";
   const main = t.positioning.title.replace(last, "");
 
   return (
-    <Runway h="320vh" ref={ref}>
-      <GridField />
-      <div className="relative z-10 mx-auto w-full max-w-6xl px-6 text-center md:px-14">
-        <Eyebrow className="text-center" >{t.positioning.num}</Eyebrow>
-        <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
-          <Words text={main} p={p} range={[0.12, 0.58]} />
-          <em className="text-flame">{last}</em>
-        </h2>
+    <section
+      id="positioning"
+      className="relative flex min-h-svh w-full items-center justify-center px-6 py-24 text-center md:px-14"
+    >
+      <div className="mx-auto w-full max-w-6xl">
+        <Reveal>
+          <Eyebrow className="text-center">{t.positioning.num}</Eyebrow>
+          <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
+            {main}
+            <em className="text-flame">{last}</em>
+          </h2>
+        </Reveal>
 
-        <p
-          className="mx-auto mt-12 max-w-3xl font-serif text-[clamp(1.3rem,2.3vw,1.8rem)] leading-snug text-dim"
-          style={{
-            opacity: seg(0.5, 0.72),
-            transform: `translateY(${(1 - seg(0.5, 0.72)) * 30}px)`,
-          }}
-        >
-          {t.positioning.body}
-        </p>
-
-        <div
-          className="mx-auto mt-14 w-full max-w-xl border border-cream/10 bg-raised/30 text-left"
-          style={{
-            opacity: seg(0.7, 0.95),
-            transform: `translateY(${(1 - seg(0.7, 0.95)) * 36}px)`,
-          }}
-        >
-          <p className="border-b border-cream/10 px-6 py-3 font-sans text-[10px] uppercase tracking-[0.25em] text-faint">
-            {t.positioning.glanceTitle}
+        <Reveal delay={0.1}>
+          <p className="mx-auto mt-12 max-w-3xl font-serif text-[clamp(1.3rem,2.3vw,1.8rem)] leading-snug text-dim">
+            {t.positioning.body}
           </p>
-          <dl>
-            {t.positioning.glance.map(([label, value], i) => (
-              <div
-                key={label}
-                className={`flex flex-col gap-1 px-6 py-4 sm:flex-row sm:items-baseline sm:justify-between ${
-                  i > 0 ? "border-t border-cream/10" : ""
-                }`}
-              >
-                <dt className="shrink-0 font-sans text-[10px] uppercase tracking-[0.2em] text-faint">
-                  {label}
-                </dt>
-                <dd className="text-right font-serif text-[15px] leading-snug text-cream">
-                  {value}
-                </dd>
-              </div>
-            ))}
-          </dl>
-        </div>
+        </Reveal>
+
+        <Reveal delay={0.18}>
+          <div className="mx-auto mt-14 w-full max-w-xl border border-cream/10 bg-raised/30 text-left">
+            <p className="border-b border-cream/10 px-6 py-3 font-sans text-[10px] uppercase tracking-[0.25em] text-faint">
+              {t.positioning.glanceTitle}
+            </p>
+            <dl>
+              {t.positioning.glance.map(([label, value], i) => (
+                <div
+                  key={label}
+                  className={`flex flex-col gap-1 px-6 py-4 sm:flex-row sm:items-baseline sm:justify-between ${
+                    i > 0 ? "border-t border-cream/10" : ""
+                  }`}
+                >
+                  <dt className="shrink-0 font-sans text-[10px] uppercase tracking-[0.2em] text-faint">
+                    {label}
+                  </dt>
+                  <dd className="text-right font-serif text-[15px] leading-snug text-cream">
+                    {value}
+                  </dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        </Reveal>
       </div>
-    </Runway>
+    </section>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/* 03 · ABOUT (pinned)                                                 */
+/* 03 · ABOUT (normal flow, subtle reveal)                            */
 /* ------------------------------------------------------------------ */
 
-function PinAbout({ t }: { t: Copy }) {
-  const { ref, on } = usePin<HTMLDivElement>();
-  const [p, setP] = useState(0);
-  useEffect(() => on(setP), [on]);
-
-  const seg = (a: number, b: number) => clamp01((p - a) / (b - a));
+function About({ t }: { t: Copy }) {
   const a = t.about;
 
   return (
-    <Runway h="280vh" ref={ref}>
-      <GridField />
-      <div className="relative z-10 mx-auto w-full max-w-6xl px-6 text-center md:px-14">
-        <Eyebrow className="text-center">{a.num}</Eyebrow>
+    <section
+      id="about"
+      className="relative flex min-h-svh w-full items-center justify-center px-6 py-24 text-center md:px-14"
+    >
+      <div className="mx-auto w-full max-w-6xl">
+        <Reveal>
+          <Eyebrow className="text-center">{a.num}</Eyebrow>
+          <p className="mx-auto mt-10 max-w-5xl font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
+            <em className="text-cream">
+              “{a.statement}”
+            </em>
+            <span className="text-flame">.</span>
+          </p>
+        </Reveal>
 
-        <p className="mx-auto mt-10 max-w-5xl font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
-          <em className="text-cream">
-            “
-            <Words text={a.statement} p={p} range={[0.12, 0.72]} />
-            ”
-          </em>
-          <span className="text-flame">.</span>
-        </p>
-
-        <p
-          className="mx-auto mt-14 w-fit font-serif text-lg leading-relaxed text-dim"
-          style={{
-            opacity: seg(0.7, 0.92),
-            transform: `translateY(${(1 - seg(0.7, 0.92)) * 26}px)`,
-          }}
-        >
-          <span className="text-flame">—</span>{" "}
-          <span className="text-cream">{a.name}</span>{" "}
-          <span className="text-faint">({a.note})</span>
-        </p>
+        <Reveal delay={0.12}>
+          <p className="mx-auto mt-14 w-fit font-serif text-lg leading-relaxed text-dim">
+            <span className="text-flame">—</span>{" "}
+            <span className="text-cream">{a.name}</span>{" "}
+            <span className="text-faint">({a.note})</span>
+          </p>
+        </Reveal>
       </div>
-    </Runway>
+    </section>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/* 04 · WHAT I BUILD (pinned)                                          */
+/* 04 · WHAT I BUILD (normal flow, subtle reveal)                     */
 /* ------------------------------------------------------------------ */
 
-function PinBuild({ t }: { t: Copy }) {
-  const { ref, on } = usePin<HTMLDivElement>();
-  const [p, setP] = useState(0);
-  useEffect(() => on(setP), [on]);
-
-  const seg = (a: number, b: number) => clamp01((p - a) / (b - a));
+function Build({ t }: { t: Copy }) {
   const b = t.build;
   const panels = [
     { tag: b.new.tag, lead: b.new.lead, body: b.new.body },
@@ -457,38 +478,25 @@ function PinBuild({ t }: { t: Copy }) {
   ];
 
   return (
-    <Runway h="320vh" ref={ref}>
-      <GridField />
-      <div className="relative z-10 mx-auto w-full max-w-6xl px-6 md:px-14">
-        <Eyebrow className="text-center">{b.num}</Eyebrow>
-        <h2
-          className="mx-auto mt-6 max-w-4xl text-center font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]"
-          style={{
-            opacity: seg(0.05, 0.25),
-            transform: `translateY(${(1 - seg(0.05, 0.25)) * 28}px)`,
-          }}
-        >
-          {b.title}
-        </h2>
-        <p
-          className="mx-auto mt-6 max-w-2xl text-center font-serif text-lg leading-relaxed text-dim"
-          style={{ opacity: seg(0.18, 0.38) }}
-        >
-          {b.intro}
-        </p>
+    <section
+      id="build"
+      className="relative flex min-h-svh w-full items-center justify-center px-6 py-24 md:px-14"
+    >
+      <div className="mx-auto w-full max-w-6xl">
+        <Reveal className="text-center">
+          <Eyebrow className="text-center">{b.num}</Eyebrow>
+          <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
+            {b.title}
+          </h2>
+          <p className="mx-auto mt-6 max-w-2xl font-serif text-lg leading-relaxed text-dim">
+            {b.intro}
+          </p>
+        </Reveal>
 
         <div className="mt-14 grid gap-5 md:grid-cols-2">
-          {panels.map((panel, i) => {
-            const o = seg(0.22 + i * 0.3, 0.45 + i * 0.3);
-            return (
-              <div
-                key={panel.tag}
-                className="flex h-full flex-col justify-between border border-cream/10 bg-raised/30 p-8 md:p-10"
-                style={{
-                  opacity: o,
-                  transform: `translateY(${(1 - o) * 40}px)`,
-                }}
-              >
+          {panels.map((panel, i) => (
+            <Reveal key={panel.tag} delay={0.1 + i * 0.12} className="h-full">
+              <div className="flex h-full flex-col justify-between border border-cream/10 bg-raised/30 p-8 md:p-10">
                 <div>
                   <div className="flex items-center justify-between">
                     <span className="font-sans text-[11px] uppercase tracking-[0.25em] text-flame">
@@ -504,16 +512,16 @@ function PinBuild({ t }: { t: Copy }) {
                   {panel.body}
                 </p>
               </div>
-            );
-          })}
+            </Reveal>
+          ))}
         </div>
       </div>
-    </Runway>
+    </section>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/* 05 · PROCESS (pinned)                                               */
+/* 05 · PROCESS (pinned scrollytelling)                               */
 /* ------------------------------------------------------------------ */
 
 function PinProcess({ t, lang }: { t: Copy; lang: Lang }) {
@@ -527,9 +535,8 @@ function PinProcess({ t, lang }: { t: Copy; lang: Lang }) {
   const steps = b.process;
 
   return (
-    <Runway h="380vh" ref={ref}>
-      <GridField />
-      <div className="relative z-10 mx-auto w-full max-w-6xl px-6 md:px-14">
+    <Runway id="process" h="300vh" ref={ref}>
+      <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col justify-start px-6 pt-20 md:justify-center md:px-14 md:pt-0">
         <Eyebrow className="text-center">{b.processTitle}</Eyebrow>
         <h2 className="mx-auto mt-6 max-w-4xl text-center font-display text-[clamp(2rem,4.6vw,4.1rem)] leading-[1.05] tracking-[-0.015em]">
           <Words text={ui.processHead} p={p} range={[0.08, 0.4]} />
@@ -538,7 +545,10 @@ function PinProcess({ t, lang }: { t: Copy; lang: Lang }) {
         <div className="mt-10 grid gap-10 md:mt-16 md:grid-cols-4 md:gap-8">
           {steps.map((step, i) => {
             const o = seg(0.12 + i * 0.19, 0.3 + i * 0.19);
-            const border = o > 0.55 ? "2px solid var(--color-flame)" : "2px solid rgba(246,236,216,0.15)";
+            const border =
+              o > 0.55
+                ? "2px solid var(--color-flame)"
+                : "2px solid rgba(246,236,216,0.15)";
             return (
               <div
                 key={step.n}
@@ -569,7 +579,7 @@ function PinProcess({ t, lang }: { t: Copy; lang: Lang }) {
 }
 
 /* ------------------------------------------------------------------ */
-/* 06 · SELECTED WORK (pinned)                                         */
+/* 06 · SELECTED WORK (pinned scrollytelling)                         */
 /* ------------------------------------------------------------------ */
 
 function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
@@ -583,8 +593,7 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
   const main = w.title.replace(last, "");
 
   return (
-    <Runway h="460vh" ref={ref}>
-      <GridField />
+    <Runway id="projects" h="380vh" ref={ref}>
       <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col justify-start px-6 pt-20 md:justify-center md:pt-0 md:px-14">
         <div className="text-center">
           <Eyebrow className="text-center">{w.num}</Eyebrow>
@@ -655,41 +664,32 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
 }
 
 /* ------------------------------------------------------------------ */
-/* 07 · A GOOD FIT (pinned)                                            */
+/* 07 · A GOOD FIT (normal flow, subtle reveal)                       */
 /* ------------------------------------------------------------------ */
 
-function PinFit({ t, lang }: { t: Copy; lang: Lang }) {
-  const { ref, on } = usePin<HTMLDivElement>();
-  const [p, setP] = useState(0);
-  useEffect(() => on(setP), [on]);
-
-  const seg = (a: number, b: number) => clamp01((p - a) / (b - a));
+function Fit({ t, lang }: { t: Copy; lang: Lang }) {
   const f = t.fit;
   const last = lang === "en" ? "real change." : "un cambio real.";
   const main = f.title.replace(last, "");
 
   return (
-    <Runway h="340vh" ref={ref}>
-      <GridField />
-      <div className="relative z-10 mx-auto w-full max-w-6xl px-6 md:px-14">
-        <Eyebrow className="text-center">{f.num}</Eyebrow>
-        <h2 className="mx-auto mt-6 max-w-4xl text-center font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
-          <Words text={main} p={p} range={[0.1, 0.5]} />
-          <em className="text-flame">{last}</em>
-        </h2>
+    <section
+      id="fit"
+      className="relative flex min-h-svh w-full items-center justify-center px-6 py-24 md:px-14"
+    >
+      <div className="mx-auto w-full max-w-6xl">
+        <Reveal className="text-center">
+          <Eyebrow className="text-center">{f.num}</Eyebrow>
+          <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
+            {main}
+            <em className="text-flame">{last}</em>
+          </h2>
+        </Reveal>
 
         <div className="mt-12 grid gap-5 md:grid-cols-2">
-          {f.items.map((item, i) => {
-            const o = seg(0.08 + i * 0.2, 0.28 + i * 0.2);
-            return (
-              <div
-                key={item.n}
-                className="h-full border border-cream/10 bg-raised/25 p-7 md:p-8"
-                style={{
-                  opacity: o,
-                  transform: `translateY(${(1 - o) * 34}px)`,
-                }}
-              >
+          {f.items.map((item, i) => (
+            <Reveal key={item.n} delay={0.08 + i * 0.1} className="h-full">
+              <div className="h-full border border-cream/10 bg-raised/25 p-7 md:p-8">
                 <h3 className="font-sans text-lg font-bold uppercase leading-snug tracking-[0.02em] text-cream">
                   {item.t}
                 </h3>
@@ -697,101 +697,84 @@ function PinFit({ t, lang }: { t: Copy; lang: Lang }) {
                   {item.d}
                 </p>
               </div>
-            );
-          })}
+            </Reveal>
+          ))}
         </div>
       </div>
-    </Runway>
+    </section>
   );
 }
 
 /* ------------------------------------------------------------------ */
-/* 08 · CONTACT (pinned)                                               */
+/* 08 · CONTACT (normal flow, subtle reveal)                          */
 /* ------------------------------------------------------------------ */
 
-function PinContact({ t }: { t: Copy }) {
-  const { ref, on } = usePin<HTMLDivElement>();
-  const [p, setP] = useState(0);
-  useEffect(() => on(setP), [on]);
-
-  const seg = (a: number, b: number) => clamp01((p - a) / (b - a));
+function Contact({ t }: { t: Copy }) {
   const c = t.contact;
   const titleMain = c.title.split("?")[0];
 
   return (
-    <Runway h="320vh" ref={ref}>
-      <GridField />
-      <div className="relative z-10 mx-auto w-full max-w-6xl px-6 text-center md:px-14">
-        <Eyebrow className="text-center">{c.num}</Eyebrow>
+    <section
+      id="contact"
+      className="relative flex min-h-svh w-full items-center justify-center px-6 py-24 text-center md:px-14"
+    >
+      <div className="mx-auto w-full max-w-6xl">
+        <Reveal>
+          <Eyebrow className="text-center">{c.num}</Eyebrow>
+          <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2rem,4.8vw,4.4rem)] leading-[1.03] tracking-[-0.015em]">
+            {titleMain}
+            <em className="text-flame">?</em>
+          </h2>
+          <p className="mx-auto mt-8 max-w-2xl font-serif text-lg leading-relaxed text-dim">
+            {c.body}
+          </p>
+        </Reveal>
 
-        <h2
-          className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2rem,4.8vw,4.4rem)] leading-[1.03] tracking-[-0.015em]"
-          style={{
-            opacity: seg(0.05, 0.3),
-            transform: `translateY(${(1 - seg(0.05, 0.3)) * 30}px)`,
-          }}
-        >
-          <Words text={titleMain} p={p} range={[0.15, 0.6]} />
-          <em className="text-flame">?</em>
-        </h2>
-
-        <p
-          className="mx-auto mt-8 max-w-2xl font-serif text-lg leading-relaxed text-dim"
-          style={{ opacity: seg(0.4, 0.6) }}
-        >
-          {c.body}
-        </p>
-
-        <div
-          className="mt-12 flex flex-col items-center gap-10 md:flex-row md:items-end md:justify-center"
-          style={{
-            opacity: seg(0.55, 0.78),
-            transform: `translateY(${(1 - seg(0.55, 0.78)) * 30}px)`,
-          }}
-        >
-          <a
-            href={t.links.email}
-            className="group inline-flex w-fit items-center gap-3 bg-flame px-8 py-4 font-sans text-[12px] font-semibold uppercase tracking-[0.22em] text-ink transition-colors duration-200 hover:bg-cream"
-          >
-            {c.cta}
-            <Arrow className="transition-transform duration-200 group-hover:translate-x-1 group-hover:-translate-y-1" />
-          </a>
-          <div>
-            <p className="font-sans text-[10px] uppercase tracking-[0.25em] text-faint">
-              {c.bestWay}
-            </p>
+        <Reveal delay={0.1}>
+          <div className="mt-12 flex flex-col items-center gap-10 md:flex-row md:items-end md:justify-center">
             <a
               href={t.links.email}
-              className="mt-2 block break-all font-display text-xl text-cream underline decoration-flame decoration-2 underline-offset-8 transition-colors hover:text-flame md:text-2xl"
+              className="group inline-flex w-fit items-center gap-3 bg-flame px-8 py-4 font-sans text-[12px] font-semibold uppercase tracking-[0.22em] text-ink transition-colors duration-200 hover:bg-cream"
             >
-              {t.links.email.replace("mailto:", "")}
+              {c.cta}
+              <Arrow className="transition-transform duration-200 group-hover:translate-x-1 group-hover:-translate-y-1" />
             </a>
+            <div>
+              <p className="font-sans text-[10px] uppercase tracking-[0.25em] text-faint">
+                {c.bestWay}
+              </p>
+              <a
+                href={t.links.email}
+                className="mt-2 block break-all font-display text-xl text-cream underline decoration-flame decoration-2 underline-offset-8 transition-colors hover:text-flame md:text-2xl"
+              >
+                {t.links.email.replace("mailto:", "")}
+              </a>
+            </div>
           </div>
-        </div>
+        </Reveal>
 
-        <div
-          className="mt-14 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 border-t border-cream/10 pt-8"
-          style={{ opacity: seg(0.75, 0.95) }}
-        >
-          <span className="font-sans text-[10px] uppercase tracking-[0.25em] text-faint">
-            {c.online}
-          </span>
-          {[
-            { label: c.linkedin, href: t.links.linkedin },
-            { label: c.github, href: t.links.github },
-          ].map((s) => (
-            <a
-              key={s.label}
-              href={s.href}
-              className="group inline-flex items-center gap-2 font-sans text-[12px] uppercase tracking-[0.2em] text-dim transition-colors hover:text-flame"
-            >
-              {s.label}
-              <Arrow className="text-flame" />
-            </a>
-          ))}
-        </div>
+        <Reveal delay={0.18}>
+          <div className="mt-14 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 border-t border-cream/10 pt-8">
+            <span className="font-sans text-[10px] uppercase tracking-[0.25em] text-faint">
+              {c.online}
+            </span>
+            {[
+              { label: c.linkedin, href: t.links.linkedin },
+              { label: c.github, href: t.links.github },
+            ].map((s) => (
+              <a
+                key={s.label}
+                href={s.href}
+                className="group inline-flex items-center gap-2 font-sans text-[12px] uppercase tracking-[0.2em] text-dim transition-colors hover:text-flame"
+              >
+                {s.label}
+                <Arrow className="text-flame" />
+              </a>
+            ))}
+          </div>
+        </Reveal>
       </div>
-    </Runway>
+    </section>
   );
 }
 
@@ -804,14 +787,14 @@ export function Scrolly() {
   return (
     <>
       <ProgressRail />
-      <PinHero t={t} lang={lang} />
-      <PinPositioning t={t} lang={lang} />
-      <PinAbout t={t} />
-      <PinBuild t={t} />
+      <Hero t={t} lang={lang} />
+      <Positioning t={t} lang={lang} />
+      <About t={t} />
+      <Build t={t} />
       <PinProcess t={t} lang={lang} />
       <PinProjects t={t} lang={lang} />
-      <PinFit t={t} lang={lang} />
-      <PinContact t={t} />
+      <Fit t={t} lang={lang} />
+      <Contact t={t} />
     </>
   );
 }
