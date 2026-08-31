@@ -116,23 +116,6 @@ function Runway({
 }
 
 /* ------------------------------------------------------------------ */
-/* Grid field: faint cells, sweeping beam, walking colored line       */
-/* ------------------------------------------------------------------ */
-
-function GridField() {
-  return (
-    <div aria-hidden className="pointer-events-none absolute inset-0">
-      <div className="grid-field" />
-      <div className="grid-beam hidden md:block" />
-      <div className="grid-beam grid-beam-alt hidden md:block" />
-      <div className="grid-walker hidden md:block" />
-      <div className="grid-walker grid-walker-alt hidden md:block" />
-      <div className="grid-walker grid-walker-slow hidden md:block" />
-    </div>
-  );
-}
-
-/* ------------------------------------------------------------------ */
 /* Words: progressive word-by-word text highlight                     */
 /* ------------------------------------------------------------------ */
 
@@ -265,7 +248,6 @@ function PinHero({ t, lang }: { t: Copy; lang: Lang }) {
 
   return (
     <Runway h="340vh" ref={ref}>
-      <GridField />
       <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col items-center justify-center px-6 md:px-14">
         <div
           className="text-center"
@@ -346,8 +328,7 @@ function PinPositioning({ t, lang }: { t: Copy; lang: Lang }) {
 
   return (
     <Runway h="320vh" ref={ref}>
-      <GridField />
-      <div className="relative z-10 mx-auto w-full max-w-6xl px-6 text-center md:px-14">
+      <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col justify-start px-6 pt-20 text-center md:justify-center md:px-14 md:pt-0">
         <Eyebrow className="text-center" >{t.positioning.num}</Eyebrow>
         <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
           <Words text={main} p={p} range={[0.12, 0.58]} />
@@ -411,8 +392,7 @@ function PinAbout({ t }: { t: Copy }) {
 
   return (
     <Runway h="280vh" ref={ref}>
-      <GridField />
-      <div className="relative z-10 mx-auto w-full max-w-6xl px-6 text-center md:px-14">
+      <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col justify-start px-6 pt-20 text-center md:justify-center md:px-14 md:pt-0">
         <Eyebrow className="text-center">{a.num}</Eyebrow>
 
         <p className="mx-auto mt-10 max-w-5xl font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
@@ -458,8 +438,7 @@ function PinBuild({ t }: { t: Copy }) {
 
   return (
     <Runway h="320vh" ref={ref}>
-      <GridField />
-      <div className="relative z-10 mx-auto w-full max-w-6xl px-6 md:px-14">
+      <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col justify-start px-6 pt-20 md:justify-center md:px-14 md:pt-0">
         <Eyebrow className="text-center">{b.num}</Eyebrow>
         <h2
           className="mx-auto mt-6 max-w-4xl text-center font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]"
@@ -528,8 +507,7 @@ function PinProcess({ t, lang }: { t: Copy; lang: Lang }) {
 
   return (
     <Runway h="380vh" ref={ref}>
-      <GridField />
-      <div className="relative z-10 mx-auto w-full max-w-6xl px-6 md:px-14">
+      <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col justify-start px-6 pt-20 md:justify-center md:px-14 md:pt-0">
         <Eyebrow className="text-center">{b.processTitle}</Eyebrow>
         <h2 className="mx-auto mt-6 max-w-4xl text-center font-display text-[clamp(2rem,4.6vw,4.1rem)] leading-[1.05] tracking-[-0.015em]">
           <Words text={ui.processHead} p={p} range={[0.08, 0.4]} />
@@ -584,7 +562,6 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
 
   return (
     <Runway h="460vh" ref={ref}>
-      <GridField />
       <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col justify-start px-6 pt-20 md:justify-center md:pt-0 md:px-14">
         <div className="text-center">
           <Eyebrow className="text-center">{w.num}</Eyebrow>
@@ -670,8 +647,7 @@ function PinFit({ t, lang }: { t: Copy; lang: Lang }) {
 
   return (
     <Runway h="340vh" ref={ref}>
-      <GridField />
-      <div className="relative z-10 mx-auto w-full max-w-6xl px-6 md:px-14">
+      <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col justify-start px-6 pt-20 md:justify-center md:px-14 md:pt-0">
         <Eyebrow className="text-center">{f.num}</Eyebrow>
         <h2 className="mx-auto mt-6 max-w-4xl text-center font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
           <Words text={main} p={p} range={[0.1, 0.5]} />
@@ -720,8 +696,7 @@ function PinContact({ t }: { t: Copy }) {
 
   return (
     <Runway h="320vh" ref={ref}>
-      <GridField />
-      <div className="relative z-10 mx-auto w-full max-w-6xl px-6 text-center md:px-14">
+      <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col justify-start px-6 pt-20 text-center md:justify-center md:px-14 md:pt-0">
         <Eyebrow className="text-center">{c.num}</Eyebrow>
 
         <h2
