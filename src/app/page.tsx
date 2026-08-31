@@ -1,6 +1,6 @@
 import { LanguageProvider } from "@/components/LanguageProvider";
 import { Header } from "@/components/Header";
-import { Sections } from "@/components/Sections";
+import { Scrolly } from "@/components/Scrolly";
 import { Footer } from "@/components/Footer";
 
 export default function Home() {
@@ -8,7 +8,7 @@ export default function Home() {
     <LanguageProvider>
       <Header />
       <main>
-        <Sections />
+        <Scrolly />
       </main>
       <Footer />
     </LanguageProvider>
