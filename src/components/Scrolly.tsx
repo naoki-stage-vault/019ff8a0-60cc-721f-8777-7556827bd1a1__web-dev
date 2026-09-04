@@ -20,22 +20,26 @@ const UI = {
 const SECTION_IDS = [
   "top",
   "positioning",
+  "at-a-glance",
   "about",
-  "build",
+  "what-i-build",
   "process",
-  "projects",
-  "fit",
+  "selected-work",
+  "a-good-fit",
+  "investment",
   "contact",
 ];
 
 const RAIL_LABELS: Record<string, { en: string; es: string }> = {
   top: { en: "Intro", es: "Portada" },
   positioning: { en: "Positioning", es: "Posicionamiento" },
+  "at-a-glance": { en: "At a glance", es: "De un vistazo" },
   about: { en: "About", es: "Sobre mí" },
-  build: { en: "What I build", es: "Lo que construyo" },
+  "what-i-build": { en: "What I build", es: "Lo que construyo" },
   process: { en: "Process", es: "Proceso" },
-  projects: { en: "Selected work", es: "Trabajo seleccionado" },
-  fit: { en: "A good fit", es: "Un buen encaje" },
+  "selected-work": { en: "Selected work", es: "Trabajo seleccionado" },
+  "a-good-fit": { en: "A good fit", es: "Un buen encaje" },
+  investment: { en: "Investment", es: "Inversión" },
   contact: { en: "Contact", es: "Contacto" },
 };
 
@@ -165,7 +169,7 @@ function Runway({
 }) {
   return (
     <div ref={ref} id={id} data-slide className="relative" style={{ height: h }}>
-      <div className="sticky top-0 h-svh overflow-hidden">{children}</div>
+      <div className="sticky h-svh overflow-hidden" style={{ top: '84px' }}>{children}</div>
     </div>
   );
 }
@@ -367,8 +371,8 @@ function Hero({ t, lang }: { t: Copy; lang: Lang }) {
 /* 02 · POSITIONING (normal flow, subtle reveal)                      */
 /* ------------------------------------------------------------------ */
 
-function Positioning({ t, lang }: { t: Copy; lang: Lang }) {
-  const last = lang === "en" ? "catch up." : "ponerse al día.";
+function PositioningSection({ t, lang }: { t: Copy; lang: Lang }) {
+  const last = lang === "en" ? "how to build it." : "cómo construirlo.";
   const main = t.positioning.title.replace(last, "");
 
   return (
@@ -390,7 +394,22 @@ function Positioning({ t, lang }: { t: Copy; lang: Lang }) {
             {t.positioning.body}
           </p>
         </Reveal>
+      </div>
+    </section>
+  );
+}
 
+/* ------------------------------------------------------------------ */
+/* 03 · AT A GLANCE (normal flow, subtle reveal)                      */
+/* ------------------------------------------------------------------ */
+
+function AtAGlance({ t }: { t: Copy }) {
+  return (
+    <section
+      id="at-a-glance"
+      className="relative flex min-h-svh w-full items-center justify-center px-6 py-24 text-center md:px-14"
+    >
+      <div className="mx-auto w-full max-w-6xl">
         <Reveal delay={0.18}>
           <div className="mx-auto mt-14 w-full max-w-xl border border-cream/10 bg-raised/30 text-left">
             <p className="border-b border-cream/10 px-6 py-3 font-sans text-[10px] uppercase tracking-[0.25em] text-faint">
@@ -421,10 +440,10 @@ function Positioning({ t, lang }: { t: Copy; lang: Lang }) {
 }
 
 /* ------------------------------------------------------------------ */
-/* 03 · ABOUT (normal flow, subtle reveal)                            */
+/* 04 · ABOUT (normal flow, subtle reveal)                            */
 /* ------------------------------------------------------------------ */
 
-function About({ t }: { t: Copy }) {
+function AboutSection({ t }: { t: Copy }) {
   const a = t.about;
 
   return (
@@ -456,19 +475,19 @@ function About({ t }: { t: Copy }) {
 }
 
 /* ------------------------------------------------------------------ */
-/* 04 · WHAT I BUILD (normal flow, subtle reveal)                     */
+/* 05 · WHAT I BUILD (normal flow, subtle reveal)                     */
 /* ------------------------------------------------------------------ */
 
-function Build({ t }: { t: Copy }) {
+function WhatIBuild({ t }: { t: Copy }) {
   const b = t.build;
   const panels = [
-    { tag: b.new.tag, lead: b.new.lead, body: b.new.body },
-    { tag: b.rebuild.tag, lead: b.rebuild.lead, body: b.rebuild.body },
+    { tag: b.new.tag, lead: b.new.lead, body: b.new.body, secondaryBody: b.new.secondaryBody, price: b.new.price, cta: b.new.cta, link: b.new.link },
+    { tag: b.rebuild.tag, lead: b.rebuild.lead, body: b.rebuild.body, secondaryBody: b.rebuild.secondaryBody, price: b.rebuild.price, cta: b.rebuild.cta, link: b.rebuild.link },
   ];
 
   return (
     <section
-      id="build"
+      id="what-i-build"
       className="relative flex min-h-svh w-full items-center justify-center px-6 py-24 md:px-14"
     >
       <div className="mx-auto w-full max-w-6xl">
@@ -489,7 +508,7 @@ function Build({ t }: { t: Copy }) {
                 <div>
                   <div className="flex items-center justify-between">
                     <span className="font-sans text-[11px] uppercase tracking-[0.25em] text-flame">
-                      {panel.tag}
+                      {panel.tag} ↗
                     </span>
                     <Arrow className="text-faint" />
                   </div>
@@ -500,6 +519,19 @@ function Build({ t }: { t: Copy }) {
                 <p className="mt-6 font-serif text-[15px] leading-relaxed text-dim">
                   {panel.body}
                 </p>
+                <p className="mt-3 font-serif text-[15px] leading-relaxed text-dim">
+                  {panel.secondaryBody}
+                </p>
+                <p className="mt-3 font-sans text-sm font-bold uppercase tracking-[0.08em] text-cream">
+                  {panel.price}
+                </p>
+                <a
+                  href={panel.link}
+                  className="group inline-flex w-fit items-center gap-3 bg-flame px-7 py-4 font-sans text-[12px] font-semibold uppercase tracking-[0.22em] text-ink transition-colors duration-200 hover:bg-cream mt-6"
+                >
+                  {panel.cta}
+                  <Arrow className="transition-transform duration-200 group-hover:translate-x-1 group-hover:-translate-y-1" />
+                </a>
               </div>
             </Reveal>
           ))}
@@ -510,10 +542,10 @@ function Build({ t }: { t: Copy }) {
 }
 
 /* ------------------------------------------------------------------ */
-/* 05 · PROCESS (pinned scrollytelling)                               */
+/* 06 · PROCESS (pinned scrollytelling)                               */
 /* ------------------------------------------------------------------ */
 
-function PinProcess({ t, lang }: { t: Copy; lang: Lang }) {
+function ProcessSection({ t, lang }: { t: Copy; lang: Lang }) {
   const { ref, on } = usePin<HTMLDivElement>();
   const [p, setP] = useState(0);
   useEffect(() => on(setP), [on]);
@@ -568,21 +600,21 @@ function PinProcess({ t, lang }: { t: Copy; lang: Lang }) {
 }
 
 /* ------------------------------------------------------------------ */
-/* 06 · SELECTED WORK (pinned scrollytelling)                         */
+/* 07 · SELECTED WORK (pinned scrollytelling)                         */
 /* ------------------------------------------------------------------ */
 
-function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
+function SelectedWork({ t, lang }: { t: Copy; lang: Lang }) {
   const { ref, on } = usePin<HTMLDivElement>();
   const [p, setP] = useState(0);
   useEffect(() => on(setP), [on]);
 
   const seg = (a: number, b: number) => clamp01((p - a) / (b - a));
   const w = t.work;
-  const last = lang === "en" ? "Different websites." : "Sitios web diferentes.";
+  const last = lang === "en" ? "Different solutions." : "Soluciones diferentes.";
   const main = w.title.replace(last, "");
 
   return (
-    <Runway id="projects" h="380vh" ref={ref}>
+    <Runway id="selected-work" h="380vh" ref={ref}>
       <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col justify-start px-6 pt-20 md:justify-center md:pt-0 md:px-14">
         <div className="text-center">
           <div style={{ opacity: seg(0, 0.12) }}>
@@ -656,17 +688,17 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
 }
 
 /* ------------------------------------------------------------------ */
-/* 07 · A GOOD FIT (normal flow, subtle reveal)                       */
+/* 08 · A GOOD FIT (normal flow, subtle reveal)                       */
 /* ------------------------------------------------------------------ */
 
-function Fit({ t, lang }: { t: Copy; lang: Lang }) {
+function AGoodFit({ t, lang }: { t: Copy; lang: Lang }) {
   const f = t.fit;
-  const last = lang === "en" ? "real change." : "un cambio real.";
+  const last = lang === "en" ? "properly." : "bien hecho.";
   const main = f.title.replace(last, "");
 
   return (
     <section
-      id="fit"
+      id="a-good-fit"
       className="relative flex min-h-svh w-full items-center justify-center px-6 py-24 md:px-14"
     >
       <div className="mx-auto w-full max-w-6xl">
@@ -680,7 +712,7 @@ function Fit({ t, lang }: { t: Copy; lang: Lang }) {
 
         <div className="mt-12 grid gap-5 md:grid-cols-2">
           {f.items.map((item, i) => (
-            <Reveal key={item.n} delay={0.08 + i * 0.1} className="h-full">
+            <Reveal key={item.t} delay={0.08 + i * 0.1} className="h-full">
               <div className="h-full border border-cream/10 bg-raised/25 p-7 md:p-8">
                 <h3 className="font-sans text-lg font-bold uppercase leading-snug tracking-[0.02em] text-cream">
                   {item.t}
@@ -698,12 +730,98 @@ function Fit({ t, lang }: { t: Copy; lang: Lang }) {
 }
 
 /* ------------------------------------------------------------------ */
-/* 08 · CONTACT (normal flow, subtle reveal)                          */
+/* 09 · INVESTMENT (normal flow, subtle reveal)                       */
 /* ------------------------------------------------------------------ */
 
-function Contact({ t }: { t: Copy }) {
+function InvestmentSection({ t, lang }: { t: Copy; lang: Lang }) {
+  const i = t.investment;
+  const last = lang === "en" ? "Clear price." : "Precio claro.";
+  const main = i.title.replace(last, "");
+
+  return (
+    <section
+      id="investment"
+      className="relative flex min-h-svh w-full items-center justify-center px-6 py-24 md:px-14"
+    >
+      <div className="mx-auto w-full max-w-6xl">
+        <Reveal className="text-center">
+          <Eyebrow className="text-center">{i.num}</Eyebrow>
+          <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
+            {main}
+            <em className="text-flame">{last}</em>
+          </h2>
+        </Reveal>
+
+        <div className="mt-14 grid gap-5 md:grid-cols-2">
+          <Reveal delay={0.1} className="h-full">
+            <div className="flex h-full flex-col justify-between border border-cream/10 bg-raised/30 p-8 md:p-10">
+              <div>
+                <h3 className="font-sans text-lg font-bold uppercase leading-snug tracking-[0.02em] text-cream">
+                  {i.websites.title}
+                </h3>
+                <p className="mt-3 font-serif text-[15px] leading-relaxed text-dim">
+                  {i.websites.body}
+                </p>
+                <p className="mt-3 font-serif text-[15px] leading-relaxed text-dim">
+                  {i.websites.secondaryBody}
+                </p>
+                <p className="mt-3 font-sans text-sm font-bold uppercase tracking-[0.08em] text-cream">
+                  {i.websites.price}
+                </p>
+              </div>
+              <a
+                href={i.websites.link}
+                className="group inline-flex w-fit items-center gap-3 bg-flame px-7 py-4 font-sans text-[12px] font-semibold uppercase tracking-[0.22em] text-ink transition-colors duration-200 hover:bg-cream mt-6"
+              >
+                {i.websites.cta} ↗
+              </a>
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.2} className="h-full">
+            <div className="flex h-full flex-col justify-between border border-cream/10 bg-raised/30 p-8 md:p-10">
+              <div>
+                <h3 className="font-sans text-lg font-bold uppercase leading-snug tracking-[0.02em] text-cream">
+                  {i.mvps.title}
+                </h3>
+                <p className="mt-3 font-serif text-[15px] leading-relaxed text-dim">
+                  {i.mvps.body}
+                </p>
+                <p className="mt-3 font-serif text-[15px] leading-relaxed text-dim">
+                  {i.mvps.secondaryBody}
+                </p>
+                <p className="mt-3 font-sans text-sm font-bold uppercase tracking-[0.08em] text-cream">
+                  {i.mvps.price}
+                </p>
+              </div>
+              <a
+                href={i.mvps.link}
+                className="group inline-flex w-fit items-center gap-3 bg-flame px-7 py-4 font-sans text-[12px] font-semibold uppercase tracking-[0.22em] text-ink transition-colors duration-200 hover:bg-cream mt-6"
+              >
+                {i.mvps.cta} ↗
+              </a>
+            </div>
+          </Reveal>
+        </div>
+
+        <Reveal delay={0.3}>
+          <p className="mx-auto mt-14 max-w-3xl font-serif text-lg leading-relaxed text-dim">
+            {i.footnote}
+          </p>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* 10 · CONTACT (normal flow, subtle reveal)                          */
+/* ------------------------------------------------------------------ */
+
+function ContactSection({ t }: { t: Copy }) {
   const c = t.contact;
   const titleMain = c.title.split("?")[0];
+  const last = t.lang === "en" ? "build?" : "construir?";
 
   return (
     <section
@@ -715,7 +833,7 @@ function Contact({ t }: { t: Copy }) {
           <Eyebrow className="text-center">{c.num}</Eyebrow>
           <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2rem,4.8vw,4.4rem)] leading-[1.03] tracking-[-0.015em]">
             {titleMain}
-            <em className="text-flame">?</em>
+            <em className="text-flame">{last}</em>
           </h2>
           <p className="mx-auto mt-8 max-w-2xl font-serif text-lg leading-relaxed text-dim">
             {c.body}
@@ -780,13 +898,15 @@ export function Scrolly() {
     <>
       <ProgressRail />
       <Hero t={t} lang={lang} />
-      <Positioning t={t} lang={lang} />
-      <About t={t} />
-      <Build t={t} />
-      <PinProcess t={t} lang={lang} />
-      <PinProjects t={t} lang={lang} />
-      <Fit t={t} lang={lang} />
-      <Contact t={t} />
+      <PositioningSection t={t} lang={lang} />
+      <AtAGlance t={t} />
+      <AboutSection t={t} />
+      <WhatIBuild t={t} />
+      <ProcessSection t={t} lang={lang} />
+      <SelectedWork t={t} lang={lang} />
+      <AGoodFit t={t} lang={lang} />
+      <InvestmentSection t={t} lang={lang} />
+      <ContactSection t={t} />
     </>
   );
 }

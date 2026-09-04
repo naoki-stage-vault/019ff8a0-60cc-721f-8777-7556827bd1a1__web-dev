@@ -48,8 +48,7 @@ body {
 /* display serif with full character */
 .font-display {
   font-family: var(--font-fraunces), Georgia, serif;
-  font-weight: 470;
-  font-variation-settings: "opsz" 144, "SOFT" 100, "WONK" 1;
+  font-variation-settings: "opsz" 144, "SOFT" 100;
   text-wrap: balance;
 }
 
