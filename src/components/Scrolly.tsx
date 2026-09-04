@@ -52,7 +52,7 @@ function Eyebrow({
 }) {
   return (
     <p
-      className={`font-sans text-[11px] uppercase tracking-[0.3em] text-flame ${className}`}
+      className={`font-sans text-xs uppercase tracking-[0.35em] text-flame ${className}`}
     >
       {children}
     </p>
@@ -296,7 +296,7 @@ function Hero({ t, lang }: { t: Copy; lang: Lang }) {
   return (
     <section
       id="top"
-      className="relative flex min-h-svh w-full items-center justify-center overflow-hidden px-6 pt-16 md:px-14"
+      className="relative flex min-h-svh w-full items-center justify-center overflow-hidden px-6 pt-16 md:items-start md:justify-start md:px-14 md:pt-24"
     >
       <div className="mx-auto w-full max-w-6xl">
         <div
@@ -309,8 +309,8 @@ function Hero({ t, lang }: { t: Copy; lang: Lang }) {
               "opacity 1s cubic-bezier(0.22, 1, 0.36, 1), transform 1s cubic-bezier(0.22, 1, 0.36, 1), filter 1s cubic-bezier(0.22, 1, 0.36, 1)",
           }}
         >
-          <Eyebrow className="text-center">{t.hero.label}</Eyebrow>
-          <h1 className="mx-auto mt-8 font-display text-[clamp(2.5rem,6.5vw,6rem)] leading-[1.02] tracking-[-0.02em]">
+          <Eyebrow className="text-center md:text-left">{t.hero.label}</Eyebrow>
+          <h1 className="mx-auto mt-8 font-display text-[clamp(2.5rem,6vw,5.5rem)] leading-[1.02] tracking-[-0.02em] md:mx-0">
             <span className="block uppercase">{t.hero.titleA}</span>
             <em className="text-cream">
               {main}
@@ -329,12 +329,12 @@ function Hero({ t, lang }: { t: Copy; lang: Lang }) {
           }}
         >
           <div className="flex w-full flex-col items-center gap-8 md:flex-row md:items-start md:justify-between">
-            <p className="max-w-md text-center font-serif text-lg leading-relaxed text-dim md:text-left">
+            <p className="max-w-md text-center font-serif text-xl leading-relaxed text-dim md:text-left">
               {t.hero.sub}
             </p>
             <a
               href={t.links.email}
-              className="group inline-flex w-fit items-center gap-3 bg-flame px-7 py-4 font-sans text-[12px] font-semibold uppercase tracking-[0.22em] text-ink transition-colors duration-200 hover:bg-cream"
+              className="group inline-flex w-fit items-center gap-3 bg-flame px-7 py-4 font-sans text-sm font-semibold uppercase tracking-[0.22em] text-ink transition-colors duration-200 hover:bg-cream"
             >
               {t.hero.cta}
               <Arrow className="transition-transform duration-200 group-hover:translate-x-1 group-hover:-translate-y-1" />
@@ -616,7 +616,7 @@ function SelectedWork({ t, lang }: { t: Copy; lang: Lang }) {
   return (
     <Runway id="selected-work" h="380vh" ref={ref}>
       <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col justify-start px-6 pt-20 md:justify-center md:pt-0 md:px-14">
-        <div className="text-center">
+        <div className="w-full text-center md:text-left">
           <div style={{ opacity: seg(0, 0.12) }}>
             <Eyebrow className="text-center">{w.num}</Eyebrow>
           </div>
