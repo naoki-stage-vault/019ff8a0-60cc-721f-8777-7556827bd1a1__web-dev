@@ -296,7 +296,7 @@ function Hero({ t, lang }: { t: Copy; lang: Lang }) {
   return (
     <section
       id="top"
-      className="relative flex min-h-svh w-full items-center justify-center overflow-hidden px-6 md:px-14"
+      className="relative flex min-h-svh w-full items-center justify-center overflow-hidden px-6 pt-16 md:px-14"
     >
       <div className="mx-auto w-full max-w-6xl">
         <div
