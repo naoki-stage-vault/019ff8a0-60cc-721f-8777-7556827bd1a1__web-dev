@@ -310,7 +310,7 @@ function Hero({ t, lang }: { t: Copy; lang: Lang }) {
           }}
         >
           <Eyebrow className="text-center">{t.hero.label}</Eyebrow>
-          <h1 className="mx-auto mt-8 font-display text-[clamp(3rem,7.8vw,7.4rem)] leading-[1.02] tracking-[-0.02em]">
+          <h1 className="mx-auto mt-8 font-display text-[clamp(2.5rem,6.5vw,6rem)] leading-[1.02] tracking-[-0.02em]">
             <span className="block uppercase">{t.hero.titleA}</span>
             <em className="text-cream">
               {main}
@@ -329,7 +329,7 @@ function Hero({ t, lang }: { t: Copy; lang: Lang }) {
           }}
         >
           <div className="flex w-full flex-col items-center gap-8 md:flex-row md:items-start md:justify-between">
-            <p className="max-w-md text-center font-serif text-xl leading-relaxed text-dim md:text-left">
+            <p className="max-w-md text-center font-serif text-lg leading-relaxed text-dim md:text-left">
               {t.hero.sub}
             </p>
             <a
@@ -383,7 +383,7 @@ function PositioningSection({ t, lang }: { t: Copy; lang: Lang }) {
       <div className="mx-auto w-full max-w-6xl">
         <Reveal>
           <Eyebrow className="text-center">{t.positioning.num}</Eyebrow>
-          <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
+          <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(1.8rem,4vw,3.8rem)] leading-[1.05] tracking-[-0.015em]">
             {main}
             <em className="text-flame">{last}</em>
           </h2>
@@ -493,7 +493,7 @@ function WhatIBuild({ t }: { t: Copy }) {
       <div className="mx-auto w-full max-w-6xl">
         <Reveal className="text-center">
           <Eyebrow className="text-center">{b.num}</Eyebrow>
-          <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
+          <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(1.8rem,4vw,3.8rem)] leading-[1.05] tracking-[-0.015em]">
             {b.title}
           </h2>
           <p className="mx-auto mt-6 max-w-2xl font-serif text-lg leading-relaxed text-dim">
@@ -620,7 +620,7 @@ function SelectedWork({ t, lang }: { t: Copy; lang: Lang }) {
           <div style={{ opacity: seg(0, 0.12) }}>
             <Eyebrow className="text-center">{w.num}</Eyebrow>
           </div>
-          <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
+          <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(1.8rem,4vw,3.8rem)] leading-[1.05] tracking-[-0.015em]">
             <Words text={main} p={p} range={[0, 0.3]} />
             <em className="text-flame">{last}</em>
           </h2>
@@ -704,7 +704,7 @@ function AGoodFit({ t, lang }: { t: Copy; lang: Lang }) {
       <div className="mx-auto w-full max-w-6xl">
         <Reveal className="text-center">
           <Eyebrow className="text-center">{f.num}</Eyebrow>
-          <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
+          <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(1.8rem,4vw,3.8rem)] leading-[1.05] tracking-[-0.015em]">
             {main}
             <em className="text-flame">{last}</em>
           </h2>
@@ -746,7 +746,7 @@ function InvestmentSection({ t, lang }: { t: Copy; lang: Lang }) {
       <div className="mx-auto w-full max-w-6xl">
         <Reveal className="text-center">
           <Eyebrow className="text-center">{i.num}</Eyebrow>
-          <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
+          <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(1.8rem,4vw,3.8rem)] leading-[1.05] tracking-[-0.015em]">
             {main}
             <em className="text-flame">{last}</em>
           </h2>
@@ -831,7 +831,7 @@ function ContactSection({ t }: { t: Copy }) {
       <div className="mx-auto w-full max-w-6xl">
         <Reveal>
           <Eyebrow className="text-center">{c.num}</Eyebrow>
-          <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2rem,4.8vw,4.4rem)] leading-[1.03] tracking-[-0.015em]">
+          <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(1.9rem,4.2vw,4rem)] leading-[1.03] tracking-[-0.015em]">
             {titleMain}
             <em className="text-flame">{last}</em>
           </h2>
