@@ -576,34 +576,92 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
   const [p, setP] = useState(0);
   useEffect(() => on(setP), [on]);
 
+  const headingRef = useRef<HTMLDivElement>(null);
+  const projectsListRef = useRef<HTMLDivElement>(null);
+
+  const [runwayHeight, setRunwayHeight] = useState("380vh");
+  const [projectsListTranslateY, setProjectsListTranslateY] = useState("0px");
+
   const seg = (a: number, b: number) => clamp01((p - a) / (b - a));
   const w = t.work;
   const last = lang === "en" ? "Different websites." : "Sitios web diferentes.";
   const main = w.title.replace(last, "");
 
+  useEffect(() => {
+    const calculateLayout = () => {
+      if (!headingRef.current || !projectsListRef.current) return;
+
+      const viewportHeight = window.innerHeight;
+      const headingHeight = headingRef.current.offsetHeight;
+      const projectsListHeight = projectsListRef.current.scrollHeight; // Use scrollHeight to get full content height
+
+      const topSafeArea = 40; // px
+      const bottomSafeArea = 40; // px
+
+      // The available height for the projects list to scroll within
+      const availableHeight = viewportHeight - headingHeight - topSafeArea - bottomSafeArea;
+
+      // The maximum distance the projects list needs to travel to show all items
+      // Ensure maxListTravel is not negative
+      const maxListTravel = Math.max(0, projectsListHeight - availableHeight);
+
+      // The total height of the runway should accommodate the full scroll of the projects list
+      // We want the scroll progress (p) from 0 to 1 to map to the projectsListTranslateY from 0 to -maxListTravel
+      // A multiplier is used to control the scroll sensitivity/duration.
+      // The runway height needs to be at least viewportHeight + maxListTravel to allow for the full scroll.
+      // Adding a multiplier makes the scroll feel longer and smoother.
+      const scrollMultiplier = 3; // Adjust this value to control how "long" the scroll feels
+      setRunwayHeight(`${(viewportHeight + maxListTravel * scrollMultiplier)}px`);
+
+      // Calculate translateY for the projects list based on scroll progress
+      // p goes from 0 to 1. We want translateY to go from 0 to -maxListTravel
+      setProjectsListTranslateY(`-${p * maxListTravel}px`);
+    };
+
+    calculateLayout(); // Initial calculation and on scroll
+
+    const handleResize = () => {
+      requestAnimationFrame(calculateLayout);
+    };
+
+    window.addEventListener("scroll", calculateLayout, { passive: true }); // Recalculate translateY on scroll
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("scroll", calculateLayout);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [p, w.projects, t.work.title, lang]); // Recalculate if project data, language, or scroll progress changes
+
   return (
-    <Runway id="projects" h="380vh" ref={ref}>
-      <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col justify-start px-6 pt-20 md:justify-center md:pt-0 md:px-14">
-        <div className="text-center">
-          <div style={{ opacity: seg(0, 0.12) }}>
+    <Runway id="projects" h={runwayHeight} ref={ref}>
+      <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col justify-start px-6 pt-20 md:justify-start md:pt-10 md:px-14">
+        <div className="text-center" ref={headingRef}>
+          <div>
             <Eyebrow className="text-center">{w.num}</Eyebrow>
           </div>
           <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
-            <Words text={main} p={p} range={[0, 0.3]} />
+            {main}
             <em className="text-flame">{last}</em>
           </h2>
           <p
             className="mx-auto mt-6 hidden max-w-2xl font-serif text-lg leading-relaxed text-dim md:block"
-            style={{ opacity: seg(0.12, 0.3) }}
           >
             {w.intro}
           </p>
         </div>
 
-        <div className="mt-10 border-b border-cream/10">
+        <div
+          className="mt-10 border-b border-cream/10"
+          ref={projectsListRef}
+          style={{ transform: projectsListTranslateY }}
+        >
           {w.projects.map((pr, i) => {
-            const o = seg(0.1 + i * 0.16, 0.28 + i * 0.16);
-            const active = o > 0.55;
+            const projectRevealStartP = 0.1 + i * 0.16;
+            const projectRevealEndP = 0.28 + i * 0.16;
+            const revealProgress = clamp01((p - projectRevealStartP) / (projectRevealEndP - projectRevealStartP));
+
+            const active = revealProgress > 0.55;
+
             return (
               <a
                 key={pr.n}
@@ -612,10 +670,9 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
                 rel="noreferrer"
                 className="grid gap-3 border-t border-cream/10 py-4 md:grid-cols-12 md:items-center md:gap-6 md:py-6"
                 style={{
-                  opacity: Math.min(1, o * 1.5),
-                  transform: `translateY(${(1 - Math.min(1, o * 1.5)) * 26}px)`,
+                  opacity: Math.min(1, revealProgress * 1.5),
                   background: active ? "rgba(34,25,16,0.45)" : "transparent",
-                  transition: "background-color 0.3s",
+                  transition: "background-color 0.3s, opacity 0.3s",
                 }}
               >
                 <div className="md:col-span-4">
