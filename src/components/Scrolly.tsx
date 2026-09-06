@@ -610,7 +610,7 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
                 href={pr.url}
                 target="_blank"
                 rel="noreferrer"
-                className="grid gap-3 border-t border-cream/10 py-4 md:grid-cols-12 md:items-center md:gap-6 md:py-6"
+                className="grid gap-3 border-t border-cream/10 py-8 md:grid-cols-12 md:items-center md:gap-6 md:py-10"
                 style={{
                   opacity: Math.min(1, o * 1.5),
                   transform: `translateY(${(1 - Math.min(1, o * 1.5)) * 26}px)`,
