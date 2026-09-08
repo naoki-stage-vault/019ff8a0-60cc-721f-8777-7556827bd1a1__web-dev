@@ -2,6 +2,9 @@ export type Lang = "en" | "es";
 
 export const en = {
   nav: [
+    { href: "/", label: "Home" },
+    { href: "/sitios-web", label: "Websites" },
+    { href: "/mvp-webapp", label: "MVP Webapps" },
     { href: "#positioning", label: "Positioning" },
     { href: "#work", label: "What I build" },
     { href: "#projects", label: "Selected work" },
@@ -140,6 +143,9 @@ export const en = {
 };
 export const es = {
   nav: [
+    { href: "/", label: "Inicio" },
+    { href: "/sitios-web", label: "Sitios Web" },
+    { href: "/mvp-webapp", label: "MVPs Webapp" },
     { href: "#positioning", label: "Posicionamiento" },
     { href: "#work", label: "Lo que construyo" },
     { href: "#projects", label: "Trabajo seleccionado" },
