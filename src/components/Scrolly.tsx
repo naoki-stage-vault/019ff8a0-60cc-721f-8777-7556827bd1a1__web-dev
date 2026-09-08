@@ -583,7 +583,7 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
 
   return (
     <Runway id="projects" h="380vh" ref={ref}>
-      <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col justify-start px-6 pt-20 md:justify-center md:pt-0 md:px-14">
+      <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col justify-start px-6 pt-10 md:px-14">
         <div className="text-center">
           <div style={{ opacity: seg(0, 0.12) }}>
             <Eyebrow className="text-center">{w.num}</Eyebrow>
