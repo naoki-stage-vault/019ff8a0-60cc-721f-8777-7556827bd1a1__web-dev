@@ -309,10 +309,10 @@ function Hero({ t, lang }: { t: Copy; lang: Lang }) {
           <p className="mx-auto mt-6 max-w-2xl font-serif text-lg leading-relaxed text-dim">
             {t.hero.preHeadline}
           </p>
-          <h1 className="mx-auto mt-8 font-display text-[clamp(3rem,7.8vw,7.4rem)] leading-[1.02] tracking-[-0.02em]">
+          <h1 className="mx-auto mt-8 font-display text-[clamp(3rem,7.8vw,7.4rem)] leading-[1.02] tracking-[-0.02em] text-cream">
             <span className="block uppercase">{main}</span>
-            <em className="text-cream">
-              <span className="text-flame">{last}</span>
+            <em className="text-flame">
+              {last}
             </em>
           </h1>
         </div>
