@@ -578,10 +578,63 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
   const last = lang === "en" ? "Different solutions." : "Soluciones diferentes.";
   const main = w.title.replace(last, "");
 
+  const introRef = useRef<HTMLDivElement>(null);
+  const projectsContainerRef = useRef<HTMLDivElement>(null);
+  const [runwayHeight, setRunwayHeight] = useState("380vh"); // Initial hardcoded value, will be updated
+
+  useEffect(() => {
+    const calculateAndSetRunwayHeight = () => {
+      if (introRef.current && projectsContainerRef.current) {
+        const viewportHeight = window.innerHeight;
+
+        // Get the actual rendered height of the introductory text block
+        const introHeight = introRef.current.offsetHeight;
+
+        // Get the total scrollHeight of the projects container if all projects were fully visible
+        const totalProjectsContentHeight = projectsContainerRef.current.scrollHeight;
+
+        // The main content div has pt-10 (40px). The projectsContainerRef has mt-10 (40px).
+        // These contribute to the overall height that needs to be scrolled.
+        const mainContentPaddingTop = 40; // from pt-10
+        const projectsContainerMarginTop = 40; // from mt-10
+
+        // Total height of all content that needs to be revealed within the pinned section
+        const contentFullHeight = mainContentPaddingTop + introHeight + projectsContainerMarginTop + totalProjectsContentHeight;
+
+        // maxTravel is the amount of content that needs to scroll past the viewport
+        const maxTravel = Math.max(0, contentFullHeight - viewportHeight);
+
+        // Add a bottom safe area as per requirement (24-40px)
+        const bottomSafeArea = 40;
+        const calculatedRunwayHeight = viewportHeight + maxTravel + bottomSafeArea;
+
+        setRunwayHeight(`${calculatedRunwayHeight}px`);
+      }
+    };
+
+    calculateAndSetRunwayHeight(); // Initial calculation
+    window.addEventListener("resize", calculateAndSetRunwayHeight);
+    return () => {
+      window.removeEventListener("resize", calculateAndSetRunwayHeight);
+    };
+  }, [w.projects, lang]); // Recalculate if projects or language change
+
+  // Dynamic segment calculation for project animations
+  const numProjects = w.projects.length;
+  const segmentDuration = 0.18; // Keep the original duration of each project's animation
+  const animationStartGlobal = 0.1; // Start of the first project's animation
+  const animationEndGlobal = 0.98; // End of the last project's animation
+
+  let segmentSpacing = 0;
+  if (numProjects > 1) {
+    // Calculate spacing such that the last project's animation ends at animationEndGlobal
+    segmentSpacing = (animationEndGlobal - animationStartGlobal - segmentDuration) / (numProjects - 1);
+  }
+
   return (
-    <Runway id="projects" h="380vh" ref={ref}>
+    <Runway id="projects" h={runwayHeight} ref={ref}>
       <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col justify-start px-6 pt-10 md:px-14">
-        <div className="text-center">
+        <div className="text-center" ref={introRef}>
           <div style={{ opacity: seg(0, 0.12) }}>
             <Eyebrow className="text-center">{w.num}</Eyebrow>
           </div>
@@ -597,9 +650,11 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
           </p>
         </div>
 
-        <div className="mt-10 border-b border-cream/10">
+        <div className="mt-10 border-b border-cream/10" ref={projectsContainerRef}>
           {w.projects.map((pr, i) => {
-            const o = seg(0.1 + i * 0.16, 0.28 + i * 0.16);
+            const startP = animationStartGlobal + i * segmentSpacing;
+            const endP = startP + segmentDuration;
+            const o = seg(startP, endP);
             const active = o > 0.55;
             return (
               <a
