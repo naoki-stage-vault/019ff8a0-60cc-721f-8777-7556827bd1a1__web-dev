@@ -565,38 +565,6 @@ function PinProcess({ t, lang }: { t: Copy; lang: Lang }) {
 }
 
 /* ------------------------------------------------------------------ */
-/* SELECTED WORK INTRO (normal flow)                                  */
-/* ------------------------------------------------------------------ */
-
-function SelectedWorkIntro({ t, lang }: { t: Copy; lang: Lang }) {
-  const w = t.work;
-  const last = lang === "en" ? "Different solutions." : "Soluciones diferentes.";
-  const main = w.title.replace(last, "");
-
-  return (
-    <section
-      id="projects-intro"
-      className="relative flex w-full items-center justify-center px-6 py-24 text-center md:px-14"
-    >
-      <div className="mx-auto w-full max-w-6xl">
-        <Reveal className="text-center">
-          <Eyebrow className="text-center">{w.num}</Eyebrow>
-          <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
-            {main}
-            <em className="text-flame">{last}</em>
-          </h2>
-          <p
-            className="mx-auto mt-6 hidden max-w-2xl font-serif text-lg leading-relaxed text-dim md:block"
-          >
-            {w.intro}
-          </p>
-        </Reveal>
-      </div>
-    </section>
-  );
-}
-
-/* ------------------------------------------------------------------ */
 /* 06 · SELECTED WORK (pinned scrollytelling)                         */
 /* ------------------------------------------------------------------ */
 
@@ -607,6 +575,7 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
 
   const projectsListRef = useRef<HTMLDivElement>(null);
   const stickyContentRef = useRef<HTMLDivElement>(null);
+  const headingRef = useRef<HTMLDivElement>(null);
   const projectsViewportRef = useRef<HTMLDivElement>(null);
 
   const [runwayHeight, setRunwayHeight] = useState("380vh");
@@ -621,10 +590,11 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
         const SAFE_AREA_BOTTOM = 32; // 24-40px, picked 32px
 
         const projectsListHeight = projectsListRef.current.scrollHeight;
-        const projectsViewportActualHeight = projectsViewportRef.current.offsetHeight;
+        const stickyContentHeight = stickyContentRef.current.offsetHeight;
+        const headingHeight = headingRef.current.offsetHeight;
 
-        // The available height for the projects list within the projectsViewport
-        const availableProjectsHeight = projectsViewportActualHeight - SAFE_AREA_BOTTOM;
+        // The available height for the projects list within the sticky content, after the heading
+        const availableProjectsHeight = stickyContentHeight - headingHeight - SAFE_AREA_BOTTOM;
 
         // currentMaxTravel is the amount of scroll needed if the projectsList starts at the top of its visible area
         let adjustedMaxTravel = Math.max(0, projectsListHeight - availableProjectsHeight);
@@ -648,14 +618,34 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
     };
   }, [p, t, lang]); // Added t and lang as dependencies for recalculation on language change or content change
 
-  return (
-    <Runway id="projects" h={runwayHeight} ref={runwayRef} className="mt-16">
-      <div ref={stickyContentRef} className="relative z-10 mx-auto grid h-full w-full max-w-6xl px-6 pt-10 md:px-14 gap-8" style={{ gridTemplateRows: 'auto minmax(0, 1fr)' }}>
+  const w = t.work;
+  const last = lang === "en" ? "Different solutions." : "Soluciones diferentes.";
+  const main = w.title.replace(last, "");
 
-        <div ref={projectsViewportRef} className="projects-viewport" style={{ transform: `translateY(${translateY}px)`, minHeight: 0 }}>
+  return (
+    <Runway id="projects" h={runwayHeight} ref={runwayRef}>
+      <div ref={stickyContentRef} className="relative z-10 mx-auto grid h-full w-full max-w-6xl px-6 pt-10 md:px-14 gap-8" style={{ gridTemplateRows: 'auto minmax(0, 1fr)' }}>
+        <div ref={headingRef} className="text-center">
+          <div style={{ opacity: seg(0, 0.12) }}>
+            <Eyebrow className="text-center">{w.num}</Eyebrow>
+          </div>
+          <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
+            <Words text={main} p={p} range={[0, 0.3]} />
+            <em className="text-flame">{last}</em>
+          </h2>
+          <p
+            className="mx-auto mt-6 hidden max-w-2xl font-serif text-lg leading-relaxed text-dim md:block"
+            style={{ opacity: seg(0.12, 0.3) }}
+          >
+            {w.intro}
+          </p>
+        </div>
+
+        <div ref={projectsViewportRef} className="projects-viewport" style={{ minHeight: 0 }}>
           <div
             ref={projectsListRef}
             className="border-b border-cream/10"
+            style={{ transform: `translateY(${translateY}px)` }}
           >
             {w.projects.map((pr, i) => {
               const o = seg(0.1 + i * 0.16, 0.28 + i * 0.16);
@@ -899,7 +889,6 @@ export function Scrolly() {
       <Positioning t={t} lang={lang} />
       <Build t={t} />
       <PinProcess t={t} lang={lang} />
-      <SelectedWorkIntro t={t} lang={lang} />
       <PinProjects t={t} lang={lang} />
       <Fit t={t} lang={lang} />
       <Investment t={t} lang={lang} />
