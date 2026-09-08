@@ -612,6 +612,9 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
   const [runwayHeight, setRunwayHeight] = useState("380vh");
   const [translateY, setTranslateY] = useState(0);
 
+  const seg = (a: number, b: number) => clamp01((p - a) / (b - a));
+  const w = t.work;
+
   useEffect(() => {
     const calculateScrollMetrics = () => {
       if (projectsListRef.current && stickyContentRef.current && projectsViewportRef.current) {
