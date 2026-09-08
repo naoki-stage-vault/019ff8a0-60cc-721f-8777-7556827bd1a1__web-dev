@@ -583,6 +583,8 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
 
   // Effect to calculate maxScrollDistancePx and runwayHeightVh
   useEffect(() => {
+    let rafId: number;
+
     const calculateDimensions = () => {
       if (!projectsListRef.current || !headerContentRef.current) return;
 
@@ -606,9 +608,16 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
       setRunwayHeightVh(`${totalRunwayHeightVh}vh`);
     };
 
-    calculateDimensions();
-    window.addEventListener("resize", calculateDimensions);
-    return () => window.removeEventListener("resize", calculateDimensions);
+    const scheduleCalculation = () => {
+      rafId = requestAnimationFrame(calculateDimensions);
+    };
+
+    scheduleCalculation(); // Initial calculation
+    window.addEventListener("resize", scheduleCalculation);
+    return () => {
+      window.removeEventListener("resize", scheduleCalculation);
+      cancelAnimationFrame(rafId);
+    };
   }, [t.work.projects.length]); // Recalculate if project list changes
 
   // Apply translateY based on p and maxScrollDistancePx
