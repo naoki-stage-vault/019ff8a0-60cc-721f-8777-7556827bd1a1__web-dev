@@ -14,8 +14,8 @@ export const en = {
   },
   hero: {
     label: "Web design + development / Costa Rica",
-    preHeadline: "Not every web project needs the same thing.",
-    headline: "WEBSITES AND MVPs, BUILT FOR WHAT THEY NEED TO DO.",
+    preHeadline: "",
+    headline: "WEBSITES + WEBAPP MVPs, BUILT AROUND WHAT THEY NEED TO DO.",
     body: "Design and development from scratch — from a new web presence to the first functional version of a product.",
     cta: "Start a project",
     secondaryCta: "See what I build",
@@ -183,8 +183,8 @@ export const es = {
   },
   hero: {
     label: "Diseño web + desarrollo / Costa Rica",
-    preHeadline: "No todos los proyectos web necesitan lo mismo.",
-    headline: "SITIOS WEB Y MVPs, CONSTRUIDOS PARA LO QUE TIENEN QUE HACER.",
+    preHeadline: "",
+    headline: "SITIOS WEB + MVPs DE WEBAPPS, CONSTRUIDOS ALREDEDOR DE LO QUE NECESITAN HACER.",
     body: "Diseño y desarrollo desde cero: desde una nueva presencia web hasta la primera versión funcional de un producto.",
     cta: "Iniciar un proyecto",
     secondaryCta: "Ver lo que construyo",

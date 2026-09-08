@@ -306,9 +306,6 @@ function Hero({ t, lang }: { t: Copy; lang: Lang }) {
           }}
         >
           <Eyebrow className="text-center">{t.hero.label}</Eyebrow>
-          <p className="mx-auto mt-6 max-w-2xl font-serif text-lg leading-relaxed text-dim">
-            {t.hero.preHeadline}
-          </p>
           <h1 className="mx-auto mt-6 font-display text-[clamp(2.5rem,6vw,6rem)] leading-[1.02] tracking-[-0.02em] text-cream">
             <span className="block">{main}</span>
             <span className="text-flame">
