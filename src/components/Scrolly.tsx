@@ -576,48 +576,24 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
   const projectsListRef = useRef<HTMLDivElement>(null);
   const stickyContentRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
+  const projectsViewportRef = useRef<HTMLDivElement>(null);
 
   const [runwayHeight, setRunwayHeight] = useState("380vh");
   const [translateY, setTranslateY] = useState(0);
 
   useEffect(() => {
     const calculateScrollMetrics = () => {
-      if (projectsListRef.current && stickyContentRef.current && headingRef.current) {
-        const projectsListHeight = projectsListRef.current.scrollHeight;
-        const headingHeight = headingRef.current.offsetHeight;
-        const stickyViewportHeight = stickyContentRef.current.offsetHeight;
+      if (projectsListRef.current && stickyContentRef.current && headingRef.current && projectsViewportRef.current) {
+        const SAFE_AREA_BOTTOM = 32; // 24-40px, picked 32px
 
-        // The available height for the projects list within the sticky viewport
-        // This is the sticky viewport height minus the heading/intro area
-        const visibleProjectsAreaHeight = stickyViewportHeight - headingHeight;
+        const projectsListHeight = projectsListRef.current.scrollHeight;
+        const projectsViewportActualHeight = projectsViewportRef.current.offsetHeight;
+
+        // The available height for the projects list within the projectsViewport
+        const availableProjectsHeight = projectsViewportActualHeight - SAFE_AREA_BOTTOM;
 
         // currentMaxTravel is the amount of scroll needed if the projectsList starts at the top of its visible area
-        let adjustedMaxTravel = Math.max(0, projectsListHeight - visibleProjectsAreaHeight);
-
-        const lastProjectElement = projectsListRef.current.lastElementChild as HTMLElement;
-
-        if (lastProjectElement) {
-          // Calculate the bottom of the last project relative to the top of the projectsListRef
-          const lastProjectBottomRelativeToProjectsList = lastProjectElement.offsetTop + lastProjectElement.offsetHeight;
-
-          // projectsListRef.current.offsetTop is the distance from stickyContentRef.current.top to projectsListRef.current.top
-          const projectsListOffsetTop = projectsListRef.current.offsetTop;
-
-          // Calculate the final bottom of the last project if we only scroll by adjustedMaxTravel (initial calculation)
-          // This is relative to the stickyContentRef's top
-          const finalLastProjectBottomRelativeToStickyContent = projectsListOffsetTop + lastProjectBottomRelativeToProjectsList - adjustedMaxTravel;
-
-          // The desired bottom boundary for the last project (relative to stickyContentRef's top)
-          const desiredBottomBoundaryRelativeToStickyContent = stickyViewportHeight - 32;
-
-          // Calculate how much more travel is needed
-          const missingTravel = finalLastProjectBottomRelativeToStickyContent - desiredBottomBoundaryRelativeToStickyContent;
-
-          // Add missingTravel to adjustedMaxTravel if it's positive
-          adjustedMaxTravel += Math.max(0, missingTravel);
-        }
-
-
+        let adjustedMaxTravel = Math.max(0, projectsListHeight - availableProjectsHeight);
 
         // Apply the initial offset to the translateY. This pushes the list down at p=0.
         setTranslateY(-p * adjustedMaxTravel);
@@ -662,7 +638,7 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
           </p>
         </div>
 
-        <div className="projects-viewport" style={{ transform: `translateY(${translateY}px)`, minHeight: 0 }}>
+        <div ref={projectsViewportRef} className="projects-viewport" style={{ transform: `translateY(${translateY}px)`, minHeight: 0 }}>
           <div
             ref={projectsListRef}
             className="border-b border-cream/10"
