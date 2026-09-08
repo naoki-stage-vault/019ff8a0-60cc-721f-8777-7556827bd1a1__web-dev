@@ -14,48 +14,31 @@ type LangContextValue = {
 
 const LangContext = createContext<LangContextValue | null>(null);
 
-export function LanguageProvider({ children }: { children: ReactNode }) {
+export function LanguageProvider({ children, initialLang }: { children: ReactNode; initialLang: Lang }) {
   const router = useRouter();
   const pathname = usePathname();
 
-  const getLangFromPath = useCallback(() => {
-    const pathParts = pathname.split('/').filter(Boolean);
-    if (pathParts.length > 0 && (pathParts[0] === 'en' || pathParts[0] === 'es')) {
-      return pathParts[0] as Lang;
-    }
-    return "en"; // Default to English if no language in path
-  }, [pathname]);
-
-  const [lang, setLangState] = useState<Lang>(getLangFromPath());
+  const [lang, setLangState] = useState<Lang>(initialLang);
 
   useEffect(() => {
-    // This effect runs only on the client side after hydration
-    const saved = window.localStorage.getItem("cc-lang");
-    const initialLang = getLangFromPath();
+    // Ensure the HTML lang attribute is set
+    document.documentElement.lang = lang;
 
-    if (saved && (saved === "en" || saved === "es")) {
-      if (saved !== initialLang) {
-        // If saved language in localStorage is different from URL, update URL
-        const newPath = `/${saved}${pathname.substring(3)}`; // e.g., /en/path -> /es/path
-        router.replace(newPath);
-        setLangState(saved);
-      } else {
-        setLangState(saved);
-      }
-    } else {
-      // If no saved language, or invalid, use language from path and save it
-      setLangState(initialLang);
+    // Client-side logic to sync localStorage with URL and handle redirects if necessary
+    const saved = window.localStorage.getItem("cc-lang");
+    if (saved && (saved === "en" || saved === "es") && saved !== lang) {
+      // If localStorage has a different language, redirect to that language's URL
+      const newPath = `/${saved}${pathname.substring(3)}`;
+      router.replace(newPath);
+    } else if (!saved || (saved !== "en" && saved !== "es")) {
+      // If no saved language or invalid, save the current URL's language
       try {
-        window.localStorage.setItem("cc-lang", initialLang);
+        window.localStorage.setItem("cc-lang", lang);
       } catch {
         /* storage unavailable — ignore */
       }
     }
-  }, [getLangFromPath, pathname, router]);
-
-  useEffect(() => {
-    document.documentElement.lang = lang;
-  }, [lang]);
+  }, [lang, pathname, router]);
 
   const setLang = useCallback(
     (l: Lang) => {
@@ -66,7 +49,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
         /* storage unavailable — ignore */
       }
       // Update the URL to reflect the new language
-      const newPath = `/${l}${pathname.substring(3)}`; // e.g., /en/path -> /es/path
+      const newPath = `/${l}${pathname.substring(3)}`;
       router.push(newPath);
     },
     [pathname, router]

@@ -39,7 +39,7 @@ export default function RootLayout({
   return (
     <html lang={lang} className={`${fraunces.variable} ${grotesk.variable}`}>
       <body>
-        <LanguageProvider>
+        <LanguageProvider initialLang={lang as "en" | "es"}>
           <SmoothScroll>{children}</SmoothScroll>
         </LanguageProvider>
       </body>
