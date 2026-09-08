@@ -1,16 +1,9 @@
-import { LanguageProvider } from "@/components/LanguageProvider";
-import { Header } from "@/components/Header";
-import { Scrolly } from "@/components/Scrolly";
-import { Footer } from "@/components/Footer";
-
-export default function Home() {
+export default function RootPage() {
   return (
-    <LanguageProvider>
-      <Header />
-      <main>
-        <Scrolly />
-      </main>
-      <Footer />
-    </LanguageProvider>
+    <div>
+      <h1>Hello from root!</h1>
+      <p>If you see this, the root page is being rendered.</p>
+      <p>Please navigate to <a href="/en">/en</a> or <a href="/es">/es</a></p>
+    </div>
   );
 }

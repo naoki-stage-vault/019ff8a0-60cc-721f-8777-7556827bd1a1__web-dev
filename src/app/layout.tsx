@@ -1,6 +1,4 @@
-import type { Metadata } from "next";
 import { Fraunces, Space_Grotesk } from "next/font/google";
-import { SmoothScroll } from "@/components/SmoothScroll";
 import "./globals.css";
 
 const fraunces = Fraunces({
@@ -17,12 +15,6 @@ const grotesk = Space_Grotesk({
   display: "swap",
 });
 
-export const metadata: Metadata = {
-  title: "Catalina Cobap — Web Design + Development / Costa Rica",
-  description:
-    "Custom websites for businesses and independent professionals ready for an online presence that reflects the quality of their work today.",
-};
-
 export default function RootLayout({
   children,
 }: {
@@ -30,9 +22,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className={`${fraunces.variable} ${grotesk.variable}`}>
-      <body>
-        <SmoothScroll>{children}</SmoothScroll>
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
