@@ -569,9 +569,55 @@ function PinProcess({ t, lang }: { t: Copy; lang: Lang }) {
 /* ------------------------------------------------------------------ */
 
 function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
-  const { ref, on } = usePin<HTMLDivElement>();
+  const { ref: runwayRef, on } = usePin<HTMLDivElement>();
   const [p, setP] = useState(0);
   useEffect(() => on(setP), [on]);
+
+  const projectsListRef = useRef<HTMLDivElement>(null);
+  const stickyContentRef = useRef<HTMLDivElement>(null);
+  const headingRef = useRef<HTMLDivElement>(null);
+
+  const [runwayHeight, setRunwayHeight] = useState("380vh");
+  const [translateY, setTranslateY] = useState(0);
+
+  const SAFE_AREA_BOTTOM = 32; // 24-40px, picked 32px
+
+  useEffect(() => {
+    const calculateScrollMetrics = () => {
+      if (projectsListRef.current && stickyContentRef.current && headingRef.current) {
+        const projectsListHeight = projectsListRef.current.scrollHeight;
+        const headingHeight = headingRef.current.offsetHeight;
+        const stickyViewportHeight = stickyContentRef.current.offsetHeight;
+
+        // The available height for the projects list within the sticky viewport
+        // This is the sticky viewport height minus the heading/intro area
+        const visibleProjectsAreaHeight = stickyViewportHeight - headingHeight - SAFE_AREA_BOTTOM;
+
+        const maxTravel = Math.max(
+          0,
+          projectsListHeight - visibleProjectsAreaHeight
+        );
+
+        // Update translateY for the projects list based on scroll progress
+        setTranslateY(-p * maxTravel);
+
+        // Calculate the total runway height needed
+        // It should be at least viewport height + maxTravel + some buffer for smooth scrolling
+        const newRunwayHeight = `calc(100vh + ${maxTravel + 200}px)`; // Added 200px as a buffer
+        setRunwayHeight(newRunwayHeight);
+      }
+    };
+
+    calculateScrollMetrics(); // Initial calculation
+    const handleResize = () => calculateScrollMetrics();
+
+    window.addEventListener("resize", handleResize);
+    // Recalculate when progress 'p' changes, as content might shift slightly
+    // or to ensure translateY is updated correctly with new maxTravel
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, [p]); // Recalculate when p changes
 
   const seg = (a: number, b: number) => clamp01((p - a) / (b - a));
   const w = t.work;
@@ -579,9 +625,9 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
   const main = w.title.replace(last, "");
 
   return (
-    <Runway id="projects" h="380vh" ref={ref}>
-      <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col justify-start px-6 pt-10 md:px-14">
-        <div className="text-center">
+    <Runway id="projects" h={runwayHeight} ref={runwayRef}>
+      <div ref={stickyContentRef} className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col justify-start px-6 pt-10 md:px-14">
+        <div ref={headingRef} className="text-center">
           <div style={{ opacity: seg(0, 0.12) }}>
             <Eyebrow className="text-center">{w.num}</Eyebrow>
           </div>
@@ -597,7 +643,11 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
           </p>
         </div>
 
-        <div className="mt-10 border-b border-cream/10">
+        <div
+          ref={projectsListRef}
+          className="mt-10 border-b border-cream/10"
+          style={{ transform: `translateY(${translateY}px)` }}
+        >
           {w.projects.map((pr, i) => {
             const o = seg(0.1 + i * 0.16, 0.28 + i * 0.16);
             const active = o > 0.55;
@@ -610,6 +660,7 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
                 className="grid gap-3 border-t border-cream/10 py-4 md:grid-cols-12 md:items-center md:gap-6 md:py-6"
                 style={{
                   opacity: Math.min(1, o * 1.5),
+                  // The individual project translateY is for entrance animation, keep it.
                   transform: `translateY(${(1 - Math.min(1, o * 1.5)) * 26}px)`,
                   background: active ? "rgba(34,25,16,0.45)" : "transparent",
                   transition: "background-color 0.3s",
