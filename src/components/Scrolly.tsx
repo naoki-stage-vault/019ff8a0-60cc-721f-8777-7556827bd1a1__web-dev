@@ -578,6 +578,8 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
 
   const [maxScrollDistancePx, setMaxScrollDistancePx] = useState(0);
   const [runwayHeightVh, setRunwayHeightVh] = useState("380vh"); // Initial value, will be updated
+  const [debugViewportHeight, setDebugViewportHeight] = useState(0);
+  const [debugHeaderHeight, setDebugHeaderHeight] = useState(0);
 
   // Effect to calculate maxScrollDistancePx and runwayHeightVh
   useEffect(() => {
@@ -586,6 +588,8 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
 
       const viewportHeight = window.innerHeight;
       const headerHeight = headerContentRef.current.offsetHeight;
+      setDebugViewportHeight(viewportHeight);
+      setDebugHeaderHeight(headerHeight);
       const projectsListHeight = projectsListRef.current.scrollHeight;
       const bottomSafeArea = 24; // Desired padding at the bottom (24-40px)
 
@@ -645,8 +649,8 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
             <p>translateY: {translateY.toFixed(2)}</p>
             <p>runwayHeightVh: {runwayHeightVh}</p>
             <p>projectsListHeight: {projectsListRef.current?.scrollHeight.toFixed(2)}</p>
-            <p>viewportHeight: {window.innerHeight.toFixed(2)}</p>
-            <p>headerHeight: {headerContentRef.current?.offsetHeight.toFixed(2)}</p>
+            <p>viewportHeight: {debugViewportHeight.toFixed(2)}</p>
+            <p>headerHeight: {debugHeaderHeight.toFixed(2)}</p>
           </div>
           {w.projects.map((pr, i) => {
             const o = seg(0.1 + i * 0.16, 0.28 + i * 0.16);
