@@ -639,6 +639,15 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
           className="mt-10 border-b border-cream/10"
           style={{ transform: `translateY(${translateY}px)` }}
         >
+          <div style={{ color: 'white', background: 'black', padding: '10px', position: 'fixed', top: '10px', left: '10px', zIndex: 1000 }}>
+            <p>p: {p.toFixed(2)}</p>
+            <p>maxScrollDistancePx: {maxScrollDistancePx.toFixed(2)}</p>
+            <p>translateY: {translateY.toFixed(2)}</p>
+            <p>runwayHeightVh: {runwayHeightVh}</p>
+            <p>projectsListHeight: {projectsListRef.current?.scrollHeight.toFixed(2)}</p>
+            <p>viewportHeight: {window.innerHeight.toFixed(2)}</p>
+            <p>headerHeight: {headerContentRef.current?.offsetHeight.toFixed(2)}</p>
+          </div>
           {w.projects.map((pr, i) => {
             const o = seg(0.1 + i * 0.16, 0.28 + i * 0.16);
             const active = o > 0.55;
