@@ -289,6 +289,14 @@ export const es = {
         link: "Visitar sitio",
         url: "https://estersplace.com",
       },
+      {
+        n: "06",
+        cat: "Hospitalidad",
+        name: "Ester’s Place",
+        desc: "Un hospedaje bilingüe con presencia en línea completa.",
+        link: "Visitar sitio",
+        url: "https://estersplace.com",
+      },
     ],
   },
   fit: {
