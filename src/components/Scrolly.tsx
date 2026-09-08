@@ -569,9 +569,59 @@ function PinProcess({ t, lang }: { t: Copy; lang: Lang }) {
 /* ------------------------------------------------------------------ */
 
 function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
-  const { ref, on } = usePin<HTMLDivElement>();
+  const { ref: runwayRef, on } = usePin<HTMLDivElement>();
   const [p, setP] = useState(0);
   useEffect(() => on(setP), [on]);
+
+  const projectsListRef = useRef<HTMLDivElement>(null);
+  const headerContentRef = useRef<HTMLDivElement>(null);
+
+  const [maxScrollDistancePx, setMaxScrollDistancePx] = useState(0);
+  const [runwayHeightVh, setRunwayHeightVh] = useState("380vh"); // Initial value, will be updated
+  const [debugViewportHeight, setDebugViewportHeight] = useState(0);
+  const [debugHeaderHeight, setDebugHeaderHeight] = useState(0);
+
+  // Effect to calculate maxScrollDistancePx and runwayHeightVh
+  useEffect(() => {
+    let rafId: number;
+
+    const calculateDimensions = () => {
+      if (!projectsListRef.current || !headerContentRef.current) return;
+
+      const viewportHeight = window.innerHeight;
+      const headerHeight = headerContentRef.current.offsetHeight;
+      setDebugViewportHeight(viewportHeight);
+      setDebugHeaderHeight(headerHeight);
+      const projectsListHeight = projectsListRef.current.scrollHeight;
+      const bottomSafeArea = 24; // Desired padding at the bottom (24-40px)
+
+      // Calculate the maximum upward translation needed for the projects list
+      const calculatedMaxScrollDistancePx = Math.max(0, projectsListHeight - (viewportHeight - headerHeight - bottomSafeArea));
+      setMaxScrollDistancePx(calculatedMaxScrollDistancePx);
+
+      // Calculate the total runway height needed for 'p' to go from 0 to 1
+      // The usePin hook calculates total = r.height - vh.
+      // We want total to be equal to calculatedMaxScrollDistancePx (in pixels).
+      // So, r.height (runwayHeight) should be viewportHeight + calculatedMaxScrollDistancePx.
+      const totalRunwayHeightPx = viewportHeight + calculatedMaxScrollDistancePx;
+      const totalRunwayHeightVh = (totalRunwayHeightPx / viewportHeight) * 100;
+      setRunwayHeightVh(`${totalRunwayHeightVh}vh`);
+    };
+
+    const scheduleCalculation = () => {
+      rafId = requestAnimationFrame(calculateDimensions);
+    };
+
+    scheduleCalculation(); // Initial calculation
+    window.addEventListener("resize", scheduleCalculation);
+    return () => {
+      window.removeEventListener("resize", scheduleCalculation);
+      cancelAnimationFrame(rafId);
+    };
+  }, [t.work.projects.length]); // Recalculate if project list changes
+
+  // Apply translateY based on p and maxScrollDistancePx
+  const translateY = -p * maxScrollDistancePx;
 
   const seg = (a: number, b: number) => clamp01((p - a) / (b - a));
   const w = t.work;
@@ -579,9 +629,9 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
   const main = w.title.replace(last, "");
 
   return (
-    <Runway id="projects" h="380vh" ref={ref}>
-      <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col justify-start px-6 pt-10 md:px-14">
-        <div className="text-center">
+    <Runway id="projects" h={runwayHeightVh} ref={runwayRef}>
+      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col justify-start px-6 pt-10 md:px-14">
+        <div ref={headerContentRef} className="text-center">
           <div style={{ opacity: seg(0, 0.12) }}>
             <Eyebrow className="text-center">{w.num}</Eyebrow>
           </div>
@@ -597,7 +647,12 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
           </p>
         </div>
 
-        <div className="mt-10 border-b border-cream/10">
+        <div
+          ref={projectsListRef}
+          className="mt-10 border-b border-cream/10"
+          style={{ transform: `translateY(${translateY}px)` }}
+        >
+
           {w.projects.map((pr, i) => {
             const o = seg(0.1 + i * 0.16, 0.28 + i * 0.16);
             const active = o > 0.55;
