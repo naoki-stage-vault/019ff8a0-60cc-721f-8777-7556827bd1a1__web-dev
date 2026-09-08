@@ -632,8 +632,8 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
             <em className="text-flame">{last}</em>
           </h2>
           <p
-            className="mx-auto mt-6 hidden max-w-2xl font-serif text-lg leading-relaxed text-dim md:block"
-            style={{ opacity: seg(0.12, 0.3) }}
+            className="mx-auto mt-6 hidden max-w-4xl font-serif text-lg leading-relaxed text-dim md:block"
+            style={{ opacity: seg(0.12, 0.3), textWrap: 'balance' }}
           >
             {w.intro}
           </p>
