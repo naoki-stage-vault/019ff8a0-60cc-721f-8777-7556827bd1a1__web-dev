@@ -602,7 +602,7 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
 
         // Calculate the total runway height needed
         // It should be at least viewport height + adjustedMaxTravel + some buffer for smooth scrolling
-        const newRunwayHeight = `calc(100vh + ${adjustedMaxTravel + 200}px)`; // Added 200px as a buffer
+        const newRunwayHeight = `calc(100vh + ${adjustedMaxTravel + 400}px)`; // Added 400px as a buffer
         setRunwayHeight(newRunwayHeight);
       }
     };
@@ -627,7 +627,7 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
           <div style={{ opacity: seg(0, 0.12) }}>
             <Eyebrow className="text-center">{w.num}</Eyebrow>
           </div>
-          <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em] whitespace-nowrap">
+          <h2 className="mx-auto mt-6 font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em] whitespace-nowrap">
             <Words text={main} p={p} range={[0, 0.3]} />
             <em className="text-flame">{last}</em>
           </h2>
