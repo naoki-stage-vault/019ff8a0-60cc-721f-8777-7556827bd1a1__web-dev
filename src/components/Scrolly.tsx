@@ -165,7 +165,7 @@ function Runway({
 }) {
   return (
     <div ref={ref} id={id} data-slide className="relative" style={{ height: h }}>
-      <div className="sticky top-0 h-svh overflow-y-auto">{children}</div>
+      <div className="sticky top-0">{children}</div>
     </div>
   );
 }
