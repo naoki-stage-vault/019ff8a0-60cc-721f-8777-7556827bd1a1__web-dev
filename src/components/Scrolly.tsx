@@ -589,11 +589,10 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
         const SAFE_AREA_BOTTOM = 32; // 24-40px, picked 32px
 
         const projectsListHeight = projectsListRef.current.scrollHeight;
-        const stickyContentHeight = stickyContentRef.current.offsetHeight;
-        const headingHeight = headingRef.current.offsetHeight;
+        const projectsViewportActualHeight = projectsViewportRef.current.offsetHeight;
 
-        // The available height for the projects list within the sticky content, after the heading
-        const availableProjectsHeight = stickyContentHeight - headingHeight - SAFE_AREA_BOTTOM;
+        // The available height for the projects list within the projectsViewport
+        const availableProjectsHeight = projectsViewportActualHeight - SAFE_AREA_BOTTOM;
 
         // currentMaxTravel is the amount of scroll needed if the projectsList starts at the top of its visible area
         let adjustedMaxTravel = Math.max(0, projectsListHeight - availableProjectsHeight);
@@ -628,7 +627,7 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
           <div style={{ opacity: seg(0, 0.12) }}>
             <Eyebrow className="text-center">{w.num}</Eyebrow>
           </div>
-          <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
+          <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em] whitespace-nowrap">
             <Words text={main} p={p} range={[0, 0.3]} />
             <em className="text-flame">{last}</em>
           </h2>
