@@ -593,31 +593,51 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
         // This is the sticky viewport height minus the heading/intro area
         const visibleProjectsAreaHeight = stickyViewportHeight - headingHeight - SAFE_AREA_BOTTOM;
 
-        const maxTravel = Math.max(
-          0,
-          projectsListHeight - visibleProjectsAreaHeight
-        );
+        // currentMaxTravel is the amount of scroll needed if the projectsList starts at the top of its visible area
+        let adjustedMaxTravel = Math.max(0, projectsListHeight - visibleProjectsAreaHeight);
+
+        const lastProjectElement = projectsListRef.current.lastElementChild as HTMLElement;
+
+        if (lastProjectElement) {
+          // Calculate the bottom of the last project relative to the top of the projectsListRef
+          const lastProjectBottomRelativeToProjectsList = lastProjectElement.offsetTop + lastProjectElement.offsetHeight;
+
+          // projectsListRef.current.offsetTop is the distance from stickyContentRef.current.top to projectsListRef.current.top
+          const projectsListOffsetTop = projectsListRef.current.offsetTop;
+
+          // Calculate the final bottom of the last project if we only scroll by adjustedMaxTravel (initial calculation)
+          // This is relative to the stickyContentRef's top
+          const finalLastProjectBottomRelativeToStickyContent = projectsListOffsetTop + lastProjectBottomRelativeToProjectsList - adjustedMaxTravel;
+
+          // The desired bottom boundary for the last project (relative to stickyContentRef's top)
+          const desiredBottomBoundaryRelativeToStickyContent = stickyViewportHeight - SAFE_AREA_BOTTOM;
+
+          // Calculate how much more travel is needed
+          const missingTravel = finalLastProjectBottomRelativeToStickyContent - desiredBottomBoundaryRelativeToStickyContent;
+
+          // Add missingTravel to adjustedMaxTravel if it's positive
+          adjustedMaxTravel += Math.max(0, missingTravel);
+        }
 
         // Update translateY for the projects list based on scroll progress
-        setTranslateY(-p * maxTravel);
+        // The `p` value is already 0-1, so -p * adjustedMaxTravel is correct for the translation
+        setTranslateY(-p * adjustedMaxTravel);
 
         // Calculate the total runway height needed
-        // It should be at least viewport height + maxTravel + some buffer for smooth scrolling
-        const newRunwayHeight = `calc(100vh + ${maxTravel + 200}px)`; // Added 200px as a buffer
+        // It should be at least viewport height + adjustedMaxTravel + some buffer for smooth scrolling
+        const newRunwayHeight = `calc(100vh + ${adjustedMaxTravel + 200}px)`; // Added 200px as a buffer
         setRunwayHeight(newRunwayHeight);
       }
     };
 
-    calculateScrollMetrics(); // Initial calculation
+    calculateScrollMetrics(); // Initial calculation and on 'p' change
     const handleResize = () => calculateScrollMetrics();
 
     window.addEventListener("resize", handleResize);
-    // Recalculate when progress 'p' changes, as content might shift slightly
-    // or to ensure translateY is updated correctly with new maxTravel
     return () => {
       window.removeEventListener("resize", handleResize);
     };
-  }, [p]); // Recalculate when p changes
+  }, [p, t, lang]); // Added t and lang as dependencies for recalculation on language change or content change
 
   const seg = (a: number, b: number) => clamp01((p - a) / (b - a));
   const w = t.work;
