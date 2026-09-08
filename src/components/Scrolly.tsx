@@ -619,9 +619,27 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
           adjustedMaxTravel += Math.max(0, missingTravel);
         }
 
-        // Update translateY for the projects list based on scroll progress
-        // The `p` value is already 0-1, so -p * adjustedMaxTravel is correct for the translation
-        setTranslateY(-p * adjustedMaxTravel);
+        // --- NEW LOGIC FOR INTRO-PROJECTS GAP ---
+        const INTRO_TO_PROJECTS_GAP = 32; // Desired gap in px (24-48px range)
+
+        let initialProjectsListOffset = 0;
+
+        if (headingRef.current && projectsListRef.current) {
+          const headingBottomRelativeToSticky = headingRef.current.offsetTop + headingRef.current.offsetHeight;
+          const projectsListStaticTopRelativeToSticky = projectsListRef.current.offsetTop;
+
+          const currentLayoutGap = projectsListStaticTopRelativeToSticky - headingBottomRelativeToSticky;
+
+          if (currentLayoutGap < INTRO_TO_PROJECTS_GAP) {
+            initialProjectsListOffset = INTRO_TO_PROJECTS_GAP - currentLayoutGap;
+          }
+        }
+
+        // Apply the initial offset to the translateY. This pushes the list down at p=0.
+        setTranslateY(initialProjectsListOffset - p * adjustedMaxTravel);
+
+        // And increase adjustedMaxTravel by this initial offset to ensure Ester's Place still ends correctly.
+        adjustedMaxTravel += initialProjectsListOffset;
 
         // Calculate the total runway height needed
         // It should be at least viewport height + adjustedMaxTravel + some buffer for smooth scrolling
