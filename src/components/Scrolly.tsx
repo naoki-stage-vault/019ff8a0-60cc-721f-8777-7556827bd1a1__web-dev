@@ -285,8 +285,7 @@ function Hero({ t, lang }: { t: Copy; lang: Lang }) {
   }, []);
 
   const enter = entered ? 1 : 0;
-  const last = lang === "en" ? "BUILT FOR WHAT THEY NEED TO DO." : "CONSTRUIDOS PARA LO QUE TIENEN QUE HACER.";
-  const main = t.hero.headline.replace(last, "");
+  const headline = lang === "en" ? "WEBSITES + WEBAPP MVPs,\nBUILT TO DO THEIR JOB." : "SITIOS WEB + MVPs DE WEBAPPS,\nCONSTRUIDOS PARA HACER SU TRABAJO.";
   const strip = t.hero.strip;
 
   return (
@@ -306,19 +305,14 @@ function Hero({ t, lang }: { t: Copy; lang: Lang }) {
           }}
         >
           <Eyebrow className="text-center">{t.hero.label}</Eyebrow>
-          <p className="mx-auto mt-6 max-w-2xl font-serif text-lg leading-relaxed text-dim">
-            {t.hero.preHeadline}
-          </p>
-          <h1 className="mx-auto mt-6 font-display text-[clamp(2.5rem,6vw,6rem)] leading-[1.02] tracking-[-0.02em] text-cream">
-            <span className="block">{main}</span>
-            <span className="text-flame">
-              {last}
-            </span>
+          <h1 className="mx-auto mt-6 font-display text-[clamp(2.5rem,6vw,6rem)] leading-[1.02] tracking-[-0.02em] text-cream text-center">
+            <span className="block">{headline.split('\n')[0]}</span>
+            <span className="block text-flame italic">{headline.split('\n')[1]}</span>
           </h1>
         </div>
 
         <div
-          className="mt-12 w-full"
+          className="mt-12 w-full flex flex-col items-center"
           style={{
             opacity: enter,
             transform: `translateY(${(1 - enter) * 30}px)`,
@@ -326,18 +320,16 @@ function Hero({ t, lang }: { t: Copy; lang: Lang }) {
               "opacity 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.15s, transform 1.1s cubic-bezier(0.22, 1, 0.36, 1) 0.15s",
           }}
         >
-          <div className="flex w-full flex-col items-center gap-8 md:flex-row md:items-start md:justify-between">
-            <p className="max-w-md text-center font-serif text-xl leading-relaxed text-dim md:text-left">
-              {t.hero.body}
-            </p>
-            <a
-              href={t.links.email}
-              className="group inline-flex w-fit items-center gap-3 bg-flame px-7 py-4 font-sans text-[12px] font-semibold uppercase tracking-[0.22em] text-ink transition-colors duration-200 hover:bg-cream"
-            >
-              {t.hero.cta}
-              <Arrow className="transition-transform duration-200 group-hover:translate-x-1 group-hover:-translate-y-1" />
-            </a>
-          </div>
+          <p className="max-w-md text-center font-serif text-xl leading-relaxed text-dim">
+            {t.hero.body}
+          </p>
+          <a
+            href={t.links.email}
+            className="group inline-flex w-fit items-center gap-3 bg-flame px-7 py-4 font-sans text-[12px] font-semibold uppercase tracking-[0.22em] text-ink transition-colors duration-200 hover:bg-cream mt-8"
+          >
+            {t.hero.cta}
+            <Arrow className="transition-transform duration-200 group-hover:translate-x-1 group-hover:-translate-y-1" />
+          </a>
 
           <div className="marquee-fade mt-16 w-full overflow-hidden border-y border-cream/10 py-3">
             <div className="marquee-track font-sans text-[11px] uppercase tracking-[0.3em] text-faint">
