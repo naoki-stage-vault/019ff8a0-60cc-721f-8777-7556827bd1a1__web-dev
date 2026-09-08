@@ -20,22 +20,22 @@ const UI = {
 const SECTION_IDS = [
   "top",
   "positioning",
-  "about",
   "build",
   "process",
   "projects",
   "fit",
+  "investment",
   "contact",
 ];
 
 const RAIL_LABELS: Record<string, { en: string; es: string }> = {
   top: { en: "Intro", es: "Portada" },
   positioning: { en: "Positioning", es: "Posicionamiento" },
-  about: { en: "About", es: "Sobre mí" },
   build: { en: "What I build", es: "Lo que construyo" },
   process: { en: "Process", es: "Proceso" },
   projects: { en: "Selected work", es: "Trabajo seleccionado" },
   fit: { en: "A good fit", es: "Un buen encaje" },
+  investment: { en: "Investment", es: "Inversión" },
   contact: { en: "Contact", es: "Contacto" },
 };
 
@@ -285,9 +285,9 @@ function Hero({ t, lang }: { t: Copy; lang: Lang }) {
   }, []);
 
   const enter = entered ? 1 : 0;
-  const last = lang === "en" ? "look like it." : "reflejarlo.";
-  const main = t.hero.titleB.replace(last, "");
-  const strip = `${t.hero.strip}  ·  ${t.hero.stripSuffix}`;
+  const last = lang === "en" ? "BUILT FOR WHAT THEY NEED TO DO." : "CONSTRUIDOS PARA LO QUE TIENEN QUE HACER.";
+  const main = t.hero.headline.replace(last, "");
+  const strip = t.hero.strip;
 
   return (
     <section
@@ -306,10 +306,12 @@ function Hero({ t, lang }: { t: Copy; lang: Lang }) {
           }}
         >
           <Eyebrow className="text-center">{t.hero.label}</Eyebrow>
+          <p className="mx-auto mt-6 max-w-2xl font-serif text-lg leading-relaxed text-dim">
+            {t.hero.preHeadline}
+          </p>
           <h1 className="mx-auto mt-8 font-display text-[clamp(3rem,7.8vw,7.4rem)] leading-[1.02] tracking-[-0.02em]">
-            <span className="block uppercase">{t.hero.titleA}</span>
+            <span className="block uppercase">{main}</span>
             <em className="text-cream">
-              {main}
               <span className="text-flame">{last}</span>
             </em>
           </h1>
@@ -326,7 +328,7 @@ function Hero({ t, lang }: { t: Copy; lang: Lang }) {
         >
           <div className="flex w-full flex-col items-center gap-8 md:flex-row md:items-start md:justify-between">
             <p className="max-w-md text-center font-serif text-xl leading-relaxed text-dim md:text-left">
-              {t.hero.sub}
+              {t.hero.body}
             </p>
             <a
               href={t.links.email}
@@ -368,7 +370,7 @@ function Hero({ t, lang }: { t: Copy; lang: Lang }) {
 /* ------------------------------------------------------------------ */
 
 function Positioning({ t, lang }: { t: Copy; lang: Lang }) {
-  const last = lang === "en" ? "catch up." : "ponerse al día.";
+  const last = lang === "en" ? "how to build it." : "cómo construirlo.";
   const main = t.positioning.title.replace(last, "");
 
   return (
@@ -394,10 +396,10 @@ function Positioning({ t, lang }: { t: Copy; lang: Lang }) {
         <Reveal delay={0.18}>
           <div className="mx-auto mt-14 w-full max-w-xl border border-cream/10 bg-raised/30 text-left">
             <p className="border-b border-cream/10 px-6 py-3 font-sans text-[10px] uppercase tracking-[0.25em] text-faint">
-              {t.positioning.glanceTitle}
+              {t.glance.num}
             </p>
             <dl>
-              {t.positioning.glance.map(([label, value], i) => (
+              {t.glance.items.map(([label, value], i) => (
                 <div
                   key={label}
                   className={`flex flex-col gap-1 px-6 py-4 sm:flex-row sm:items-baseline sm:justify-between ${
@@ -437,17 +439,15 @@ function About({ t }: { t: Copy }) {
           <Eyebrow className="text-center">{a.num}</Eyebrow>
           <p className="mx-auto mt-10 max-w-5xl font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
             <em className="text-cream">
-              “{a.statement}”
+              {a.quote}
             </em>
-            <span className="text-flame">.</span>
           </p>
         </Reveal>
 
         <Reveal delay={0.12}>
           <p className="mx-auto mt-14 w-fit font-serif text-lg leading-relaxed text-dim">
-            <span className="text-flame">—</span>{" "}
-            <span className="text-cream">{a.name}</span>{" "}
-            <span className="text-faint">({a.note})</span>
+            <span className="text-flame">{a.attribution}</span>{" "}
+            <span className="text-faint">({a.role})</span>
           </p>
         </Reveal>
       </div>
@@ -461,10 +461,6 @@ function About({ t }: { t: Copy }) {
 
 function Build({ t }: { t: Copy }) {
   const b = t.build;
-  const panels = [
-    { tag: b.new.tag, lead: b.new.lead, body: b.new.body },
-    { tag: b.rebuild.tag, lead: b.rebuild.lead, body: b.rebuild.body },
-  ];
 
   return (
     <section
@@ -483,24 +479,31 @@ function Build({ t }: { t: Copy }) {
         </Reveal>
 
         <div className="mt-14 grid gap-5 md:grid-cols-2">
-          {panels.map((panel, i) => (
-            <Reveal key={panel.tag} delay={0.1 + i * 0.12} className="h-full">
-              <div className="flex h-full flex-col justify-between border border-cream/10 bg-raised/30 p-8 md:p-10">
+          {b.services.map((service, i) => (
+            <Reveal key={service.label} delay={0.1 + i * 0.12} className="h-full">
+              <a href={service.link} className="flex h-full flex-col justify-between border border-cream/10 bg-raised/30 p-8 md:p-10 group">
                 <div>
                   <div className="flex items-center justify-between">
                     <span className="font-sans text-[11px] uppercase tracking-[0.25em] text-flame">
-                      {panel.tag}
+                      {service.label} ↗
                     </span>
-                    <Arrow className="text-faint" />
+                    <Arrow className="text-faint transition-transform duration-200 group-hover:translate-x-1 group-hover:-translate-y-1" />
                   </div>
                   <h3 className="mt-6 font-display text-2xl leading-tight md:text-[1.7rem]">
-                    {panel.lead}
+                    {service.headline}
                   </h3>
                 </div>
                 <p className="mt-6 font-serif text-[15px] leading-relaxed text-dim">
-                  {panel.body}
+                  {service.body}
                 </p>
-              </div>
+                <p className="mt-4 font-sans text-sm font-bold uppercase tracking-[0.08em] text-cream">
+                  {service.price}
+                </p>
+                <span className="mt-6 inline-flex items-center gap-2 font-sans text-[12px] uppercase tracking-[0.2em] text-flame">
+                  {service.cta}
+                  <Arrow />
+                </span>
+              </a>
             </Reveal>
           ))}
         </div>
@@ -519,16 +522,18 @@ function PinProcess({ t, lang }: { t: Copy; lang: Lang }) {
   useEffect(() => on(setP), [on]);
 
   const seg = (a: number, b: number) => clamp01((p - a) / (b - a));
-  const b = t.build;
   const ui = UI[lang];
-  const steps = b.process;
+  const steps = t.process.steps;
+  const last = lang === "en" ? "to launch." : "al lanzamiento.";
+  const main = t.process.title.replace(last, "");
 
   return (
     <Runway id="process" h="300vh" ref={ref}>
       <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col justify-start px-6 pt-20 md:justify-center md:px-14 md:pt-0">
-        <Eyebrow className="text-center">{b.processTitle}</Eyebrow>
+        <Eyebrow className="text-center">{t.process.num}</Eyebrow>
         <h2 className="mx-auto mt-6 max-w-4xl text-center font-display text-[clamp(2rem,4.6vw,4.1rem)] leading-[1.05] tracking-[-0.015em]">
-          <Words text={ui.processHead} p={p} range={[0.08, 0.4]} />
+          <Words text={main} p={p} range={[0.08, 0.4]} />
+          <em className="text-flame">{last}</em>
         </h2>
 
         <div className="mt-10 grid gap-10 md:mt-16 md:grid-cols-4 md:gap-8">
@@ -540,7 +545,7 @@ function PinProcess({ t, lang }: { t: Copy; lang: Lang }) {
                 : "2px solid rgba(246,236,216,0.15)";
             return (
               <div
-                key={step.n}
+                key={step.title}
                 className="pt-6"
                 style={{
                   borderTop: border,
@@ -553,10 +558,10 @@ function PinProcess({ t, lang }: { t: Copy; lang: Lang }) {
                   className="font-sans text-sm font-bold uppercase tracking-[0.08em]"
                   style={{ color: o > 0.55 ? "var(--color-cream)" : "var(--color-dim)" }}
                 >
-                  {step.t}
+                  {step.title}
                 </h3>
                 <p className="mt-3 font-serif text-[15px] leading-relaxed text-dim">
-                  {step.d}
+                  {step.text}
                 </p>
               </div>
             );
@@ -578,7 +583,7 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
 
   const seg = (a: number, b: number) => clamp01((p - a) / (b - a));
   const w = t.work;
-  const last = lang === "en" ? "Different websites." : "Sitios web diferentes.";
+  const last = lang === "en" ? "Different solutions." : "Soluciones diferentes.";
   const main = w.title.replace(last, "");
 
   return (
@@ -661,7 +666,7 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
 
 function Fit({ t, lang }: { t: Copy; lang: Lang }) {
   const f = t.fit;
-  const last = lang === "en" ? "real change." : "un cambio real.";
+  const last = lang === "en" ? "build something properly." : "construir algo bien hecho.";
   const main = f.title.replace(last, "");
 
   return (
@@ -680,13 +685,13 @@ function Fit({ t, lang }: { t: Copy; lang: Lang }) {
 
         <div className="mt-12 grid gap-5 md:grid-cols-2">
           {f.items.map((item, i) => (
-            <Reveal key={item.n} delay={0.08 + i * 0.1} className="h-full">
+            <Reveal key={item.title} delay={0.08 + i * 0.1} className="h-full">
               <div className="h-full border border-cream/10 bg-raised/25 p-7 md:p-8">
                 <h3 className="font-sans text-lg font-bold uppercase leading-snug tracking-[0.02em] text-cream">
-                  {item.t}
+                  {item.title}
                 </h3>
                 <p className="mt-3 font-serif text-[15px] leading-relaxed text-dim">
-                  {item.d}
+                  {item.text}
                 </p>
               </div>
             </Reveal>
@@ -698,12 +703,70 @@ function Fit({ t, lang }: { t: Copy; lang: Lang }) {
 }
 
 /* ------------------------------------------------------------------ */
-/* 08 · CONTACT (normal flow, subtle reveal)                          */
+/* 08 · INVESTMENT (normal flow, subtle reveal)                       */
 /* ------------------------------------------------------------------ */
 
-function Contact({ t }: { t: Copy }) {
+function Investment({ t, lang }: { t: Copy; lang: Lang }) {
+  const i = t.investment;
+  const last = lang === "en" ? "Clear price." : "Precio claro.";
+  const main = i.title.replace(last, "");
+
+  return (
+    <section
+      id="investment"
+      className="relative flex min-h-svh w-full items-center justify-center px-6 py-24 md:px-14"
+    >
+      <div className="mx-auto w-full max-w-6xl">
+        <Reveal className="text-center">
+          <Eyebrow className="text-center">{i.num}</Eyebrow>
+          <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
+            {main}
+            <em className="text-flame">{last}</em>
+          </h2>
+        </Reveal>
+
+        <div className="mt-14 grid gap-5 md:grid-cols-2">
+          {i.services.map((service, idx) => (
+            <Reveal key={service.title} delay={0.1 + idx * 0.12} className="h-full">
+              <a href={service.link} className="flex h-full flex-col justify-between border border-cream/10 bg-raised/30 p-8 md:p-10 group">
+                <div>
+                  <h3 className="font-display text-2xl leading-tight md:text-[1.7rem]">
+                    {service.title}
+                  </h3>
+                  <p className="mt-2 font-sans text-sm font-bold uppercase tracking-[0.08em] text-cream">
+                    {service.price}
+                  </p>
+                </div>
+                <p className="mt-6 font-serif text-[15px] leading-relaxed text-dim">
+                  {service.body}
+                </p>
+                <span className="mt-6 inline-flex items-center gap-2 font-sans text-[12px] uppercase tracking-[0.2em] text-flame">
+                  {service.cta}
+                  <Arrow />
+                </span>
+              </a>
+            </Reveal>
+          ))}
+        </div>
+
+        <Reveal delay={0.18}>
+          <p className="mx-auto mt-12 max-w-2xl text-center font-serif text-lg leading-relaxed text-dim">
+            {i.footnote}
+          </p>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* 09 · CONTACT (normal flow, subtle reveal)                          */
+/* ------------------------------------------------------------------ */
+
+function Contact({ t, lang }: { t: Copy; lang: Lang }) {
   const c = t.contact;
-  const titleMain = c.title.split("?")[0];
+  const last = lang === "en" ? "build?" : "construir?";
+  const main = c.title.replace(last, "");
 
   return (
     <section
@@ -714,8 +777,8 @@ function Contact({ t }: { t: Copy }) {
         <Reveal>
           <Eyebrow className="text-center">{c.num}</Eyebrow>
           <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2rem,4.8vw,4.4rem)] leading-[1.03] tracking-[-0.015em]">
-            {titleMain}
-            <em className="text-flame">?</em>
+            {main}
+            <em className="text-flame">{last}</em>
           </h2>
           <p className="mx-auto mt-8 max-w-2xl font-serif text-lg leading-relaxed text-dim">
             {c.body}
@@ -781,12 +844,12 @@ export function Scrolly() {
       <ProgressRail />
       <Hero t={t} lang={lang} />
       <Positioning t={t} lang={lang} />
-      <About t={t} />
       <Build t={t} />
       <PinProcess t={t} lang={lang} />
       <PinProjects t={t} lang={lang} />
       <Fit t={t} lang={lang} />
-      <Contact t={t} />
+      <Investment t={t} lang={lang} />
+      <Contact t={t} lang={lang} />
     </>
   );
 }
