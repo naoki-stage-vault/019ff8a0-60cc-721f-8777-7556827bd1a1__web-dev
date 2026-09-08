@@ -521,43 +521,51 @@ function PinProcess({ t, lang }: { t: Copy; lang: Lang }) {
 
   return (
     <Runway id="process" h="300vh" ref={ref}>
-      <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col items-center justify-center px-6 py-12 md:px-14">
-        <Eyebrow className="text-center">{t.process.num}</Eyebrow>
-        <h2 className="mx-auto mt-0 max-w-4xl text-center font-display text-[clamp(2rem,4.6vw,4.1rem)] leading-[1.05] tracking-[-0.015em]">
-          <Words text={main} p={p} range={[0.08, 0.4]} />
-          <em className="text-flame">{last}</em>
-        </h2>
+      <div className="relative z-10 grid h-full w-full place-items-center px-6 md:px-14">
+        <div
+          className="process-composition flex flex-col items-center justify-center w-full max-w-6xl"
+          style={{
+            transform: `translateY(${(p * -50)}px)`,
+            transition: "transform 0.3s ease-out",
+          }}
+        >
+          <div className="process-heading flex flex-col items-center">
+            <Eyebrow>{t.process.num}</Eyebrow>
+            <h2 className="mt-6 max-w-4xl text-center font-display text-[clamp(2rem,4.6vw,4.1rem)] leading-[1.05] tracking-[-0.015em]">
+              <Words text={main} p={p} range={[0.08, 0.4]} />
+              <em className="text-flame">{last}</em>
+            </h2>
+          </div>
 
-        <div className="mt-8 grid w-full max-w-4xl gap-10 md:mt-16 md:grid-cols-4 md:gap-8">
-          {steps.map((step, i) => {
-            const o = seg(0.12 + i * 0.19, 0.3 + i * 0.19);
-            const border =
-              o > 0.55
-                ? "2px solid var(--color-flame)"
-                : "2px solid rgba(246,236,216,0.15)";
-            return (
-              <div
-                key={step.title}
-                className="pt-6"
-                style={{
-                  borderTop: border,
-                  opacity: Math.min(1, o * 1.6),
-                  transform: `translateY(${(1 - o) * 30}px)`,
-                  transition: "border-color 0.3s",
-                }}
-              >
-                <h3
-                  className="font-sans text-sm font-bold uppercase tracking-[0.08em]"
-                  style={{ color: o > 0.55 ? "var(--color-cream)" : "var(--color-dim)" }}
+          <div className="process-step-stage relative mt-10 w-full max-w-xl md:mt-16 h-[200px] flex items-center justify-center">
+            {steps.map((step, i) => {
+              const start = i * (1 / steps.length);
+              const end = (i + 1) * (1 / steps.length);
+              const o = seg(start, end);
+
+              return (
+                <div
+                  key={step.title}
+                  className="absolute inset-0 flex flex-col items-center justify-center text-center"
+                  style={{
+                    opacity: o,
+                    transform: `translateY(${(1 - o) * 30}px)`,
+                    transition: "opacity 0.3s, transform 0.3s",
+                  }}
                 >
-                  {step.title}
-                </h3>
-                <p className="mt-3 font-serif text-[15px] leading-relaxed text-dim">
-                  {step.text}
-                </p>
-              </div>
-            );
-          })}
+                  <h3
+                    className="font-sans text-sm font-bold uppercase tracking-[0.08em]"
+                    style={{ color: o > 0.5 ? "var(--color-cream)" : "var(--color-dim)" }}
+                  >
+                    {step.title}
+                  </h3>
+                  <p className="mt-3 font-serif text-[15px] leading-relaxed text-dim max-w-md">
+                    {step.text}
+                  </p>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
     </Runway>
