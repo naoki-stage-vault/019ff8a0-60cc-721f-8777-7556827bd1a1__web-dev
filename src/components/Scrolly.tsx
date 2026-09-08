@@ -578,8 +578,13 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
   const last = lang === "en" ? "Different solutions." : "Soluciones diferentes.";
   const main = w.title.replace(last, "");
 
+  const numProjects = w.projects.length;
+  // Calculate runway height: 100vh for base (header/intro) + 100vh per project
+  // This provides enough scroll distance for each project and a buffer at the end.
+  const runwayHeight = `${numProjects * 100 + 100}vh`;
+
   return (
-    <Runway id="projects" h="380vh" ref={ref}>
+    <Runway id="projects" h={runwayHeight} ref={ref}>
       <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col justify-start px-6 pt-10 md:px-14">
         <div className="text-center">
           <div style={{ opacity: seg(0, 0.12) }}>
