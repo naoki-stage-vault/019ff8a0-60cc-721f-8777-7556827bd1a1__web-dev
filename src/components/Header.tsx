@@ -2,9 +2,12 @@
 
 import { useLang } from "@/components/LanguageProvider";
 import type { Lang } from "@/lib/content";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export function Header() {
   const { t, lang, setLang } = useLang();
+  const pathname = usePathname();
 
   const btn = (l: Lang) => (
     <button
@@ -24,8 +27,8 @@ export function Header() {
   return (
     <header className="fixed inset-x-0 top-0 z-50 border-b border-cream/10 bg-ink/75 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-6 md:px-14">
-        <a
-          href="#top"
+        <Link
+          href={`/${lang}`}
           className="group flex items-center gap-2.5 font-display text-lg tracking-tight"
         >
           <span
@@ -33,14 +36,26 @@ export function Header() {
             aria-hidden
           />
           {t.brand}
-        </a>
+        </Link>
+
+        <nav className="hidden md:flex items-center gap-6">
+          {t.nav.map((item) => (
+            <Link
+              key={item.href}
+              href={`/${lang}${item.href}`}
+              className="font-sans text-[11px] uppercase tracking-[0.25em] text-dim transition-colors hover:text-flame"
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
 
         <div className="flex items-center gap-6">
           <a
-            href="#contact"
+            href={t.links.email}
             className="hidden font-sans text-[11px] uppercase tracking-[0.25em] text-dim transition-colors hover:text-flame sm:block"
           >
-            {t.hero.cta} ↗
+            {t.contact.cta} ↗
           </a>
           <div className="flex items-stretch overflow-hidden border border-cream/20">
             {btn("en")}

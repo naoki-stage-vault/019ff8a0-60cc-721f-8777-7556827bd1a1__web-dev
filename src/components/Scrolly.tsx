@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useLang } from "@/components/LanguageProvider";
 import type { Copy, Lang } from "@/lib/content";
+import Link from "next/link";
 
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 
@@ -12,30 +13,29 @@ const Arrow = ({ className = "" }: { className?: string }) => (
   </span>
 );
 
-const UI = {
-  en: { processHead: "One clear thread, from first call to launch." },
-  es: { processHead: "Un solo hilo, de la primera llamada al lanzamiento." },
-} as const;
-
 const SECTION_IDS = [
   "top",
   "positioning",
+  "at-a-glance",
   "about",
-  "build",
+  "what-i-build",
   "process",
-  "projects",
-  "fit",
+  "selected-work",
+  "a-good-fit",
+  "investment",
   "contact",
 ];
 
 const RAIL_LABELS: Record<string, { en: string; es: string }> = {
   top: { en: "Intro", es: "Portada" },
   positioning: { en: "Positioning", es: "Posicionamiento" },
+  "at-a-glance": { en: "At a glance", es: "De un vistazo" },
   about: { en: "About", es: "Sobre mí" },
-  build: { en: "What I build", es: "Lo que construyo" },
+  "what-i-build": { en: "What I build", es: "Lo que construyo" },
   process: { en: "Process", es: "Proceso" },
-  projects: { en: "Selected work", es: "Trabajo seleccionado" },
-  fit: { en: "A good fit", es: "Un buen encaje" },
+  "selected-work": { en: "Selected work", es: "Trabajo seleccionado" },
+  "a-good-fit": { en: "A good fit", es: "Un buen encaje" },
+  investment: { en: "Investment", es: "Inversión" },
   contact: { en: "Contact", es: "Contacto" },
 };
 
@@ -277,7 +277,7 @@ function ProgressRail() {
 /* 01 · HERO (normal flow, entrance on load)                          */
 /* ------------------------------------------------------------------ */
 
-function Hero({ t, lang }: { t: Copy; lang: Lang }) {
+function Hero({ t }: { t: Copy }) {
   const [entered, setEntered] = useState(false);
   useEffect(() => {
     const id = requestAnimationFrame(() => setEntered(true));
@@ -285,9 +285,7 @@ function Hero({ t, lang }: { t: Copy; lang: Lang }) {
   }, []);
 
   const enter = entered ? 1 : 0;
-  const last = lang === "en" ? "look like it." : "reflejarlo.";
-  const main = t.hero.titleB.replace(last, "");
-  const strip = `${t.hero.strip}  ·  ${t.hero.stripSuffix}`;
+  const headlineParts = t.hero.headline.split(t.hero.headlineItalic);
 
   return (
     <section
@@ -305,13 +303,16 @@ function Hero({ t, lang }: { t: Copy; lang: Lang }) {
               "opacity 1s cubic-bezier(0.22, 1, 0.36, 1), transform 1s cubic-bezier(0.22, 1, 0.36, 1), filter 1s cubic-bezier(0.22, 1, 0.36, 1)",
           }}
         >
-          <Eyebrow className="text-center">{t.hero.label}</Eyebrow>
-          <h1 className="mx-auto mt-8 font-display text-[clamp(3rem,7.8vw,7.4rem)] leading-[1.02] tracking-[-0.02em]">
-            <span className="block uppercase">{t.hero.titleA}</span>
+          <Eyebrow className="text-center">{t.hero.eyebrow}</Eyebrow>
+          <p className="mx-auto mt-4 max-w-4xl font-display text-[clamp(1.5rem,4vw,3.5rem)] leading-[1.05] tracking-[-0.015em] text-dim">
+            {t.hero.preHeadline}
+          </p>
+          <h1 className="mx-auto mt-2 font-display text-[clamp(3rem,7.8vw,7.4rem)] leading-[1.02] tracking-[-0.02em]">
+            <span className="block uppercase">{headlineParts[0]}</span>
             <em className="text-cream">
-              {main}
-              <span className="text-flame">{last}</span>
+              {t.hero.headlineItalic}
             </em>
+            <span className="block uppercase">{headlineParts[1]}</span>
           </h1>
         </div>
 
@@ -326,7 +327,7 @@ function Hero({ t, lang }: { t: Copy; lang: Lang }) {
         >
           <div className="flex w-full flex-col items-center gap-8 md:flex-row md:items-start md:justify-between">
             <p className="max-w-md text-center font-serif text-xl leading-relaxed text-dim md:text-left">
-              {t.hero.sub}
+              {t.hero.body}
             </p>
             <a
               href={t.links.email}
@@ -339,21 +340,21 @@ function Hero({ t, lang }: { t: Copy; lang: Lang }) {
 
           <div className="marquee-fade mt-16 w-full overflow-hidden border-y border-cream/10 py-3">
             <div className="marquee-track font-sans text-[11px] uppercase tracking-[0.3em] text-faint">
-              <span className="px-4">{strip}</span>
+              <span className="px-4">{t.hero.marquee}</span>
               <span className="px-4" aria-hidden>
-                {strip}
+                {t.hero.marquee}
               </span>
               <span className="px-4" aria-hidden>
-                {strip}
+                {t.hero.marquee}
               </span>
               <span className="px-4" aria-hidden>
-                {strip}
+                {t.hero.marquee}
               </span>
               <span className="px-4" aria-hidden>
-                {strip}
+                {t.hero.marquee}
               </span>
               <span className="px-4" aria-hidden>
-                {strip}
+                {t.hero.marquee}
               </span>
             </div>
           </div>
@@ -368,8 +369,7 @@ function Hero({ t, lang }: { t: Copy; lang: Lang }) {
 /* ------------------------------------------------------------------ */
 
 function Positioning({ t, lang }: { t: Copy; lang: Lang }) {
-  const last = lang === "en" ? "catch up." : "ponerse al día.";
-  const main = t.positioning.title.replace(last, "");
+  const headlineParts = t.positioning.headline.split(t.positioning.headlineItalic);
 
   return (
     <section
@@ -378,10 +378,11 @@ function Positioning({ t, lang }: { t: Copy; lang: Lang }) {
     >
       <div className="mx-auto w-full max-w-6xl">
         <Reveal>
-          <Eyebrow className="text-center">{t.positioning.num}</Eyebrow>
+          <Eyebrow className="text-center">{t.positioning.eyebrow}</Eyebrow>
           <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
-            {main}
-            <em className="text-flame">{last}</em>
+            {headlineParts[0]}
+            <em className="text-flame">{t.positioning.headlineItalic}</em>
+            {headlineParts[1]}
           </h2>
         </Reveal>
 
@@ -394,10 +395,10 @@ function Positioning({ t, lang }: { t: Copy; lang: Lang }) {
         <Reveal delay={0.18}>
           <div className="mx-auto mt-14 w-full max-w-xl border border-cream/10 bg-raised/30 text-left">
             <p className="border-b border-cream/10 px-6 py-3 font-sans text-[10px] uppercase tracking-[0.25em] text-faint">
-              {t.positioning.glanceTitle}
+              {t.atAGlance.eyebrow}
             </p>
             <dl>
-              {t.positioning.glance.map(([label, value], i) => (
+              {t.atAGlance.items.map(([label, value], i) => (
                 <div
                   key={label}
                   className={`flex flex-col gap-1 px-6 py-4 sm:flex-row sm:items-baseline sm:justify-between ${
@@ -434,20 +435,18 @@ function About({ t }: { t: Copy }) {
     >
       <div className="mx-auto w-full max-w-6xl">
         <Reveal>
-          <Eyebrow className="text-center">{a.num}</Eyebrow>
+          <Eyebrow className="text-center">{a.eyebrow}</Eyebrow>
           <p className="mx-auto mt-10 max-w-5xl font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
             <em className="text-cream">
-              “{a.statement}”
+              {a.quote}
             </em>
-            <span className="text-flame">.</span>
           </p>
         </Reveal>
 
         <Reveal delay={0.12}>
           <p className="mx-auto mt-14 w-fit font-serif text-lg leading-relaxed text-dim">
-            <span className="text-flame">—</span>{" "}
-            <span className="text-cream">{a.name}</span>{" "}
-            <span className="text-faint">({a.note})</span>
+            {a.attribution}{" "}
+            <span className="text-cream">{a.role}</span>
           </p>
         </Reveal>
       </div>
@@ -459,23 +458,19 @@ function About({ t }: { t: Copy }) {
 /* 04 · WHAT I BUILD (normal flow, subtle reveal)                     */
 /* ------------------------------------------------------------------ */
 
-function Build({ t }: { t: Copy }) {
-  const b = t.build;
-  const panels = [
-    { tag: b.new.tag, lead: b.new.lead, body: b.new.body },
-    { tag: b.rebuild.tag, lead: b.rebuild.lead, body: b.rebuild.body },
-  ];
+function WhatIBuild({ t }: { t: Copy }) {
+  const b = t.whatIBuild;
 
   return (
     <section
-      id="build"
+      id="what-i-build"
       className="relative flex min-h-svh w-full items-center justify-center px-6 py-24 md:px-14"
     >
       <div className="mx-auto w-full max-w-6xl">
         <Reveal className="text-center">
-          <Eyebrow className="text-center">{b.num}</Eyebrow>
+          <Eyebrow className="text-center">{b.eyebrow}</Eyebrow>
           <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
-            {b.title}
+            {b.headline}
           </h2>
           <p className="mx-auto mt-6 max-w-2xl font-serif text-lg leading-relaxed text-dim">
             {b.intro}
@@ -483,24 +478,34 @@ function Build({ t }: { t: Copy }) {
         </Reveal>
 
         <div className="mt-14 grid gap-5 md:grid-cols-2">
-          {panels.map((panel, i) => (
-            <Reveal key={panel.tag} delay={0.1 + i * 0.12} className="h-full">
-              <div className="flex h-full flex-col justify-between border border-cream/10 bg-raised/30 p-8 md:p-10">
+          {[b.service1, b.service2].map((service, i) => (
+            <Reveal key={service.label} delay={0.1 + i * 0.12} className="h-full">
+              <Link href={service.link} className="flex h-full flex-col justify-between border border-cream/10 bg-raised/30 p-8 md:p-10 group">
                 <div>
                   <div className="flex items-center justify-between">
                     <span className="font-sans text-[11px] uppercase tracking-[0.25em] text-flame">
-                      {panel.tag}
+                      {service.label}
                     </span>
-                    <Arrow className="text-faint" />
+                    <Arrow className="text-faint transition-transform duration-200 group-hover:translate-x-1 group-hover:-translate-y-1" />
                   </div>
                   <h3 className="mt-6 font-display text-2xl leading-tight md:text-[1.7rem]">
-                    {panel.lead}
+                    {service.headline}
                   </h3>
                 </div>
                 <p className="mt-6 font-serif text-[15px] leading-relaxed text-dim">
-                  {panel.body}
+                  {service.body}
                 </p>
-              </div>
+                <p className="mt-3 font-serif text-[15px] leading-relaxed text-dim">
+                  {service.secondaryBody}
+                </p>
+                <p className="mt-6 font-sans text-sm font-bold uppercase tracking-[0.08em] text-cream">
+                  {service.price}
+                </p>
+                <span className="mt-6 inline-flex items-center gap-3 bg-flame px-7 py-4 font-sans text-[12px] font-semibold uppercase tracking-[0.22em] text-ink transition-colors duration-200 hover:bg-cream">
+                  {service.cta}
+                  <Arrow className="transition-transform duration-200 group-hover:translate-x-1 group-hover:-translate-y-1" />
+                </span>
+              </Link>
             </Reveal>
           ))}
         </div>
@@ -519,20 +524,19 @@ function PinProcess({ t, lang }: { t: Copy; lang: Lang }) {
   useEffect(() => on(setP), [on]);
 
   const seg = (a: number, b: number) => clamp01((p - a) / (b - a));
-  const b = t.build;
-  const ui = UI[lang];
-  const steps = b.process;
+  const process = t.process;
+  const headlineParts = process.headline.split(process.headline); // Assuming no italic in process headline
 
   return (
     <Runway id="process" h="300vh" ref={ref}>
       <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col justify-start px-6 pt-20 md:justify-center md:px-14 md:pt-0">
-        <Eyebrow className="text-center">{b.processTitle}</Eyebrow>
+        <Eyebrow className="text-center">{process.eyebrow}</Eyebrow>
         <h2 className="mx-auto mt-6 max-w-4xl text-center font-display text-[clamp(2rem,4.6vw,4.1rem)] leading-[1.05] tracking-[-0.015em]">
-          <Words text={ui.processHead} p={p} range={[0.08, 0.4]} />
+          <Words text={process.headline} p={p} range={[0.08, 0.4]} />
         </h2>
 
         <div className="mt-10 grid gap-10 md:mt-16 md:grid-cols-4 md:gap-8">
-          {steps.map((step, i) => {
+          {process.steps.map((step, i) => {
             const o = seg(0.12 + i * 0.19, 0.3 + i * 0.19);
             const border =
               o > 0.55
@@ -540,7 +544,7 @@ function PinProcess({ t, lang }: { t: Copy; lang: Lang }) {
                 : "2px solid rgba(246,236,216,0.15)";
             return (
               <div
-                key={step.n}
+                key={step.title}
                 className="pt-6"
                 style={{
                   borderTop: border,
@@ -553,10 +557,10 @@ function PinProcess({ t, lang }: { t: Copy; lang: Lang }) {
                   className="font-sans text-sm font-bold uppercase tracking-[0.08em]"
                   style={{ color: o > 0.55 ? "var(--color-cream)" : "var(--color-dim)" }}
                 >
-                  {step.t}
+                  {step.title}
                 </h3>
                 <p className="mt-3 font-serif text-[15px] leading-relaxed text-dim">
-                  {step.d}
+                  {step.text}
                 </p>
               </div>
             );
@@ -571,26 +575,26 @@ function PinProcess({ t, lang }: { t: Copy; lang: Lang }) {
 /* 06 · SELECTED WORK (pinned scrollytelling)                         */
 /* ------------------------------------------------------------------ */
 
-function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
+function PinProjects({ t }: { t: Copy }) {
   const { ref, on } = usePin<HTMLDivElement>();
   const [p, setP] = useState(0);
   useEffect(() => on(setP), [on]);
 
   const seg = (a: number, b: number) => clamp01((p - a) / (b - a));
-  const w = t.work;
-  const last = lang === "en" ? "Different websites." : "Sitios web diferentes.";
-  const main = w.title.replace(last, "");
+  const w = t.selectedWork;
+  const headlineParts = w.headline.split(w.headlineItalic);
 
   return (
-    <Runway id="projects" h="380vh" ref={ref}>
+    <Runway id="selected-work" h="380vh" ref={ref}>
       <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col justify-start px-6 pt-10 md:px-14">
         <div className="text-center">
           <div style={{ opacity: seg(0, 0.12) }}>
-            <Eyebrow className="text-center">{w.num}</Eyebrow>
+            <Eyebrow className="text-center">{w.eyebrow}</Eyebrow>
           </div>
           <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
-            <Words text={main} p={p} range={[0, 0.3]} />
-            <em className="text-flame">{last}</em>
+            <Words text={headlineParts[0]} p={p} range={[0, 0.3]} />
+            <em className="text-flame">{w.headlineItalic}</em>
+            <Words text={headlineParts[1]} p={p} range={[0, 0.3]} />
           </h2>
           <p
             className="mx-auto mt-6 hidden max-w-2xl font-serif text-lg leading-relaxed text-dim md:block"
@@ -606,7 +610,7 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
             const active = o > 0.55;
             return (
               <a
-                key={pr.n}
+                key={pr.name}
                 href={pr.url}
                 target="_blank"
                 rel="noreferrer"
@@ -634,15 +638,15 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
                       color: active ? "var(--color-flame)" : "var(--color-dim)",
                     }}
                   >
-                    {pr.cat}
+                    {pr.category}
                   </span>
                 </div>
                 <p className="hidden font-serif text-sm leading-snug text-dim md:col-span-5 md:block md:pr-8">
-                  {pr.desc}
+                  {pr.description}
                 </p>
                 <div className="font-sans text-[11px] uppercase tracking-[0.25em] text-cream md:col-span-2 md:text-right">
                   <span className="inline-flex items-center gap-2">
-                    {pr.link}
+                    {pr.cta}
                     <Arrow />
                   </span>
                 </div>
@@ -659,34 +663,34 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
 /* 07 · A GOOD FIT (normal flow, subtle reveal)                       */
 /* ------------------------------------------------------------------ */
 
-function Fit({ t, lang }: { t: Copy; lang: Lang }) {
-  const f = t.fit;
-  const last = lang === "en" ? "real change." : "un cambio real.";
-  const main = f.title.replace(last, "");
+function Fit({ t }: { t: Copy }) {
+  const f = t.aGoodFit;
+  const headlineParts = f.headline.split(f.headlineItalic);
 
   return (
     <section
-      id="fit"
+      id="a-good-fit"
       className="relative flex min-h-svh w-full items-center justify-center px-6 py-24 md:px-14"
     >
       <div className="mx-auto w-full max-w-6xl">
         <Reveal className="text-center">
-          <Eyebrow className="text-center">{f.num}</Eyebrow>
+          <Eyebrow className="text-center">{f.eyebrow}</Eyebrow>
           <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
-            {main}
-            <em className="text-flame">{last}</em>
+            {headlineParts[0]}
+            <em className="text-flame">{f.headlineItalic}</em>
+            {headlineParts[1]}
           </h2>
         </Reveal>
 
         <div className="mt-12 grid gap-5 md:grid-cols-2">
           {f.items.map((item, i) => (
-            <Reveal key={item.n} delay={0.08 + i * 0.1} className="h-full">
+            <Reveal key={item.title} delay={0.08 + i * 0.1} className="h-full">
               <div className="h-full border border-cream/10 bg-raised/25 p-7 md:p-8">
                 <h3 className="font-sans text-lg font-bold uppercase leading-snug tracking-[0.02em] text-cream">
-                  {item.t}
+                  {item.title}
                 </h3>
                 <p className="mt-3 font-serif text-[15px] leading-relaxed text-dim">
-                  {item.d}
+                  {item.text}
                 </p>
               </div>
             </Reveal>
@@ -698,12 +702,71 @@ function Fit({ t, lang }: { t: Copy; lang: Lang }) {
 }
 
 /* ------------------------------------------------------------------ */
-/* 08 · CONTACT (normal flow, subtle reveal)                          */
+/* 08 · INVESTMENT (normal flow, subtle reveal)                       */
+/* ------------------------------------------------------------------ */
+
+function Investment({ t }: { t: Copy }) {
+  const inv = t.investment;
+  const headlineParts = inv.headline.split(inv.headlineItalic);
+
+  return (
+    <section
+      id="investment"
+      className="relative flex min-h-svh w-full items-center justify-center px-6 py-24 md:px-14"
+    >
+      <div className="mx-auto w-full max-w-6xl">
+        <Reveal className="text-center">
+          <Eyebrow className="text-center">{inv.eyebrow}</Eyebrow>
+          <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em]">
+            {headlineParts[0]}
+            <em className="text-flame">{inv.headlineItalic}</em>
+            {headlineParts[1]}
+          </h2>
+        </Reveal>
+
+        <div className="mt-14 grid gap-5 md:grid-cols-2">
+          {[inv.service1, inv.service2].map((service, i) => (
+            <Reveal key={service.title} delay={0.1 + i * 0.12} className="h-full">
+              <Link href={service.link} className="flex h-full flex-col justify-between border border-cream/10 bg-raised/30 p-8 md:p-10 group">
+                <div>
+                  <h3 className="font-sans text-lg font-bold uppercase leading-snug tracking-[0.02em] text-cream">
+                    {service.title}
+                  </h3>
+                  <p className="mt-3 font-sans text-sm font-bold uppercase tracking-[0.08em] text-flame">
+                    {service.price}
+                  </p>
+                </div>
+                <p className="mt-6 font-serif text-[15px] leading-relaxed text-dim">
+                  {service.body}
+                </p>
+                <p className="mt-3 font-serif text-[15px] leading-relaxed text-dim">
+                  {service.secondaryBody}
+                </p>
+                <span className="mt-6 inline-flex items-center gap-3 bg-flame px-7 py-4 font-sans text-[12px] font-semibold uppercase tracking-[0.22em] text-ink transition-colors duration-200 hover:bg-cream">
+                  {service.cta}
+                  <Arrow className="transition-transform duration-200 group-hover:translate-x-1 group-hover:-translate-y-1" />
+                </span>
+              </Link>
+            </Reveal>
+          ))}
+        </div>
+        <Reveal delay={0.24} className="text-center">
+          <p className="mx-auto mt-12 max-w-2xl font-serif text-lg leading-relaxed text-dim">
+            {inv.footnote}
+          </p>
+        </Reveal>
+      </div>
+    </section>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/* 09 · CONTACT (normal flow, subtle reveal)                          */
 /* ------------------------------------------------------------------ */
 
 function Contact({ t }: { t: Copy }) {
   const c = t.contact;
-  const titleMain = c.title.split("?")[0];
+  const headlineParts = c.headline.split(c.headlineItalic);
 
   return (
     <section
@@ -712,10 +775,11 @@ function Contact({ t }: { t: Copy }) {
     >
       <div className="mx-auto w-full max-w-6xl">
         <Reveal>
-          <Eyebrow className="text-center">{c.num}</Eyebrow>
+          <Eyebrow className="text-center">{c.eyebrow}</Eyebrow>
           <h2 className="mx-auto mt-6 max-w-4xl font-display text-[clamp(2rem,4.8vw,4.4rem)] leading-[1.03] tracking-[-0.015em]">
-            {titleMain}
-            <em className="text-flame">?</em>
+            {headlineParts[0]}
+            <em className="text-flame">{c.headlineItalic}</em>
+            {headlineParts[1]}
           </h2>
           <p className="mx-auto mt-8 max-w-2xl font-serif text-lg leading-relaxed text-dim">
             {c.body}
@@ -733,7 +797,7 @@ function Contact({ t }: { t: Copy }) {
             </a>
             <div>
               <p className="font-sans text-[10px] uppercase tracking-[0.25em] text-faint">
-                {c.bestWay}
+                {t.footer.bestWay}
               </p>
               <a
                 href={t.links.email}
@@ -748,11 +812,11 @@ function Contact({ t }: { t: Copy }) {
         <Reveal delay={0.18}>
           <div className="mt-14 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 border-t border-cream/10 pt-8">
             <span className="font-sans text-[10px] uppercase tracking-[0.25em] text-faint">
-              {c.online}
+              {t.footer.online}
             </span>
             {[
-              { label: c.linkedin, href: t.links.linkedin },
-              { label: c.github, href: t.links.github },
+              { label: t.footer.linkedin, href: t.links.linkedin },
+              { label: t.footer.github, href: t.links.github },
             ].map((s) => (
               <a
                 key={s.label}
@@ -779,13 +843,14 @@ export function Scrolly() {
   return (
     <>
       <ProgressRail />
-      <Hero t={t} lang={lang} />
+      <Hero t={t} />
       <Positioning t={t} lang={lang} />
       <About t={t} />
-      <Build t={t} />
+      <WhatIBuild t={t} />
       <PinProcess t={t} lang={lang} />
-      <PinProjects t={t} lang={lang} />
-      <Fit t={t} lang={lang} />
+      <PinProjects t={t} />
+      <Fit t={t} />
+      <Investment t={t} />
       <Contact t={t} />
     </>
   );
