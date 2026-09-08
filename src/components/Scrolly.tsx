@@ -521,14 +521,14 @@ function PinProcess({ t, lang }: { t: Copy; lang: Lang }) {
 
   return (
     <Runway id="process" h="300vh" ref={ref}>
-      <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col justify-start px-6 pt-20 md:justify-center md:px-14 md:pt-0">
+      <div className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col items-center justify-center px-6 py-12 md:px-14">
         <Eyebrow className="text-center">{t.process.num}</Eyebrow>
-        <h2 className="mx-auto mt-6 max-w-4xl text-center font-display text-[clamp(2rem,4.6vw,4.1rem)] leading-[1.05] tracking-[-0.015em]">
+        <h2 className="mx-auto mt-0 max-w-4xl text-center font-display text-[clamp(2rem,4.6vw,4.1rem)] leading-[1.05] tracking-[-0.015em]">
           <Words text={main} p={p} range={[0.08, 0.4]} />
           <em className="text-flame">{last}</em>
         </h2>
 
-        <div className="mt-10 grid gap-10 md:mt-16 md:grid-cols-4 md:gap-8">
+        <div className="mt-8 grid w-full max-w-4xl gap-10 md:mt-16 md:grid-cols-4 md:gap-8">
           {steps.map((step, i) => {
             const o = seg(0.12 + i * 0.19, 0.3 + i * 0.19);
             const border =
