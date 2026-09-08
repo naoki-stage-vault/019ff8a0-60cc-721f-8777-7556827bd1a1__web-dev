@@ -580,8 +580,6 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
   const [runwayHeight, setRunwayHeight] = useState("380vh");
   const [translateY, setTranslateY] = useState(0);
 
-  const SAFE_AREA_BOTTOM = 32; // 24-40px, picked 32px
-
   useEffect(() => {
     const calculateScrollMetrics = () => {
       if (projectsListRef.current && stickyContentRef.current && headingRef.current) {
@@ -591,7 +589,7 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
 
         // The available height for the projects list within the sticky viewport
         // This is the sticky viewport height minus the heading/intro area
-        const visibleProjectsAreaHeight = stickyViewportHeight - headingHeight - SAFE_AREA_BOTTOM;
+        const visibleProjectsAreaHeight = stickyViewportHeight - headingHeight;
 
         // currentMaxTravel is the amount of scroll needed if the projectsList starts at the top of its visible area
         let adjustedMaxTravel = Math.max(0, projectsListHeight - visibleProjectsAreaHeight);
@@ -610,7 +608,7 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
           const finalLastProjectBottomRelativeToStickyContent = projectsListOffsetTop + lastProjectBottomRelativeToProjectsList - adjustedMaxTravel;
 
           // The desired bottom boundary for the last project (relative to stickyContentRef's top)
-          const desiredBottomBoundaryRelativeToStickyContent = stickyViewportHeight - SAFE_AREA_BOTTOM;
+          const desiredBottomBoundaryRelativeToStickyContent = stickyViewportHeight - 32;
 
           // Calculate how much more travel is needed
           const missingTravel = finalLastProjectBottomRelativeToStickyContent - desiredBottomBoundaryRelativeToStickyContent;
@@ -619,27 +617,10 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
           adjustedMaxTravel += Math.max(0, missingTravel);
         }
 
-        // --- NEW LOGIC FOR INTRO-PROJECTS GAP ---
-        const INTRO_TO_PROJECTS_GAP = 32; // Desired gap in px (24-48px range)
 
-        let initialProjectsListOffset = 0;
-
-        if (headingRef.current && projectsListRef.current) {
-          const headingBottomRelativeToSticky = headingRef.current.offsetTop + headingRef.current.offsetHeight;
-          const projectsListStaticTopRelativeToSticky = projectsListRef.current.offsetTop;
-
-          const currentLayoutGap = projectsListStaticTopRelativeToSticky - headingBottomRelativeToSticky;
-
-          if (currentLayoutGap < INTRO_TO_PROJECTS_GAP) {
-            initialProjectsListOffset = INTRO_TO_PROJECTS_GAP - currentLayoutGap;
-          }
-        }
 
         // Apply the initial offset to the translateY. This pushes the list down at p=0.
-        setTranslateY(initialProjectsListOffset - p * adjustedMaxTravel);
-
-        // And increase adjustedMaxTravel by this initial offset to ensure Ester's Place still ends correctly.
-        adjustedMaxTravel += initialProjectsListOffset;
+        setTranslateY(-p * adjustedMaxTravel);
 
         // Calculate the total runway height needed
         // It should be at least viewport height + adjustedMaxTravel + some buffer for smooth scrolling
@@ -664,7 +645,7 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
 
   return (
     <Runway id="projects" h={runwayHeight} ref={runwayRef}>
-      <div ref={stickyContentRef} className="relative z-10 mx-auto flex h-full w-full max-w-6xl flex-col justify-start px-6 pt-10 md:px-14">
+      <div ref={stickyContentRef} className="relative z-10 mx-auto grid h-full w-full max-w-6xl px-6 pt-10 md:px-14 gap-8" style={{ gridTemplateRows: 'auto minmax(0, 1fr)' }}>
         <div ref={headingRef} className="text-center">
           <div style={{ opacity: seg(0, 0.12) }}>
             <Eyebrow className="text-center">{w.num}</Eyebrow>
@@ -681,60 +662,61 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
           </p>
         </div>
 
-        <div
-          ref={projectsListRef}
-          className="mt-10 border-b border-cream/10"
-          style={{ transform: `translateY(${translateY}px)` }}
-        >
-          {w.projects.map((pr, i) => {
-            const o = seg(0.1 + i * 0.16, 0.28 + i * 0.16);
-            const active = o > 0.55;
-            return (
-              <a
-                key={pr.n}
-                href={pr.url}
-                target="_blank"
-                rel="noreferrer"
-                className="grid gap-3 border-t border-cream/10 py-4 md:grid-cols-12 md:items-center md:gap-6 md:py-6"
-                style={{
-                  opacity: Math.min(1, o * 1.5),
-                  // The individual project translateY is for entrance animation, keep it.
-                  transform: `translateY(${(1 - Math.min(1, o * 1.5)) * 26}px)`,
-                  background: active ? "rgba(34,25,16,0.45)" : "transparent",
-                  transition: "background-color 0.3s",
-                }}
-              >
-                <div className="md:col-span-4">
-                  <h3
-                    className="font-display text-2xl leading-tight transition-colors duration-300 md:text-3xl"
-                    style={{ color: active ? "var(--color-cream)" : "var(--color-dim)" }}
-                  >
-                    {pr.name}
-                  </h3>
-                  <span
-                    className="mt-2 inline-block border px-2 py-0.5 font-sans text-[10px] uppercase tracking-[0.2em] transition-colors duration-300"
-                    style={{
-                      borderColor: active
-                        ? "rgba(255,106,60,0.5)"
-                        : "rgba(246,236,216,0.15)",
-                      color: active ? "var(--color-flame)" : "var(--color-dim)",
-                    }}
-                  >
-                    {pr.cat}
-                  </span>
-                </div>
-                <p className="hidden font-serif text-sm leading-snug text-dim md:col-span-5 md:block md:pr-8">
-                  {pr.desc}
-                </p>
-                <div className="font-sans text-[11px] uppercase tracking-[0.25em] text-cream md:col-span-2 md:text-right">
-                  <span className="inline-flex items-center gap-2">
-                    {pr.link}
-                    <Arrow />
-                  </span>
-                </div>
-              </a>
-            );
-          })}
+        <div className="projects-viewport" style={{ transform: `translateY(${translateY}px)`, minHeight: 0 }}>
+          <div
+            ref={projectsListRef}
+            className="border-b border-cream/10"
+          >
+            {w.projects.map((pr, i) => {
+              const o = seg(0.1 + i * 0.16, 0.28 + i * 0.16);
+              const active = o > 0.55;
+              return (
+                <a
+                  key={pr.n}
+                  href={pr.url}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="grid gap-3 border-t border-cream/10 py-4 md:grid-cols-12 md:items-center md:gap-6 md:py-6"
+                  style={{
+                    opacity: Math.min(1, o * 1.5),
+                    // The individual project translateY is for entrance animation, keep it.
+                    transform: `translateY(${(1 - Math.min(1, o * 1.5)) * 26}px)`,
+                    background: active ? "rgba(34,25,16,0.45)" : "transparent",
+                    transition: "background-color 0.3s",
+                  }}
+                >
+                  <div className="md:col-span-4">
+                    <h3
+                      className="font-display text-2xl leading-tight transition-colors duration-300 md:text-3xl"
+                      style={{ color: active ? "var(--color-cream)" : "var(--color-dim)" }}
+                    >
+                      {pr.name}
+                    </h3>
+                    <span
+                      className="mt-2 inline-block border px-2 py-0.5 font-sans text-[10px] uppercase tracking-[0.2em] transition-colors duration-300"
+                      style={{
+                        borderColor: active
+                          ? "rgba(255,106,60,0.5)"
+                          : "rgba(246,236,216,0.15)",
+                        color: active ? "var(--color-flame)" : "var(--color-dim)",
+                      }}
+                    >
+                      {pr.cat}
+                    </span>
+                  </div>
+                  <p className="hidden font-serif text-sm leading-snug text-dim md:col-span-5 md:block md:pr-8">
+                    {pr.desc}
+                  </p>
+                  <div className="font-sans text-[11px] uppercase tracking-[0.25em] text-cream md:col-span-2 md:text-right">
+                    <span className="inline-flex items-center gap-2">
+                      {pr.link}
+                      <Arrow />
+                    </span>
+                  </div>
+                </a>
+              );
+            })}
+          </div>
         </div>
       </div>
     </Runway>
