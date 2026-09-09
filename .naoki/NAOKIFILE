@@ -11,7 +11,6 @@ IMAGE:
     ARGUMENTS:
       NODE_VERSION: "22"
     VARIABLES:
-      NODE_ENV: development
       PATH: /usr/sbin:/usr/bin:/sbin:/bin
   BUILD:
     - RUN: apk add --no-cache bash git nodejs npm
@@ -42,4 +41,4 @@ WORKFLOWS:
     CHECK:
       - RUN: npm run lint
     BUILD:
-      - RUN: npm run build
+      - RUN: NODE_ENV=production npm run build
