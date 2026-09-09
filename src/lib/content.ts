@@ -159,12 +159,11 @@ export const en = {
     body: "Tell me what you want to launch, replace, or put into operation.",
     cta: "Start a project",
     bestWay: "Best way to start",
-
+    online: "Find me online",
     linkedin: "LinkedIn",
     github: "GitHub",
   },
   footer: {
-
     cv: "Download CV",
     tagline: "Web design + development / Costa Rica",
   },
@@ -572,7 +571,7 @@ export const es = {
       },
       {
         n: "04",
-        cat: "Tourism",
+        cat: "Turismo",
         name: "Costa Rica Descents",
         desc: "Un catálogo grande de tours, organizado para explorar.",
         link: "Visitar sitio",
@@ -580,7 +579,7 @@ export const es = {
       },
       {
         n: "05",
-        cat: "Hospitality",
+        cat: "Hospitalidad",
         name: "Ester’s Place",
         desc: "Un hospedaje bilingüe con presencia en línea completa.",
         link: "Visitar sitio",
@@ -625,12 +624,11 @@ export const es = {
     body: "Cuénteme qué quiere lanzar, reemplazar o poner en funcionamiento.",
     cta: "Iniciar un proyecto",
     bestWay: "Mejor forma de empezar",
-
+    online: "Encuéntreme en línea",
     linkedin: "LinkedIn",
     github: "GitHub",
   },
   footer: {
-
     cv: "Descargar CV",
     tagline: "Diseño web + desarrollo / Costa Rica",
   },
