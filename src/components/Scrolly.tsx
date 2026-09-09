@@ -7,9 +7,18 @@ import type { Copy, Lang } from "@/lib/content";
 const clamp01 = (v: number) => Math.min(1, Math.max(0, v));
 
 const Arrow = ({ className = "" }: { className?: string }) => (
-  <span aria-hidden className={className}>
-    ↗
-  </span>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2.5"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    className={`inline-block h-[0.7em] w-[0.7em] translate-y-[-0.08em] ${className}`}
+  >
+    <path d="M7 17l9.2-9.2M17 17V7H7" />
+  </svg>
 );
 
 const UI = {
@@ -476,10 +485,13 @@ function Build({ t }: { t: Copy }) {
               <a href={service.link} className="flex h-full flex-col justify-between border border-cream/10 bg-raised/30 p-8 md:p-10 group">
                 <div>
                   <div className="flex items-center justify-between">
-                    <span className="font-sans text-[11px] uppercase tracking-[0.25em] text-flame">
-                      {service.label} ↗
+                    <span className="font-sans text-[11px] uppercase tracking-[0.25em] text-flame md:hidden">
+                      {service.label}
                     </span>
-                    <Arrow className="text-faint transition-transform duration-200 group-hover:translate-x-1 group-hover:-translate-y-1" />
+                    <span className="hidden font-sans text-[11px] uppercase tracking-[0.25em] text-flame md:block">
+                      {service.label} <Arrow className="inline-block" />
+                    </span>
+                    <Arrow className="hidden text-faint transition-transform duration-200 group-hover:translate-x-1 group-hover:-translate-y-1 md:block" />
                   </div>
                   <h3 className="mt-6 font-display text-2xl leading-tight md:text-[1.7rem]">
                     {service.headline}
@@ -610,7 +622,7 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
                   {pr.desc}
                 </p>
                 <p className="font-sans text-sm text-flame group-hover:underline">
-                  {pr.link} ↗
+                  {pr.link} <Arrow className="inline-block" />
                 </p>
               </a>
             ))}
