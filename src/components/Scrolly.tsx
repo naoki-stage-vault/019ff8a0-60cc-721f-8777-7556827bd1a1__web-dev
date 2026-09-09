@@ -577,6 +577,9 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
   const stickyContentRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
   const projectsViewportRef = useRef<HTMLDivElement>(null);
+  const introRef = useRef<HTMLParagraphElement>(null); // Added introRef
+
+  const [introMarginBottom, setIntroMarginBottom] = useState(0); // Added introMarginBottom state
 
   const [runwayHeight, setRunwayHeight] = useState("380vh");
   const [translateY, setTranslateY] = useState(0);
@@ -585,8 +588,18 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
 
   useEffect(() => {
     const calculateScrollMetrics = () => {
-      if (projectsListRef.current && stickyContentRef.current && projectsViewportRef.current) {
+      if (projectsListRef.current && stickyContentRef.current && projectsViewportRef.current && introRef.current) {
         const SAFE_AREA_BOTTOM = 32; // 24-40px, picked 32px
+
+        const introRect = introRef.current.getBoundingClientRect();
+        // Calculate the layout bottom of the intro element
+        const introLayoutBottom = introRef.current.offsetTop + introRef.current.offsetHeight;
+        // Calculate the visual displacement (if visual bottom is lower than layout bottom)
+        const visualDisplacement = Math.max(0, introRect.bottom - introLayoutBottom);
+
+        // We need to add this displacement as margin-bottom to the intro
+        // to push the next grid item down and restore the intended gap.
+        setIntroMarginBottom(visualDisplacement);
 
         const projectsListHeight = projectsListRef.current.scrollHeight;
         const projectsViewportActualHeight = projectsViewportRef.current.offsetHeight;
@@ -610,8 +623,10 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
     calculateScrollMetrics(); // Initial calculation and on 'p' change
     const handleResize = () => calculateScrollMetrics();
 
+    window.addEventListener("scroll", calculateScrollMetrics, { passive: true }); // Recalculate on scroll to handle dynamic content/layout changes
     window.addEventListener("resize", handleResize);
     return () => {
+      window.removeEventListener("scroll", calculateScrollMetrics);
       window.removeEventListener("resize", handleResize);
     };
   }, [p, t, lang]); // Added t and lang as dependencies for recalculation on language change or content change
@@ -632,8 +647,9 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
             <em className="text-flame">{last}</em>
           </h2>
           <p
+            ref={introRef} // Attached introRef
             className="mx-auto mt-6 hidden max-w-4xl font-serif text-lg leading-relaxed text-dim md:block"
-            style={{ opacity: seg(0.12, 0.3), textWrap: 'balance' }}
+            style={{ opacity: seg(0.12, 0.3), textWrap: 'balance', marginBottom: `${introMarginBottom}px` }} // Applied dynamic margin
           >
             {w.intro}
           </p>
