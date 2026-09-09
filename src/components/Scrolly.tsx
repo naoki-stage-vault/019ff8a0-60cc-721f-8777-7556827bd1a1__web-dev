@@ -592,27 +592,44 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
         const projectsViewportActualHeight = projectsViewportRef.current.offsetHeight;
 
         // The available height for the projects list within the projectsViewport
-        const availableProjectsHeight = projectsViewportActualHeight - SAFE_AREA_BOTTOM;
+        // The available height for the projects list within the projectsViewport, considering the bottom safe area
+        const availableProjectsHeightForScrolling = projectsViewportActualHeight - SAFE_AREA_BOTTOM;
 
-        // currentMaxTravel is the amount of scroll needed if the projectsList starts at the top of its visible area
-        let adjustedMaxTravel = Math.max(0, projectsListHeight - availableProjectsHeight);
+        // User's maxTravel formula: max(0, projectsListHeight - availableProjectsHeight + bottomSafeArea)
+        // Substituting availableProjectsHeightForScrolling:
+        // max(0, projectsListHeight - (projectsViewportActualHeight - SAFE_AREA_BOTTOM) + SAFE_AREA_BOTTOM)
+        // max(0, projectsListHeight - projectsViewportActualHeight + 2 * SAFE_AREA_BOTTOM)
+        const newMaxTravel = Math.max(0, projectsListHeight - availableProjectsHeightForScrolling + SAFE_AREA_BOTTOM);
 
-        // Apply the initial offset to the translateY. This pushes the list down at p=0.
-        setTranslateY(-p * adjustedMaxTravel);
+        setTranslateY(-p * newMaxTravel);
 
         // Calculate the total runway height needed
-        // It should be at least viewport height + adjustedMaxTravel + some buffer for smooth scrolling
-        const newRunwayHeight = `calc(100vh + ${adjustedMaxTravel + 400}px)`; // Added 400px as a buffer
+        // It should be at least viewport height + newMaxTravel + some buffer for smooth scrolling
+        const newRunwayHeight = `calc(100vh + ${newMaxTravel + 400}px)`; // Added 400px as a buffer
         setRunwayHeight(newRunwayHeight);
       }
     };
 
     calculateScrollMetrics(); // Initial calculation and on 'p' change
-    const handleResize = () => calculateScrollMetrics();
 
+    const handleResize = () => calculateScrollMetrics();
     window.addEventListener("resize", handleResize);
+
+    // Use ResizeObserver for header and projects viewport to trigger recalculations
+    const headerObserver = new ResizeObserver(() => calculateScrollMetrics());
+    if (headingRef.current) {
+      headerObserver.observe(headingRef.current);
+    }
+
+    const projectsViewportObserver = new ResizeObserver(() => calculateScrollMetrics());
+    if (projectsViewportRef.current) {
+      projectsViewportObserver.observe(projectsViewportRef.current);
+    }
+
     return () => {
       window.removeEventListener("resize", handleResize);
+      headerObserver.disconnect();
+      projectsViewportObserver.disconnect();
     };
   }, [p, t, lang]); // Added t and lang as dependencies for recalculation on language change or content change
 
