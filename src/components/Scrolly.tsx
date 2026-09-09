@@ -577,7 +577,7 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
   const stickyContentRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
   const projectsViewportRef = useRef<HTMLDivElement>(null);
-  const introRef = useRef<HTMLParagraphElement>(null);
+  const introRef = useRef<HTMLParagraphElement>(null); // Nuevo introRef
 
   const [runwayHeight, setRunwayHeight] = useState("380vh");
   const [translateY, setTranslateY] = useState(0);
@@ -585,28 +585,61 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
   const seg = (a: number, b: number) => clamp01((p - a) / (b - a));
 
   useEffect(() => {
+    const checkViewport = () => {
+      // Umbrales basados en las sugerencias del usuario
+      const desktopThreshold = 1024; // min-width
+      const minimumUsefulHeight = 800; // min-height
+
+      setCanUsePinnedProjects(
+        window.innerWidth >= desktopThreshold &&
+        window.innerHeight >= minimumUsefulHeight
+      );
+    };
+
+    checkViewport(); // Comprobación inicial
+    window.addEventListener("resize", checkViewport);
+
+    return () => {
+      window.removeEventListener("resize", checkViewport);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!canUsePinnedProjects) return; // Solo calcular si estamos en modo pinned
+
     const calculateScrollMetrics = () => {
-      if (projectsListRef.current && stickyContentRef.current && projectsViewportRef.current) {
+      if (projectsListRef.current && stickyContentRef.current && projectsViewportRef.current && headingRef.current && introRef.current) {
         const SAFE_AREA_BOTTOM = 32; // 24-40px, picked 32px
+
+        // Obtener la altura real del encabezado, incluyendo el intro
+        const headingRect = headingRef.current.getBoundingClientRect();
+        const introRect = introRef.current.getBoundingClientRect();
+
+        // La altura del encabezado que realmente ocupa espacio en el flujo
+        // Usamos headingRect.height ya que el padding-bottom lo empuja
+        const actualHeaderHeight = headingRect.height;
 
         const projectsListHeight = projectsListRef.current.scrollHeight;
         const projectsViewportActualHeight = projectsViewportRef.current.offsetHeight;
 
-        // The available height for the projects list within the projectsViewport
-        // The available height for the projects list within the projectsViewport, considering the bottom safe area
+        // El espacio disponible para la lista de proyectos dentro del viewport,
+        // considerando el espacio que ocupa el encabezado y el safe area inferior.
+        // projectsViewportActualHeight es la altura del div que contiene la lista,
+        // pero necesitamos el espacio *real* disponible para el scroll de la lista.
+        // La altura del viewport menos la altura del encabezado es el espacio total.
+        // Restamos el SAFE_AREA_BOTTOM para el espacio inferior.
         const availableProjectsHeightForScrolling = projectsViewportActualHeight - SAFE_AREA_BOTTOM;
 
-        // User's maxTravel formula: max(0, projectsListHeight - availableProjectsHeight + bottomSafeArea)
-        // Substituting availableProjectsHeightForScrolling:
-        // max(0, projectsListHeight - (projectsViewportActualHeight - SAFE_AREA_BOTTOM) + SAFE_AREA_BOTTOM)
-        // max(0, projectsListHeight - projectsViewportActualHeight + 2 * SAFE_AREA_BOTTOM)
-        const newMaxTravel = Math.max(0, projectsListHeight - availableProjectsHeightForScrolling + SAFE_AREA_BOTTOM);
+        // maxTravel es la cantidad máxima que la lista de proyectos puede desplazarse hacia arriba.
+        // Es la diferencia entre la altura total de la lista y el espacio visible disponible.
+        const newMaxTravel = Math.max(0, projectsListHeight - availableProjectsHeightForScrolling);
 
         setTranslateY(-p * newMaxTravel);
 
-        // Calculate the total runway height needed
-        // It should be at least viewport height + newMaxTravel + some buffer for smooth scrolling
-        const newRunwayHeight = `calc(100vh + ${newMaxTravel + 400}px)`; // Added 400px as a buffer
+        // La altura total de la pista de aterrizaje (runway) debe ser:
+        // La altura del viewport (100svh) + el desplazamiento máximo + un buffer para un scroll suave.
+        // El buffer de 400px es para que el usuario pueda "despegar" el sticky sin que termine abruptamente.
+        const newRunwayHeight = `calc(100svh + ${newMaxTravel + 400}px)`;
         setRunwayHeight(newRunwayHeight);
       }
     };
@@ -632,92 +665,146 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
       headerObserver.disconnect();
       projectsViewportObserver.disconnect();
     };
-  }, [p, t, lang]); // Added t and lang as dependencies for recalculation on language change or content change
+  }, [p, t, lang, canUsePinnedProjects]); // Añadido canUsePinnedProjects como dependencia
 
   const w = t.work;
   const last = lang === "en" ? "Different solutions." : "Soluciones diferentes.";
   const main = w.title.replace(last, "");
 
-  return (
-    <Runway id="projects" h={runwayHeight} ref={runwayRef}>
-      <div ref={stickyContentRef} className="relative z-10 mx-auto grid h-full w-full max-w-6xl px-6 pt-10 md:px-14" style={{ gridTemplateRows: 'auto minmax(0, 1fr)' }}>
-        <div ref={headingRef} className="text-center pb-8">
-          <div style={{ opacity: seg(0, 0.12) }}>
-            <Eyebrow className="text-center">{w.num}</Eyebrow>
+  // Renderizado condicional basado en canUsePinnedProjects
+  if (canUsePinnedProjects) {
+    // Modo A: Pinned/Scrollytelling
+    return (
+      <Runway id="projects" h={runwayHeight} ref={runwayRef}>
+        <div ref={stickyContentRef} className="relative z-10 mx-auto grid h-full w-full max-w-6xl px-6 pt-10 md:px-14" style={{ gridTemplateRows: 'auto minmax(0, 1fr)' }}>
+          <div ref={headingRef} className="text-center pb-8"> {/* Mantengo pb-8 para espaciado */}
+            <div style={{ opacity: seg(0, 0.12) }}>
+              <Eyebrow className="text-center">{w.num}</Eyebrow>
+            </div>
+            <h2 className="mx-auto mt-6 font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em] whitespace-nowrap">
+              <Words text={main} p={p} range={[0, 0.3]} />
+              <em className="text-flame">{last}</em>
+            </h2>
+            <p
+              ref={introRef} // Asignar introRef aquí
+              className="mx-auto mt-6 hidden max-w-4xl font-serif text-lg leading-relaxed text-dim md:block"
+              style={{ opacity: seg(0.12, 0.3), textWrap: 'balance' }}
+            >
+              {w.intro}
+            </p>
           </div>
+
+          <div ref={projectsViewportRef} className="projects-viewport" style={{ minHeight: 0 }}>
+            <div
+              ref={projectsListRef}
+              className="border-b border-cream/10"
+              style={{ transform: `translateY(${translateY}px)` }}
+            >
+              {w.projects.map((pr, i) => {
+                const o = seg(0.1 + i * 0.16, 0.28 + i * 0.16);
+                const active = o > 0.55;
+                return (
+                  <a
+                    key={pr.n}
+                    href={pr.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="grid gap-3 border-t border-cream/10 py-4 md:grid-cols-12 md:items-center md:gap-6 md:py-6"
+                    style={{
+                      opacity: Math.min(1, o * 1.5),
+                      transform: `translateY(${(1 - Math.min(1, o * 1.5)) * 26}px)`,
+                      background: active ? "rgba(34,25,16,0.45)" : "transparent",
+                      transition: "background-color 0.3s",
+                    }}
+                  >
+                    <div className="md:col-span-4">
+                      <h3
+                        className="font-display text-2xl leading-tight transition-colors duration-300 md:text-3xl"
+                        style={{ color: active ? "var(--color-cream)" : "var(--color-dim)" }}
+                      >
+                        {pr.name}
+                      </h3>
+                      <span
+                        className="mt-2 inline-block border px-2 py-0.5 font-sans text-[10px] uppercase tracking-[0.2em] transition-colors duration-300"
+                        style={{
+                          borderColor: active
+                            ? "rgba(255,106,60,0.5)"
+                            : "rgba(246,236,216,0.15)",
+                          color: active ? "var(--color-flame)" : "var(--color-dim)",
+                        }}
+                      >
+                        {pr.cat}
+                      </span>
+                    </div>
+                    <p className="hidden font-serif text-sm leading-snug text-dim md:col-span-5 md:block md:pr-8">
+                      {pr.desc}
+                    </p>
+                    <div className="font-sans text-[11px] uppercase tracking-[0.25em] text-cream md:col-span-2 md:text-right">
+                      <span className="inline-flex items-center gap-2">
+                        {pr.link}
+                        <Arrow />
+                      </span>
+                    </div>
+                  </a>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      </Runway>
+    );
+  } else {
+    // Modo B: Normal Flow
+    return (
+      <section
+        id="projects"
+        className="relative mx-auto w-full max-w-6xl px-6 py-24 md:px-14" // Eliminar min-h-svh y flex items-center justify-center
+      >
+        <div className="text-center">
+          <Eyebrow className="text-center">{w.num}</Eyebrow>
           <h2 className="mx-auto mt-6 font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em] whitespace-nowrap">
-            <Words text={main} p={p} range={[0, 0.3]} />
+            {main}
             <em className="text-flame">{last}</em>
           </h2>
           <p
-            ref={introRef}
-            className="mx-auto mt-6 hidden max-w-4xl font-serif text-lg leading-relaxed text-dim md:block"
-            style={{ opacity: seg(0.12, 0.3), textWrap: 'balance' }}
+            className="mx-auto mt-6 mb-8 max-w-4xl font-serif text-lg leading-relaxed text-dim md:block" // Añadido mb-8 para espaciado
           >
             {w.intro}
           </p>
         </div>
 
-        <div ref={projectsViewportRef} className="projects-viewport" style={{ minHeight: 0 }}>
-          <div
-            ref={projectsListRef}
-            className="border-b border-cream/10"
-            style={{ transform: `translateY(${translateY}px)` }}
-          >
-            {w.projects.map((pr, i) => {
-              const o = seg(0.1 + i * 0.16, 0.28 + i * 0.16);
-              const active = o > 0.55;
-              return (
-                <a
-                  key={pr.n}
-                  href={pr.url}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="grid gap-3 border-t border-cream/10 py-4 md:grid-cols-12 md:items-center md:gap-6 md:py-6"
-                  style={{
-                    opacity: Math.min(1, o * 1.5),
-                    // The individual project translateY is for entrance animation, keep it.
-                    transform: `translateY(${(1 - Math.min(1, o * 1.5)) * 26}px)`,
-                    background: active ? "rgba(34,25,16,0.45)" : "transparent",
-                    transition: "background-color 0.3s",
-                  }}
-                >
-                  <div className="md:col-span-4">
-                    <h3
-                      className="font-display text-2xl leading-tight transition-colors duration-300 md:text-3xl"
-                      style={{ color: active ? "var(--color-cream)" : "var(--color-dim)" }}
-                    >
-                      {pr.name}
-                    </h3>
-                    <span
-                      className="mt-2 inline-block border px-2 py-0.5 font-sans text-[10px] uppercase tracking-[0.2em] transition-colors duration-300"
-                      style={{
-                        borderColor: active
-                          ? "rgba(255,106,60,0.5)"
-                          : "rgba(246,236,216,0.15)",
-                        color: active ? "var(--color-flame)" : "var(--color-dim)",
-                      }}
-                    >
-                      {pr.cat}
-                    </span>
-                  </div>
-                  <p className="hidden font-serif text-sm leading-snug text-dim md:col-span-5 md:block md:pr-8">
-                    {pr.desc}
-                  </p>
-                  <div className="font-sans text-[11px] uppercase tracking-[0.25em] text-cream md:col-span-2 md:text-right">
-                    <span className="inline-flex items-center gap-2">
-                      {pr.link}
-                      <Arrow />
-                    </span>
-                  </div>
-                </a>
-              );
-            })}
-          </div>
+        <div className="border-b border-cream/10"> {/* Eliminar transform translateY */}
+          {w.projects.map((pr, i) => (
+            <a
+              key={pr.n}
+              href={pr.url}
+              target="_blank"
+              rel="noreferrer"
+              className="grid gap-3 border-t border-cream/10 py-4 md:grid-cols-12 md:items-center md:gap-6 md:py-6"
+            >
+              <div className="md:col-span-4">
+                <h3 className="font-display text-2xl leading-tight md:text-3xl">
+                  {pr.name}
+                </h3>
+                <span className="mt-2 inline-block border px-2 py-0.5 font-sans text-[10px] uppercase tracking-[0.2em]">
+                  {pr.cat}
+                </span>
+              </div>
+              <p className="hidden font-serif text-sm leading-snug text-dim md:col-span-5 md:block md:pr-8">
+                {pr.desc}
+              </p>
+              <div className="font-sans text-[11px] uppercase tracking-[0.25em] text-cream md:col-span-2 md:text-right">
+                <span className="inline-flex items-center gap-2">
+                  {pr.link}
+                  <Arrow />
+                </span>
+              </div>
+            </a>
+          ))}
         </div>
-      </div>
-    </Runway>
-  );
+      </section>
+    );
+  }
 }
 
 /* ------------------------------------------------------------------ */
