@@ -849,26 +849,7 @@ function Contact({ t, lang }: { t: Copy; lang: Lang }) {
           </div>
         </Reveal>
 
-        <Reveal delay={0.18}>
-          <div className="mt-14 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 border-t border-cream/10 pt-8">
-            <span className="font-sans text-[10px] uppercase tracking-[0.25em] text-faint">
-              {c.online}
-            </span>
-            {[
-              { label: c.linkedin, href: t.links.linkedin },
-              { label: c.github, href: t.links.github },
-            ].map((s) => (
-              <a
-                key={s.label}
-                href={s.href}
-                className="group inline-flex items-center gap-2 font-sans text-[12px] uppercase tracking-[0.2em] text-dim transition-colors hover:text-flame"
-              >
-                {s.label}
-                <Arrow className="text-flame" />
-              </a>
-            ))}
-          </div>
-        </Reveal>
+
       </div>
     </section>
   );

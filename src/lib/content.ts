@@ -159,12 +159,12 @@ export const en = {
     body: "Tell me what you want to launch, replace, or put into operation.",
     cta: "Start a project",
     bestWay: "Best way to start",
-    online: "Find me online",
+
     linkedin: "LinkedIn",
     github: "GitHub",
   },
   footer: {
-    backToTop: "Back to top",
+
     cv: "Download CV",
     tagline: "Web design + development / Costa Rica",
   },
@@ -625,12 +625,12 @@ export const es = {
     body: "Cuénteme qué quiere lanzar, reemplazar o poner en funcionamiento.",
     cta: "Iniciar un proyecto",
     bestWay: "Mejor forma de empezar",
-    online: "Encuéntreme en línea",
+
     linkedin: "LinkedIn",
     github: "GitHub",
   },
   footer: {
-    backToTop: "Volver arriba",
+
     cv: "Descargar CV",
     tagline: "Diseño web + desarrollo / Costa Rica",
   },
