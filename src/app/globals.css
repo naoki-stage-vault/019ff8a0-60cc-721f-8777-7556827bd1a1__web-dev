@@ -13,6 +13,19 @@
   --font-serif: var(--font-fraunces), "Georgia", serif;
 }
 
+@layer utilities {
+  .pt-safe-mobile {
+    padding-top: 0;
+  }
+
+  @media screen and (max-width: 767px) {
+    .pt-safe-mobile {
+      padding-top: 10svh;
+      padding-top: max(10svh, env(safe-area-inset-top));
+    }
+  }
+}
+
 html {
   scroll-behavior: smooth;
 }
