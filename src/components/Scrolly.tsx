@@ -569,26 +569,28 @@ function PinProcess({ t, lang }: { t: Copy; lang: Lang }) {
 /* ------------------------------------------------------------------ */
 
 function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
+  // All useRef and useState declarations at the top
   const { ref: runwayRef, on } = usePin<HTMLDivElement>();
   const [p, setP] = useState(0);
-  useEffect(() => on(setP), [on]);
-
   const projectsListRef = useRef<HTMLDivElement>(null);
   const stickyContentRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLDivElement>(null);
   const projectsViewportRef = useRef<HTMLDivElement>(null);
-  const introRef = useRef<HTMLParagraphElement>(null); // Nuevo introRef
-
+  const introRef = useRef<HTMLParagraphElement>(null);
   const [runwayHeight, setRunwayHeight] = useState("380vh");
   const [translateY, setTranslateY] = useState(0);
+  const [canUsePinnedProjects, setCanUsePinnedProjects] = useState(true);
 
   const seg = (a: number, b: number) => clamp01((p - a) / (b - a));
 
+  // useEffect for setting scroll progress 'p'
+  useEffect(() => on(setP), [on]);
+
+  // useEffect for checking viewport dimensions and setting canUsePinnedProjects
   useEffect(() => {
     const checkViewport = () => {
-      // Umbrales basados en las sugerencias del usuario
-      const desktopThreshold = 1024; // min-width
-      const minimumUsefulHeight = 800; // min-height
+      const desktopThreshold = 1024;
+      const minimumUsefulHeight = 800;
 
       setCanUsePinnedProjects(
         window.innerWidth >= desktopThreshold &&
@@ -596,60 +598,41 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
       );
     };
 
-    checkViewport(); // Comprobación inicial
+    checkViewport();
     window.addEventListener("resize", checkViewport);
 
     return () => {
       window.removeEventListener("resize", checkViewport);
     };
-  }, []);
+  }, []); // Empty dependency array: runs once on mount
 
+  // useEffect for calculating scroll metrics for pinned mode
   useEffect(() => {
-    if (!canUsePinnedProjects) return; // Solo calcular si estamos en modo pinned
+    if (!canUsePinnedProjects) return; // Only run if in pinned mode
 
     const calculateScrollMetrics = () => {
       if (projectsListRef.current && stickyContentRef.current && projectsViewportRef.current && headingRef.current && introRef.current) {
-        const SAFE_AREA_BOTTOM = 32; // 24-40px, picked 32px
-
-        // Obtener la altura real del encabezado, incluyendo el intro
-        const headingRect = headingRef.current.getBoundingClientRect();
-        const introRect = introRef.current.getBoundingClientRect();
-
-        // La altura del encabezado que realmente ocupa espacio en el flujo
-        // Usamos headingRect.height ya que el padding-bottom lo empuja
-        const actualHeaderHeight = headingRect.height;
+        const SAFE_AREA_BOTTOM = 32;
 
         const projectsListHeight = projectsListRef.current.scrollHeight;
         const projectsViewportActualHeight = projectsViewportRef.current.offsetHeight;
 
-        // El espacio disponible para la lista de proyectos dentro del viewport,
-        // considerando el espacio que ocupa el encabezado y el safe area inferior.
-        // projectsViewportActualHeight es la altura del div que contiene la lista,
-        // pero necesitamos el espacio *real* disponible para el scroll de la lista.
-        // La altura del viewport menos la altura del encabezado es el espacio total.
-        // Restamos el SAFE_AREA_BOTTOM para el espacio inferior.
         const availableProjectsHeightForScrolling = projectsViewportActualHeight - SAFE_AREA_BOTTOM;
 
-        // maxTravel es la cantidad máxima que la lista de proyectos puede desplazarse hacia arriba.
-        // Es la diferencia entre la altura total de la lista y el espacio visible disponible.
         const newMaxTravel = Math.max(0, projectsListHeight - availableProjectsHeightForScrolling);
 
         setTranslateY(-p * newMaxTravel);
 
-        // La altura total de la pista de aterrizaje (runway) debe ser:
-        // La altura del viewport (100svh) + el desplazamiento máximo + un buffer para un scroll suave.
-        // El buffer de 400px es para que el usuario pueda "despegar" el sticky sin que termine abruptamente.
         const newRunwayHeight = `calc(100svh + ${newMaxTravel + 400}px)`;
         setRunwayHeight(newRunwayHeight);
       }
     };
 
-    calculateScrollMetrics(); // Initial calculation and on 'p' change
+    calculateScrollMetrics();
 
     const handleResize = () => calculateScrollMetrics();
     window.addEventListener("resize", handleResize);
 
-    // Use ResizeObserver for header and projects viewport to trigger recalculations
     const headerObserver = new ResizeObserver(() => calculateScrollMetrics());
     if (headingRef.current) {
       headerObserver.observe(headingRef.current);
@@ -665,19 +648,19 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
       headerObserver.disconnect();
       projectsViewportObserver.disconnect();
     };
-  }, [p, t, lang, canUsePinnedProjects]); // Añadido canUsePinnedProjects como dependencia
+  }, [p, t, lang, canUsePinnedProjects]); // Dependencies for recalculation
 
   const w = t.work;
   const last = lang === "en" ? "Different solutions." : "Soluciones diferentes.";
   const main = w.title.replace(last, "");
 
-  // Renderizado condicional basado en canUsePinnedProjects
+  // Conditional rendering based on canUsePinnedProjects
   if (canUsePinnedProjects) {
-    // Modo A: Pinned/Scrollytelling
+    // Mode A: Pinned/Scrollytelling
     return (
       <Runway id="projects" h={runwayHeight} ref={runwayRef}>
         <div ref={stickyContentRef} className="relative z-10 mx-auto grid h-full w-full max-w-6xl px-6 pt-10 md:px-14" style={{ gridTemplateRows: 'auto minmax(0, 1fr)' }}>
-          <div ref={headingRef} className="text-center pb-8"> {/* Mantengo pb-8 para espaciado */}
+          <div ref={headingRef} className="text-center pb-8">
             <div style={{ opacity: seg(0, 0.12) }}>
               <Eyebrow className="text-center">{w.num}</Eyebrow>
             </div>
@@ -686,7 +669,7 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
               <em className="text-flame">{last}</em>
             </h2>
             <p
-              ref={introRef} // Asignar introRef aquí
+              ref={introRef}
               className="mx-auto mt-6 hidden max-w-4xl font-serif text-lg leading-relaxed text-dim md:block"
               style={{ opacity: seg(0.12, 0.3), textWrap: 'balance' }}
             >
@@ -754,11 +737,11 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
       </Runway>
     );
   } else {
-    // Modo B: Normal Flow
+    // Mode B: Normal Flow
     return (
       <section
         id="projects"
-        className="relative mx-auto w-full max-w-6xl px-6 py-24 md:px-14" // Eliminar min-h-svh y flex items-center justify-center
+        className="relative mx-auto w-full max-w-6xl px-6 py-24 md:px-14"
       >
         <div className="text-center">
           <Eyebrow className="text-center">{w.num}</Eyebrow>
@@ -767,13 +750,13 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
             <em className="text-flame">{last}</em>
           </h2>
           <p
-            className="mx-auto mt-6 mb-8 max-w-4xl font-serif text-lg leading-relaxed text-dim md:block" // Añadido mb-8 para espaciado
+            className="mx-auto mt-6 mb-8 max-w-4xl font-serif text-lg leading-relaxed text-dim md:block"
           >
             {w.intro}
           </p>
         </div>
 
-        <div className="border-b border-cream/10"> {/* Eliminar transform translateY */}
+        <div className="border-b border-cream/10">
           {w.projects.map((pr, i) => (
             <a
               key={pr.n}
