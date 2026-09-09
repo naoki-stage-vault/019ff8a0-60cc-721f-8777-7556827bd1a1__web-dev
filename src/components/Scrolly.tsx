@@ -569,40 +569,36 @@ function PinProcess({ t, lang }: { t: Copy; lang: Lang }) {
 /* ------------------------------------------------------------------ */
 
 function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
-  const { ref: runwayRef, on } = usePin<HTMLDivElement>();
-  const [p, setP] = useState(0);
-  useEffect(() => on(setP), [on]);
-
   const w = t.work;
   const last = lang === "en" ? "Different solutions." : "Soluciones diferentes.";
   const main = w.title.replace(last, "");
 
   return (
-    <section id="projects" ref={runwayRef} className="relative py-24 md:py-32">
+    <section id="projects" className="relative py-24 md:py-32">
       <div className="mx-auto w-full max-w-6xl px-6 md:px-14">
-        <div className="selected-work-header text-center">
+        <div className="text-center">
           <Eyebrow className="text-center">{w.num}</Eyebrow>
           <h2 className="mx-auto mt-6 font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em] whitespace-nowrap">
             {main}
             <em className="text-flame">{last}</em>
           </h2>
           <p
-            className="mx-auto mt-6 max-w-4xl font-serif text-lg leading-relaxed text-dim md:block"
+            className="mx-auto mt-6 hidden max-w-4xl font-serif text-lg leading-relaxed text-dim md:block"
             style={{ textWrap: 'balance' }}
           >
             {w.intro}
           </p>
         </div>
 
-        <div className="selected-work-projects mt-10">
+        <div className="mt-10">
           <div className="grid md:grid-cols-2 gap-8">
-            {w.projects.map((pr, i) => (
+            {w.projects.map((pr) => (
               <a
                 key={pr.n}
                 href={pr.url}
                 target="_blank"
                 rel="noreferrer"
-                className="group block p-6 border border-cream/10 hover:border-cream/30 transition-colors"
+                className="group block p-6 border border-cream/10 hover:border-cream/30"
               >
                 <p className="font-sans text-[11px] uppercase tracking-[0.25em] text-faint mb-2">
                   {pr.cat}
