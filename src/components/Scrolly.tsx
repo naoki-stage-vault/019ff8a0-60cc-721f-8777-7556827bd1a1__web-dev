@@ -580,12 +580,12 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
     >
       <div className="text-center">
         <Eyebrow className="text-center">{w.num}</Eyebrow>
-        <h2 className="mx-auto mt-6 font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em] whitespace-nowrap">
+        <h2 className="mx-auto mt-6 font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em] lg:whitespace-nowrap">
           {main}
           <em className="text-flame">{last}</em>
         </h2>
         <p
-          className="mx-auto mt-6 mb-8 max-w-4xl font-serif text-lg leading-relaxed text-dim md:block"
+          className="mx-auto mt-6 mb-8 max-w-4xl font-serif text-lg leading-relaxed text-dim"
         >
           {w.intro}
         </p>
@@ -608,7 +608,7 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
                 {pr.cat}
               </span>
             </div>
-            <p className="hidden font-serif text-sm leading-snug text-dim md:col-span-5 md:block md:pr-8">
+            <p className="font-serif text-sm leading-snug text-dim md:col-span-5 md:pr-8">
               {pr.desc}
             </p>
             <div className="font-sans text-[11px] uppercase tracking-[0.25em] text-cream md:col-span-2 md:text-right">
