@@ -641,7 +641,7 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
   return (
     <Runway id="projects" h={runwayHeight} ref={runwayRef}>
       <div ref={stickyContentRef} className="relative z-10 mx-auto grid h-full w-full max-w-6xl px-6 pt-10 md:px-14" style={{ gridTemplateRows: 'auto minmax(0, 1fr)' }}>
-        <div ref={headingRef} className="text-center mb-8">
+        <div ref={headingRef} className="text-center pb-8">
           <div style={{ opacity: seg(0, 0.12) }}>
             <Eyebrow className="text-center">{w.num}</Eyebrow>
           </div>
