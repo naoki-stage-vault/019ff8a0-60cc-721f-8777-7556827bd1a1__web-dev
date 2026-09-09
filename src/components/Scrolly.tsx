@@ -622,8 +622,8 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
 
   return (
     <Runway id="projects" h={runwayHeight} ref={runwayRef}>
-      <div ref={stickyContentRef} className="relative z-10 mx-auto grid h-full w-full max-w-6xl px-6 pt-10 md:px-14 gap-8" style={{ gridTemplateRows: 'auto minmax(0, 1fr)' }}>
-        <div ref={headingRef} className="text-center">
+      <div ref={stickyContentRef} className="relative z-10 mx-auto grid h-full w-full max-w-6xl px-6 pt-10 md:px-14" style={{ gridTemplateRows: 'auto minmax(0, 1fr)' }}>
+        <div ref={headingRef} className="text-center mb-8">
           <div style={{ opacity: seg(0, 0.12) }}>
             <Eyebrow className="text-center">{w.num}</Eyebrow>
           </div>
@@ -632,7 +632,7 @@ function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
             <em className="text-flame">{last}</em>
           </h2>
           <p
-            className="mx-auto mt-6 mb-8 hidden max-w-4xl font-serif text-lg leading-relaxed text-dim md:block"
+            className="mx-auto mt-6 hidden max-w-4xl font-serif text-lg leading-relaxed text-dim md:block"
             style={{ opacity: seg(0.12, 0.3), textWrap: 'balance' }}
           >
             {w.intro}
