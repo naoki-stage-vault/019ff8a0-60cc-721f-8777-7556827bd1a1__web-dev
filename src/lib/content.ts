@@ -164,11 +164,307 @@ export const en = {
     github: "GitHub",
   },
   footer: {
-    backToTop: "Back to top",
     cv: "Download CV",
     tagline: "Web design + development / Costa Rica",
   },
+  sitiosWeb: {
+    hero: {
+      eyebrow: "WEBSITES FROM SCRATCH / COSTA RICA",
+      headline: "YOUR BUSINESS HAS GROWN. YOUR WEBSITE SHOULD REFLECT IT.",
+      headlineItalic: "YOUR WEBSITE SHOULD REFLECT IT.",
+      body: "New websites and complete replacements, designed and developed from scratch around what the business needs today.",
+      price: "$1,000–$1,500 USD",
+      cta: "START A PROJECT ↗",
+    },
+    twoWays: {
+      eyebrow: "TWO WAYS TO GET HERE",
+      headline: "It can be your first. Or it can replace the one you already have.",
+      item1: {
+        title: "YOU NEED YOUR FIRST SERIOUS WEBSITE",
+        text: "The business already exists. Now it needs a professional web presence that explains it clearly, presents it properly, and makes the next step easy.",
+      },
+      item2: {
+        title: "YOU ALREADY HAVE A WEBSITE, BUT YOU WANT A NEW ONE",
+        text: "The current site may be outdated, limited by its platform, expensive to maintain, or simply no longer representative of the business.",
+        secondary: "In that case, I build a new version from scratch to replace it.",
+      },
+    },
+    ifExists: {
+      eyebrow: "IF A WEBSITE ALREADY EXISTS",
+      headline: "That does not mean I build on top of it.",
+      body: "The existing site can be useful as a reference for content, pages, photography, or information that is still worth keeping.",
+      secondary: "But it does not determine the structure, design, or technology of the new one.",
+      statements: [
+        "IT IS NOT A 1:1 TECHNICAL MIGRATION.",
+        "IT IS NOT A THEME CHANGE.",
+        "IT IS NOT ANOTHER ROUND OF PATCHING THE EXISTING SITE.",
+      ],
+      final: "It is a new website built to replace the old one.",
+    },
+    whatsIncluded: {
+      eyebrow: "WHAT'S INCLUDED",
+      headline: "From content to launch.",
+      items: [
+        {
+          num: "01",
+          title: "STRUCTURE",
+          text: "What pages the site needs, how the information is organized, and what each page needs to accomplish.",
+        },
+        {
+          num: "02",
+          title: "VISUAL DIRECTION",
+          text: "Hierarchy, typography, composition, and a visual language built around the brand.",
+        },
+        {
+          num: "03",
+          title: "DESIGN",
+          text: "Complete experience design for desktop and mobile.",
+        },
+        {
+          num: "04",
+          title: "DEVELOPMENT",
+          text: "The site is built using technology that makes sense for the project.",
+        },
+        {
+          num: "05",
+          title: "INTEGRATIONS",
+          text: "Forms, booking tools, maps, analytics, or other tools the business needs.",
+        },
+        {
+          num: "06",
+          title: "LAUNCH",
+          text: "Testing, production setup, domain, and publishing.",
+        },
+      ],
+    },
+    howItWorks: {
+      eyebrow: "HOW IT WORKS",
+      headline: "One continuous thread, from defining to launching.",
+      items: [
+        {
+          num: "01",
+          title: "DEFINE",
+          text: "What problem it solves, who uses it, and what the first version needs to validate or put into operation.",
+        },
+        {
+          num: "02",
+          title: "STRUCTURE",
+          text: "Pages, content, hierarchy, and user journey.",
+        },
+        {
+          num: "03",
+          title: "DESIGN",
+          text: "Visual direction and experience.",
+        },
+        {
+          num: "04",
+          title: "BUILD",
+          text: "Frontend, backend, data, and the integrations the product needs.",
+        },
+        {
+          num: "05",
+          title: "LAUNCH",
+          text: "Final testing, domain setup, and going live.",
+        },
+      ],
+    },
+    goodFit: {
+      headline: "It makes sense if you are ready for a new version.",
+      items: [
+        {
+          title: "YOU NEED A PROFESSIONAL WEBSITE FROM SCRATCH",
+          text: "Your business needs its first serious web presence.",
+        },
+        {
+          title: "YOUR CURRENT WEBSITE NO LONGER REPRESENTS THE BUSINESS",
+          text: "The business moved forward and the website did not.",
+        },
+        {
+          title: "YOU WANT TO LEAVE A LIMITING PLATFORM BEHIND",
+          text: "The next version does not need to inherit the same restrictions.",
+        },
+        {
+          title: "YOU WANT TO REPLACE IT, NOT KEEP PATCHING IT",
+          text: "You are looking for a new solution, not another layer of fixes.",
+        },
+        {
+          title: "YOU WANT DESIGN + DEVELOPMENT IN ONE PROCESS",
+          text: "One person directs, designs, and builds the website.",
+        },
+      ],
+    },
+    investment: {
+      eyebrow: "INVESTMENT",
+      headline: "$1,000–$1,500 USD",
+      body: "Final pricing depends mainly on the number of pages, content, integrations, and overall scope.",
+      secondary: "After I understand the project, you receive a defined scope and price before work begins.",
+      cta: "START A PROJECT ↗",
+    },
+    faq: {
+      headline: "COMMON QUESTIONS",
+      questions: [
+        {
+          question: "Can I use this service if I already have a website?",
+          answer: "Yes. The new version is built separately and replaces the current site when it is ready.",
+        },
+        {
+          question: "Does the new site have to stay on the same platform?",
+          answer: "No. The technology is selected according to what the new project needs.",
+        },
+        {
+          question: "Do you migrate my current website?",
+          answer: "Not as a 1:1 technical copy. I keep only the content, information, or useful assets that make sense to carry forward.",
+        },
+        {
+          question: "Can I keep my current domain?",
+          answer: "Yes. The new site can go live on the domain you already own.",
+        },
+      ],
+    },
+    finalCta: {
+      headline: "Has the current website fallen behind?",
+      body: "Tell me what you have today and what the next version needs to do better.",
+      cta: "START A PROJECT ↗",
+    },
+  },
+  mvpWebapp: {
+    hero: {
+      eyebrow: "WEBAPP MVPs / COSTA RICA",
+      headline: "FROM AN IDEA TO A FIRST VERSION PEOPLE CAN ACTUALLY USE.",
+      headlineItalic: "A FIRST VERSION PEOPLE CAN ACTUALLY USE.",
+      body: "I design and develop web application MVPs that turn an idea into a functional first version focused on what actually needs to exist to get started.",
+      price: "FROM $2,000 USD",
+      cta: "TELL ME ABOUT THE IDEA ↗",
+    },
+    whatIsMvp: {
+      headline: "Not everything. What you need to start.",
+      body: "An MVP is not a smaller version of every feature the final product might eventually have.",
+      secondary: "First, we define what someone actually needs to be able to do for the idea to be tested, used, or put into operation.",
+      final: "That is what we build first.",
+    },
+    whatCanInclude: {
+      headline: "More than pages.",
+      intro: "Depending on the product, a first version can include:",
+      items: [
+        "USER ACCOUNTS",
+        "AUTHENTICATION",
+        "DATABASE",
+        "DASHBOARDS",
+        "PROFILES",
+        "FORMS + FLOWS",
+        "ROLES + PERMISSIONS",
+        "PAYMENTS",
+        "APIs",
+        "INTEGRATIONS",
+        "ADMIN PANEL",
+        "AUTOMATIONS",
+        "CUSTOM PRODUCT LOGIC",
+      ],
+      footnote: "Each MVP includes only the functionality needed for its first version.",
+    },
+    firstReduce: {
+      headline: "The first decision is what to leave out.",
+      body: "We do not start by asking what the product could eventually include.",
+      secondary: "We start by asking what has to work for this first version to make sense.",
+      final: "We build the essential part first. The rest can come later.",
+    },
+    howItWorks: {
+      headline: "From the idea to something that can be used.",
+      items: [
+        {
+          num: "01",
+          title: "DEFINE",
+          text: "What problem it solves, who uses it, and what the first version needs to validate or put into operation.",
+        },
+        {
+          num: "02",
+          title: "REDUCE",
+          text: "Separate what is essential from what can wait for a later version.",
+        },
+        {
+          num: "03",
+          title: "DESIGN",
+          text: "Visual direction and experience.",
+        },
+        {
+          num: "04",
+          title: "BUILD",
+          text: "Frontend, backend, data, and the integrations the product needs.",
+        },
+        {
+          num: "05",
+          title: "LAUNCH",
+          text: "Publish a functional first version and start using it.",
+        },
+      ],
+    },
+    goodFit: {
+      headline: "It makes sense if you are ready to start with the essentials.",
+      items: [
+        {
+          title: "YOU HAVE A CONCRETE IDEA",
+          text: "You can explain what the user needs to be able to do, even if you have not figured out the implementation yet.",
+        },
+        {
+          title: "YOU WANT TO START SMALL",
+          text: "You would rather launch a focused first version than try to build everything at once.",
+        },
+        {
+          title: "YOU NEED REAL FUNCTIONALITY",
+          text: "You need more than a landing page or a visual prototype.",
+        },
+        {
+          title: "YOU ARE WILLING TO PRIORITIZE",
+          text: "Some features will probably belong in a later version.",
+        },
+      ],
+    },
+    scope: {
+      headline: "MVP does not mean building everything for $2,000.",
+      body: "It does not mean building a complete platform with every planned feature in the first version.",
+      secondary: "It does not mean putting every roadmap idea into the initial scope or prioritizing feature count over a coherent first product.",
+      final: "The goal is to build the smallest version that is still useful.",
+    },
+    investment: {
+      headline: "From $2,000 USD",
+      body: "MVPs are priced according to functionality and complexity.",
+      secondary: "Pricing can change depending on authentication, roles, number of flows, data structure, APIs, payments, integrations, admin tools, and custom logic.",
+      final: "After we define what belongs in the first version, I provide a defined scope and price before work begins.",
+      cta: "TELL ME ABOUT THE IDEA ↗",
+    },
+    faq: {
+      headline: "COMMON QUESTIONS",
+      questions: [
+        {
+          question: "What technology do you use?",
+          answer: "Whatever makes sense for the product. I do not start from a mandatory stack.",
+        },
+        {
+          question: "Can it include login and a database?",
+          answer: "Yes, when the product needs them.",
+        },
+        {
+          question: "Can you integrate payments or APIs?",
+          answer: "Yes, depending on scope.",
+        },
+        {
+          question: "Will the MVP be ready for real users?",
+          answer: "When the project requires it, the goal is a functional first version that can actually be put into use, not only a visual prototype.",
+        },
+        {
+          question: "Can it grow afterward?",
+          answer: "Yes. I build a reasonable foundation for the current stage, and later versions can expand the product based on what you learn.",
+        },
+      ],
+    },
+    finalCta: {
+      headline: "Have an idea you need to put into operation?",
+      body: "Tell me what the first version needs to let people do.",
+      cta: "START A PROJECT ↗",
+    },
+  },
 };
+
 export const es = {
   nav: [
     { href: "/sitios-web", label: "Sitios Web" },
@@ -333,11 +629,307 @@ export const es = {
     github: "GitHub",
   },
   footer: {
-    backToTop: "Volver arriba",
     cv: "Descargar CV",
     tagline: "Diseño web + desarrollo / Costa Rica",
   },
+  sitiosWeb: {
+    hero: {
+      eyebrow: "SITIOS WEB DESDE CERO / COSTA RICA",
+      headline: "SU NEGOCIO HA CRECIDO. SU SITIO WEB DEBERÍA REFLEJARLO.",
+      headlineItalic: "SU SITIO WEB DEBERÍA REFLEJARLO.",
+      body: "Sitios web nuevos y reemplazos completos, diseñados y desarrollados desde cero alrededor de lo que el negocio necesita hoy.",
+      price: "$1,000–$1,500 USD",
+      cta: "INICIAR UN PROYECTO ↗",
+    },
+    twoWays: {
+      eyebrow: "DOS FORMAS DE LLEGAR AQUÍ",
+      headline: "Puede ser el primero. O puede reemplazar al que ya tiene.",
+      item1: {
+        title: "NECESITA SU PRIMER SITIO SERIO",
+        text: "El negocio ya existe. Ahora necesita una presencia web profesional para explicarlo, presentarlo y facilitar el siguiente paso.",
+      },
+      item2: {
+        title: "YA TIENE UN SITIO, PERO QUIERE UNO NUEVO",
+        text: "El sitio actual puede estar desactualizado, limitado por su plataforma, ser costoso de mantener o simplemente ya no representar al negocio.",
+        secondary: "En ese caso, construyo una nueva versión desde cero para reemplazarlo.",
+      },
+    },
+    ifExists: {
+      eyebrow: "SI YA EXISTE UN SITIO",
+      headline: "No significa que construyo encima de él.",
+      body: "El sitio actual puede servir como referencia para contenido, páginas, fotografías o información que todavía tenga sentido.",
+      secondary: "Pero no determina la estructura, el diseño o la tecnología del nuevo.",
+      statements: [
+        "NO ES UNA MIGRACIÓN 1:1.",
+        "NO ES UN CAMBIO DE TEMA.",
+        "NO ES SEGUIR PARCHANDO LO QUE YA EXISTE.",
+      ],
+      final: "Es un sitio nuevo que reemplaza al anterior.",
+    },
+    whatsIncluded: {
+      eyebrow: "QUÉ INCLUYE",
+      headline: "Del contenido al lanzamiento.",
+      items: [
+        {
+          num: "01",
+          title: "ESTRUCTURA",
+          text: "Qué páginas necesita, cómo se organiza la información y qué debe conseguir cada una.",
+        },
+        {
+          num: "02",
+          title: "DIRECCIÓN VISUAL",
+          text: "Jerarquía, tipografía, composición y lenguaje visual alrededor de la marca.",
+        },
+        {
+          num: "03",
+          title: "DISEÑO",
+          text: "Diseño completo de la experiencia para desktop y móvil.",
+        },
+        {
+          num: "04",
+          title: "DESARROLLO",
+          text: "Construcción del sitio con la tecnología adecuada para el proyecto.",
+        },
+        {
+          num: "05",
+          title: "INTEGRACIONES",
+          text: "Formularios, reservas, mapas, analítica u otras herramientas necesarias.",
+        },
+        {
+          num: "06",
+          title: "LANZAMIENTO",
+          text: "Pruebas, producción, dominio y publicación.",
+        },
+      ],
+    },
+    howItWorks: {
+      eyebrow: "CÓMO FUNCIONA",
+      headline: "Un solo hilo, de definir a lanzar.",
+      items: [
+        {
+          num: "01",
+          title: "DEFINIR",
+          text: "Qué ofrece el negocio, quién lo necesita y qué debe hacer mejor el nuevo sitio.",
+        },
+        {
+          num: "02",
+          title: "ESTRUCTURAR",
+          text: "Páginas, contenido, jerarquía y recorrido.",
+        },
+        {
+          num: "03",
+          title: "DISEÑAR",
+          text: "Dirección visual y experiencia.",
+        },
+        {
+          num: "04",
+          title: "CONSTRUIR",
+          text: "Desarrollo completo de la nueva versión.",
+        },
+        {
+          num: "05",
+          title: "LANZAR",
+          text: "Pruebas finales, dominio y puesta en línea.",
+        },
+      ],
+    },
+    goodFit: {
+      headline: "Tiene sentido si está listo para una nueva versión.",
+      items: [
+        {
+          title: "NECESITA UN SITIO PROFESIONAL DESDE CERO",
+          text: "Su negocio necesita una presencia web seria por primera vez.",
+        },
+        {
+          title: "SU SITIO ACTUAL YA NO REPRESENTA AL NEGOCIO",
+          text: "La empresa avanzó y la presencia web se quedó atrás.",
+        },
+        {
+          title: "QUIERE DEJAR ATRÁS UNA PLATAFORMA QUE LE LIMITA",
+          text: "La siguiente versión no tiene por qué heredar las mismas restricciones.",
+        },
+        {
+          title: "QUIERE REEMPLAZAR, NO SEGUIR REMENDANDO",
+          text: "Busca una nueva solución, no otra capa de arreglos.",
+        },
+        {
+          title: "QUIERE DISEÑO + DESARROLLO EN UN MISMO PROCESO",
+          text: "Una misma persona dirige, diseña y construye el sitio.",
+        },
+      ],
+    },
+    investment: {
+      eyebrow: "INVERSIÓN",
+      headline: "$1,000–$1,500 USD",
+      body: "El precio final depende principalmente del número de páginas, contenido, integraciones y alcance general.",
+      secondary: "Después de conocer el proyecto, recibirá un alcance y precio definido antes de empezar.",
+      cta: "INICIAR UN PROYECTO ↗",
+    },
+    faq: {
+      headline: "PREGUNTAS FRECUENTES",
+      questions: [
+        {
+          question: "¿Puedo contratar el servicio si ya tengo un sitio?",
+          answer: "Sí. La nueva versión se construye aparte y reemplaza la actual cuando está lista.",
+        },
+        {
+          question: "¿Tiene que quedarse en la misma plataforma?",
+          answer: "No. La tecnología se decide según lo que el nuevo proyecto necesita.",
+        },
+        {
+          question: "¿Migra mi sitio actual?",
+          answer: "No como una copia técnica 1:1. Se conserva únicamente lo que tenga sentido conservar a nivel de contenido, información o activos útiles.",
+        },
+        {
+          question: "¿Puedo mantener mi dominio?",
+          answer: "Sí. El nuevo sitio puede publicarse utilizando el dominio que ya tiene.",
+        },
+      ],
+    },
+    finalCta: {
+      headline: "¿El sitio actual ya no está a la altura?",
+      body: "Cuénteme qué tiene hoy y qué necesita hacer mejor la siguiente versión.",
+      cta: "INICIAR UN PROYECTO ↗",
+    },
+  },
+  mvpWebapp: {
+    hero: {
+      eyebrow: "MVPs DE WEBAPPS / COSTA RICA",
+      headline: "DE UNA IDEA A UNA PRIMERA VERSIÓN QUE SE PUEDE USAR.",
+      headlineItalic: "UNA PRIMERA VERSIÓN QUE SE PUEDE USAR.",
+      body: "Diseño y desarrollo MVPs de aplicaciones web para convertir una idea en una primera versión funcional, enfocada en lo que realmente necesita existir para empezar.",
+      price: "DESDE $2,000 USD",
+      cta: "CONTARME LA IDEA ↗",
+    },
+    whatIsMvp: {
+      headline: "No construir todo. Construir lo necesario para empezar.",
+      body: "Un MVP no es una versión pequeña de todo el producto final.",
+      secondary: "Primero definimos qué necesita poder hacer una persona para que la idea pueda probarse, usarse o ponerse en operación.",
+      final: "Eso es lo que construimos primero.",
+    },
+    whatCanInclude: {
+      headline: "Más que páginas.",
+      intro: "Dependiendo del producto, una primera versión puede incluir:",
+      items: [
+        "CUENTAS DE USUARIO",
+        "AUTENTICACIÓN",
+        "BASE DE DATOS",
+        "DASHBOARDS",
+        "PERFILES",
+        "FORMULARIOS + FLUJOS",
+        "ROLES + PERMISOS",
+        "PAGOS",
+        "APIs",
+        "INTEGRACIONES",
+        "PANEL ADMINISTRATIVO",
+        "AUTOMATIZACIONES",
+        "LÓGICA PROPIA DEL PRODUCTO",
+      ],
+      footnote: "Cada MVP incluye únicamente la funcionalidad necesaria para su primera versión.",
+    },
+    firstReduce: {
+      headline: "La primera decisión es qué dejar fuera.",
+      body: "No empezamos preguntando qué podría tener el producto.",
+      secondary: "Empezamos preguntando qué tiene que funcionar para que esta primera versión tenga sentido.",
+      final: "Primero construimos lo esencial. Lo demás puede venir después.",
+    },
+    howItWorks: {
+      headline: "De la idea a algo que se puede usar.",
+      items: [
+        {
+          num: "01",
+          title: "DEFINIR",
+          text: "Qué problema resuelve, quién lo usa y qué necesita validar o poner en funcionamiento.",
+        },
+        {
+          num: "02",
+          title: "REDUCIR",
+          text: "Separar lo esencial de lo que puede esperar para una siguiente versión.",
+        },
+        {
+          num: "03",
+          title: "DISEÑAR",
+          text: "Flujos, pantallas, estados e interacción.",
+        },
+        {
+          num: "04",
+          title: "CONSTRUIR",
+          text: "Frontend, backend, datos e integraciones necesarias.",
+        },
+        {
+          num: "05",
+          title: "LANZAR",
+          text: "Publicar una primera versión funcional para empezar a usarla.",
+        },
+      ],
+    },
+    goodFit: {
+      headline: "Tiene sentido si está listo para empezar con lo esencial.",
+      items: [
+        {
+          title: "TIENE UNA IDEA CONCRETA",
+          text: "Puede explicar qué debería poder hacer el usuario, aunque todavía no tenga resuelta la implementación.",
+        },
+        {
+          title: "QUIERE EMPEZAR PEQUEÑO",
+          text: "Prefiere lanzar una primera versión enfocada antes que intentar construir todo de una vez.",
+        },
+        {
+          title: "NECESITA FUNCIONALIDAD REAL",
+          text: "Necesita más que una landing o un prototipo visual.",
+        },
+        {
+          title: "ESTÁ DISPUESTO A PRIORIZAR",
+          text: "Algunas funcionalidades probablemente quedarán para una siguiente versión.",
+        },
+      ],
+    },
+    scope: {
+      headline: "MVP no significa construirlo todo por $2,000.",
+      body: "No significa construir una plataforma completa con todas sus funciones desde la primera versión.",
+      secondary: "No significa incluir cada idea del roadmap ni priorizar cantidad de funcionalidades sobre una primera versión coherente.",
+      final: "El objetivo es construir la menor versión que todavía sea útil.",
+    },
+    investment: {
+      headline: "Desde $2,000 USD",
+      body: "Los MVPs se cotizan según funcionalidad y complejidad.",
+      secondary: "El precio puede cambiar según elementos como autenticación, roles, cantidad de flujos, estructura de datos, APIs, pagos, integraciones, panel administrativo y lógica personalizada.",
+      final: "Después de definir qué entra en la primera versión, presento un alcance y precio antes de empezar.",
+      cta: "CONTARME LA IDEA ↗",
+    },
+    faq: {
+      headline: "PREGUNTAS FRECUENTES",
+      questions: [
+        {
+          question: "¿Qué tecnología usa?",
+          answer: "La que tenga sentido para el producto. No parto de un stack obligatorio.",
+        },
+        {
+          question: "¿Puede tener login y base de datos?",
+          answer: "Sí, cuando el producto lo necesita.",
+        },
+        {
+          question: "¿Puede integrar pagos o APIs?",
+          answer: "Sí, según el alcance.",
+        },
+        {
+          question: "¿El MVP queda listo para usuarios reales?",
+          answer: "Cuando el proyecto lo requiere, el objetivo es una primera versión funcional que pueda ponerse en uso, no únicamente un prototipo visual.",
+        },
+        {
+          question: "¿Después puede crecer?",
+          answer: "Sí. Se construye una base razonable para la etapa actual y las siguientes versiones pueden ampliar el producto a partir de lo aprendido.",
+        },
+      ],
+    },
+    finalCta: {
+      headline: "¿Tiene una idea que necesita poner en funcionamiento?",
+      body: "Cuénteme qué debería poder hacer la primera versión.",
+      cta: "INICIAR UN PROYECTO ↗",
+    },
+  },
 };
+
 export type Copy = typeof en;
 
 export const copy: Record<Lang, Copy> = { en, es };

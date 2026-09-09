@@ -850,7 +850,7 @@ function Contact({ t, lang }: { t: Copy; lang: Lang }) {
         </Reveal>
 
         <Reveal delay={0.18}>
-          <div className="mt-14 flex flex-wrap items-center justify-center gap-x-8 gap-y-3 border-t border-cream/10 pt-8">
+          <div className="mt-14 flex flex-wrap items-center justify-center gap-x-8 gap-y-3">
             <span className="font-sans text-[10px] uppercase tracking-[0.25em] text-faint">
               {c.online}
             </span>
