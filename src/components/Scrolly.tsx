@@ -569,225 +569,59 @@ function PinProcess({ t, lang }: { t: Copy; lang: Lang }) {
 /* ------------------------------------------------------------------ */
 
 function PinProjects({ t, lang }: { t: Copy; lang: Lang }) {
-  // All useRef and useState declarations at the top
-  const { ref: runwayRef, on } = usePin<HTMLDivElement>();
-  const [p, setP] = useState(0);
-  const projectsListRef = useRef<HTMLDivElement>(null);
-  const stickyContentRef = useRef<HTMLDivElement>(null);
-  const headingRef = useRef<HTMLDivElement>(null);
-  const projectsViewportRef = useRef<HTMLDivElement>(null);
-  const introRef = useRef<HTMLParagraphElement>(null);
-  const [runwayHeight, setRunwayHeight] = useState("380vh");
-  const [translateY, setTranslateY] = useState(0);
-  const [canUsePinnedProjects, setCanUsePinnedProjects] = useState(true);
-
-  const seg = (a: number, b: number) => clamp01((p - a) / (b - a));
-
-  // useEffect for setting scroll progress 'p'
-  useEffect(() => on(setP), [on]);
-
-  // useEffect for checking viewport dimensions and setting canUsePinnedProjects
-  useEffect(() => {
-    const checkViewport = () => {
-      const desktopThreshold = 1024;
-      const minimumUsefulHeight = 800;
-
-      setCanUsePinnedProjects(
-        window.innerWidth >= desktopThreshold &&
-        window.innerHeight >= minimumUsefulHeight
-      );
-    };
-
-    checkViewport();
-    window.addEventListener("resize", checkViewport);
-
-    return () => {
-      window.removeEventListener("resize", checkViewport);
-    };
-  }, []); // Empty dependency array: runs once on mount
-
-  // useEffect for calculating scroll metrics for pinned mode
-  useEffect(() => {
-    if (!canUsePinnedProjects) return; // Only run if in pinned mode
-
-    const calculateScrollMetrics = () => {
-      if (projectsListRef.current && stickyContentRef.current && projectsViewportRef.current && headingRef.current && introRef.current) {
-        const SAFE_AREA_BOTTOM = 32;
-
-        const projectsListHeight = projectsListRef.current.scrollHeight;
-        const projectsViewportActualHeight = projectsViewportRef.current.offsetHeight;
-
-        const availableProjectsHeightForScrolling = projectsViewportActualHeight - SAFE_AREA_BOTTOM;
-
-        const newMaxTravel = Math.max(0, projectsListHeight - availableProjectsHeightForScrolling);
-
-        setTranslateY(-p * newMaxTravel);
-
-        const newRunwayHeight = `calc(100svh + ${newMaxTravel + 400}px)`;
-        setRunwayHeight(newRunwayHeight);
-      }
-    };
-
-    calculateScrollMetrics();
-
-    const handleResize = () => calculateScrollMetrics();
-    window.addEventListener("resize", handleResize);
-
-    const headerObserver = new ResizeObserver(() => calculateScrollMetrics());
-    if (headingRef.current) {
-      headerObserver.observe(headingRef.current);
-    }
-
-    const projectsViewportObserver = new ResizeObserver(() => calculateScrollMetrics());
-    if (projectsViewportRef.current) {
-      projectsViewportObserver.observe(projectsViewportRef.current);
-    }
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-      headerObserver.disconnect();
-      projectsViewportObserver.disconnect();
-    };
-  }, [p, t, lang, canUsePinnedProjects]); // Dependencies for recalculation
-
   const w = t.work;
   const last = lang === "en" ? "Different solutions." : "Soluciones diferentes.";
   const main = w.title.replace(last, "");
 
-  // Conditional rendering based on canUsePinnedProjects
-  if (canUsePinnedProjects) {
-    // Mode A: Pinned/Scrollytelling
-    return (
-      <Runway id="projects" h={runwayHeight} ref={runwayRef}>
-        <div ref={stickyContentRef} className="relative z-10 mx-auto grid h-full w-full max-w-6xl px-6 pt-10 md:px-14" style={{ gridTemplateRows: 'auto minmax(0, 1fr)' }}>
-          <div ref={headingRef} className="text-center pb-8">
-            <div style={{ opacity: seg(0, 0.12) }}>
-              <Eyebrow className="text-center">{w.num}</Eyebrow>
-            </div>
-            <h2 className="mx-auto mt-6 font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em] whitespace-nowrap">
-              <Words text={main} p={p} range={[0, 0.3]} />
-              <em className="text-flame">{last}</em>
-            </h2>
-            <p
-              ref={introRef}
-              className="mx-auto mt-6 hidden max-w-4xl font-serif text-lg leading-relaxed text-dim md:block"
-              style={{ opacity: seg(0.12, 0.3), textWrap: 'balance' }}
-            >
-              {w.intro}
-            </p>
-          </div>
+  return (
+    <section
+      id="projects"
+      className="relative mx-auto w-full max-w-6xl px-6 py-24 md:px-14"
+    >
+      <div className="text-center">
+        <Eyebrow className="text-center">{w.num}</Eyebrow>
+        <h2 className="mx-auto mt-6 font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em] whitespace-nowrap">
+          {main}
+          <em className="text-flame">{last}</em>
+        </h2>
+        <p
+          className="mx-auto mt-6 mb-8 max-w-4xl font-serif text-lg leading-relaxed text-dim md:block"
+        >
+          {w.intro}
+        </p>
+      </div>
 
-          <div ref={projectsViewportRef} className="projects-viewport" style={{ minHeight: 0 }}>
-            <div
-              ref={projectsListRef}
-              className="border-b border-cream/10"
-              style={{ transform: `translateY(${translateY}px)` }}
-            >
-              {w.projects.map((pr, i) => {
-                const o = seg(0.1 + i * 0.16, 0.28 + i * 0.16);
-                const active = o > 0.55;
-                return (
-                  <a
-                    key={pr.n}
-                    href={pr.url}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="grid gap-3 border-t border-cream/10 py-4 md:grid-cols-12 md:items-center md:gap-6 md:py-6"
-                    style={{
-                      opacity: Math.min(1, o * 1.5),
-                      transform: `translateY(${(1 - Math.min(1, o * 1.5)) * 26}px)`,
-                      background: active ? "rgba(34,25,16,0.45)" : "transparent",
-                      transition: "background-color 0.3s",
-                    }}
-                  >
-                    <div className="md:col-span-4">
-                      <h3
-                        className="font-display text-2xl leading-tight transition-colors duration-300 md:text-3xl"
-                        style={{ color: active ? "var(--color-cream)" : "var(--color-dim)" }}
-                      >
-                        {pr.name}
-                      </h3>
-                      <span
-                        className="mt-2 inline-block border px-2 py-0.5 font-sans text-[10px] uppercase tracking-[0.2em] transition-colors duration-300"
-                        style={{
-                          borderColor: active
-                            ? "rgba(255,106,60,0.5)"
-                            : "rgba(246,236,216,0.15)",
-                          color: active ? "var(--color-flame)" : "var(--color-dim)",
-                        }}
-                      >
-                        {pr.cat}
-                      </span>
-                    </div>
-                    <p className="hidden font-serif text-sm leading-snug text-dim md:col-span-5 md:block md:pr-8">
-                      {pr.desc}
-                    </p>
-                    <div className="font-sans text-[11px] uppercase tracking-[0.25em] text-cream md:col-span-2 md:text-right">
-                      <span className="inline-flex items-center gap-2">
-                        {pr.link}
-                        <Arrow />
-                      </span>
-                    </div>
-                  </a>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      </Runway>
-    );
-  } else {
-    // Mode B: Normal Flow
-    return (
-      <section
-        id="projects"
-        className="relative mx-auto w-full max-w-6xl px-6 py-24 md:px-14"
-      >
-        <div className="text-center">
-          <Eyebrow className="text-center">{w.num}</Eyebrow>
-          <h2 className="mx-auto mt-6 font-display text-[clamp(2rem,4.6vw,4.2rem)] leading-[1.05] tracking-[-0.015em] whitespace-nowrap">
-            {main}
-            <em className="text-flame">{last}</em>
-          </h2>
-          <p
-            className="mx-auto mt-6 mb-8 max-w-4xl font-serif text-lg leading-relaxed text-dim md:block"
+      <div className="border-b border-cream/10">
+        {w.projects.map((pr, i) => (
+          <a
+            key={pr.n}
+            href={pr.url}
+            target="_blank"
+            rel="noreferrer"
+            className="grid gap-3 border-t border-cream/10 py-4 md:grid-cols-12 md:items-center md:gap-6 md:py-6"
           >
-            {w.intro}
-          </p>
-        </div>
-
-        <div className="border-b border-cream/10">
-          {w.projects.map((pr, i) => (
-            <a
-              key={pr.n}
-              href={pr.url}
-              target="_blank"
-              rel="noreferrer"
-              className="grid gap-3 border-t border-cream/10 py-4 md:grid-cols-12 md:items-center md:gap-6 md:py-6"
-            >
-              <div className="md:col-span-4">
-                <h3 className="font-display text-2xl leading-tight md:text-3xl">
-                  {pr.name}
-                </h3>
-                <span className="mt-2 inline-block border px-2 py-0.5 font-sans text-[10px] uppercase tracking-[0.2em]">
-                  {pr.cat}
-                </span>
-              </div>
-              <p className="hidden font-serif text-sm leading-snug text-dim md:col-span-5 md:block md:pr-8">
-                {pr.desc}
-              </p>
-              <div className="font-sans text-[11px] uppercase tracking-[0.25em] text-cream md:col-span-2 md:text-right">
-                <span className="inline-flex items-center gap-2">
-                  {pr.link}
-                  <Arrow />
-                </span>
-              </div>
-            </a>
-          ))}
-        </div>
-      </section>
-    );
-  }
+            <div className="md:col-span-4">
+              <h3 className="font-display text-2xl leading-tight md:text-3xl">
+                {pr.name}
+              </h3>
+              <span className="mt-2 inline-block border px-2 py-0.5 font-sans text-[10px] uppercase tracking-[0.2em]">
+                {pr.cat}
+              </span>
+            </div>
+            <p className="hidden font-serif text-sm leading-snug text-dim md:col-span-5 md:block md:pr-8">
+              {pr.desc}
+            </p>
+            <div className="font-sans text-[11px] uppercase tracking-[0.25em] text-cream md:col-span-2 md:text-right">
+              <span className="inline-flex items-center gap-2">
+                {pr.link}
+                <Arrow />
+              </span>
+            </div>
+          </a>
+        ))}
+      </div>
+    </section>
+  );
 }
 
 /* ------------------------------------------------------------------ */
