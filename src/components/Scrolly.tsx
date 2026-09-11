@@ -96,11 +96,15 @@ function Reveal({
           }
         }
       },
-      { threshold: 0.15 }
+      { threshold: 0.05 } // Adjusted for earlier trigger on mobile
     );
     io.observe(el);
     return () => io.disconnect();
   }, []);
+
+  const isMobile = typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches;
+  const translateY = isMobile ? "16px" : "18px";
+  const duration = isMobile ? "0.65s" : "0.55s"; // Adjusted for smoother mobile transition
 
   return (
     <div
@@ -108,8 +112,8 @@ function Reveal({
       className={className}
       style={{
         opacity: vis ? 1 : 0,
-        transform: vis ? "none" : "translateY(18px)",
-        transition: `opacity 0.55s cubic-bezier(0.22, 1, 0.36, 1) ${delay}s, transform 0.55s cubic-bezier(0.22, 1, 0.36, 1) ${delay}s`,
+        transform: vis ? "none" : `translateY(${translateY})`,
+        transition: `opacity ${duration} cubic-bezier(0.22, 1, 0.36, 1) ${delay}s, transform ${duration} cubic-bezier(0.22, 1, 0.36, 1) ${delay}s`,
       }}
     >
       {children}
